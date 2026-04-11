@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Aroma & Grano - Crear Cuenta</title>
+    <!-- Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;700;900&amp;family=Public+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "error-dim": "#791903",
+                        "primary-fixed": "#f99868",
+                        "on-secondary": "#ebffe1",
+                        "primary": "#964a20",
+                        "surface-container-low": "#eff6ec",
+                        "on-tertiary-fixed": "#463000",
+                        "primary-container": "#f99868",
+                        "on-secondary-container": "#00600d",
+                        "surface-dim": "#d2ddd0",
+                        "on-surface-variant": "#576257",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#6e1400",
+                        "secondary": "#006f11",
+                        "on-tertiary-fixed-variant": "#6a4b00",
+                        "on-secondary-fixed": "#004b08",
+                        "background": "#f6fbf3",
+                        "on-error": "#fff7f6",
+                        "surface": "#f6fbf3",
+                        "primary-fixed-dim": "#e98b5c",
+                        "on-tertiary": "#fff8f1",
+                        "tertiary-fixed-dim": "#efbc57",
+                        "on-surface": "#2b352c",
+                        "outline-variant": "#aab5a9",
+                        "outline": "#737e72",
+                        "primary-dim": "#873e15",
+                        "tertiary-dim": "#6d4d00",
+                        "on-secondary-fixed-variant": "#006b10",
+                        "surface-variant": "#dae6d8",
+                        "inverse-surface": "#0b0f0b",
+                        "inverse-primary": "#f99868",
+                        "surface-tint": "#964a20",
+                        "on-primary-container": "#562000",
+                        "surface-container": "#e8f0e5",
+                        "surface-bright": "#f6fbf3",
+                        "tertiary-fixed": "#ffc963",
+                        "on-tertiary-container": "#5e4200",
+                        "on-primary-fixed-variant": "#642600",
+                        "on-primary": "#fff7f5",
+                        "on-primary-fixed": "#2f0e00",
+                        "error": "#a73b21",
+                        "inverse-on-surface": "#999e97",
+                        "error-container": "#fd795a",
+                        "secondary-dim": "#00610e",
+                        "on-background": "#2b352c",
+                        "tertiary": "#7c5900",
+                        "secondary-fixed": "#97f98a",
+                        "secondary-container": "#97f98a",
+                        "secondary-fixed-dim": "#8aeb7e",
+                        "tertiary-container": "#ffc963",
+                        "surface-container-highest": "#dae6d8",
+                        "surface-container-high": "#e1ebdf"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline": ["Be Vietnam Pro"],
+                        "body": ["Public Sans"],
+                        "label": ["Public Sans"]
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        body {
+            font-family: 'Public Sans', sans-serif;
+        }
+        h1, h2, h3 {
+            font-family: 'Be Vietnam Pro', sans-serif;
+        }
+        .alert {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            max-width: 400px;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .alert-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0 0 0 1rem;
+        }
+        .password-strength {
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            text-align: left;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}" id="alertBox">
+                    <span>{{ message }}</span>
+                    <button class="alert-close" onclick="document.getElementById('alertBox').style.display='none'">×</button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <!-- Top App Bar -->
+    <header class="flex items-center justify-between px-4 h-16 w-full bg-stone-50 border-b border-stone-200">
+        <a href="/" class="p-2 transition-all duration-200 active:scale-95 hover:bg-stone-100 rounded-full">
+            <span class="material-symbols-outlined text-amber-800" data-icon="arrow_back">arrow_back</span>
+        </a>
+        <span class="text-xl font-black text-amber-800 font-headline">Aroma & Grano</span>
+        <div class="w-10"></div>
+    </header>
+
+    <main class="flex-grow flex flex-col items-center justify-center px-6 py-8">
+        <!-- Logo Icon -->
+        <div class="w-20 h-20 bg-primary-container rounded-full flex items-center justify-center mb-6 shadow-lg shadow-primary/20">
+            <span class="material-symbols-outlined text-on-primary-container text-4xl" data-icon="coffee" data-weight="fill" style="font-variation-settings: 'FILL' 1;">coffee</span>
+        </div>
+
+        <!-- Header Content -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-black text-on-surface mb-2 leading-tight">Crear Cuenta</h1>
+            <p class="text-on-surface-variant text-base">Únete a nuestra comunidad y disfruta del mejor café.</p>
+        </div>
+
+        <!-- Registration Form -->
+        <form action="/register" method="post" class="w-full max-w-sm space-y-4">
+            <div class="space-y-1">
+                <label class="text-sm font-semibold text-on-surface-variant ml-1">Full Name</label>
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline" data-icon="person">person</span>
+                    <input class="w-full bg-surface-container-high border-none rounded-full py-3.5 pl-12 pr-4 focus:ring-2 focus:ring-primary text-on-surface placeholder:text-outline-variant"
+                           name="full_name"
+                           placeholder="Tu nombre completo"
+                           type="text"
+                           required />
+                </div>
+            </div>
+
+            <div class="space-y-1">
+                <label class="text-sm font-semibold text-on-surface-variant ml-1">Correo Electrónico</label>
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline" data-icon="mail">mail</span>
+                    <input class="w-full bg-surface-container-high border-none rounded-full py-3.5 pl-12 pr-4 focus:ring-2 focus:ring-primary text-on-surface placeholder:text-outline-variant"
+                           name="email"
+                           placeholder="ejemplo@correo.com"
+                           type="email"
+                           required />
+                </div>
+            </div>
+
+            <div class="space-y-1">
+                <label class="text-sm font-semibold text-on-surface-variant ml-1">Contraseña</label>
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline" data-icon="lock">lock</span>
+                    <input class="w-full bg-surface-container-high border-none rounded-full py-3.5 pl-12 pr-12 focus:ring-2 focus:ring-primary text-on-surface placeholder:text-outline-variant"
+                           id="password"
+                           name="password"
+                           placeholder="••••••••"
+                           type="password"
+                           required
+                           oninput="checkPasswordStrength(this.value)" />
+                    <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-outline cursor-pointer"
+                          id="togglePassword"
+                          onclick="togglePasswordVisibility('password', 'togglePassword')">
+                        visibility_off
+                    </span>
+                </div>
+                <div id="passwordStrength" class="password-strength"></div>
+            </div>
+
+            <div class="space-y-1">
+                <label class="text-sm font-semibold text-on-surface-variant ml-1">Confirmar Contraseña</label>
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline" data-icon="lock_reset">lock_reset</span>
+                    <input class="w-full bg-surface-container-high border-none rounded-full py-3.5 pl-12 pr-12 focus:ring-2 focus:ring-primary text-on-surface placeholder:text-outline-variant"
+                           id="confirm_password"
+                           name="confirm_password"
+                           placeholder="••••••••"
+                           type="password"
+                           required />
+                    <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-outline cursor-pointer"
+                          id="toggleConfirmPassword"
+                          onclick="togglePasswordVisibility('confirm_password', 'toggleConfirmPassword')">
+                        visibility_off
+                    </span>
+                </div>
+            </div>
+
+            <!-- Botón de registro -->
+            <button class="w-full bg-secondary text-on-secondary font-bold py-4 rounded-full shadow-md transition-all duration-200 active:scale-95 mt-4 flex items-center justify-center gap-2"
+                    type="submit">
+                Crear Cuenta
+                <span class="material-symbols-outlined text-xl" data-icon="arrow_forward">arrow_forward</span>
+            </button>
+        </form>
+
+        <!-- Footer Link -->
+        <div class="mt-auto pt-8 pb-4">
+            <p class="text-on-surface-variant text-sm font-medium">
+                ¿Ya tienes cuenta?
+                <a class="text-primary font-bold hover:underline ml-1" href="/">Iniciar Sesión</a>
+            </p>
+        </div>
+    </main>
+
+    <!-- Script para el ojito y validación de contraseña -->
+    <script>
+        function togglePasswordVisibility(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.textContent = 'visibility';
+            } else {
+                input.type = 'password';
+                icon.textContent = 'visibility_off';
+            }
+        }
+
+        function checkPasswordStrength(password) {
+            const strengthElement = document.getElementById('passwordStrength');
+            strengthElement.style.display = 'block';
+
+            if (password.length === 0) {
+                strengthElement.style.display = 'none';
+                return;
+            }
+
+            // Validación de fortaleza
+            let strength = 0;
+            if (password.length >= 8) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+            // Asignar mensaje y estilo según la fortaleza
+            if (strength <= 1) {
+                strengthElement.textContent = 'Poco segura';
+                strengthElement.style.color = '#dc3545';
+                strengthElement.style.backgroundColor = 'rgba(220, 53, 69, 0.1)';
+            } else if (strength <= 3) {
+                strengthElement.textContent = 'Media';
+                strengthElement.style.color = '#ffc107';
+                strengthElement.style.backgroundColor = 'rgba(255, 193, 7, 0.1)';
+            } else {
+                strengthElement.textContent = 'Segura';
+                strengthElement.style.color = '#28a745';
+                strengthElement.style.backgroundColor = 'rgba(40, 167, 69, 0.1)';
+            }
+        }
+    </script>
+    <!-- Bottom Background Decorative Image -->
+    <div class="fixed bottom-0 left-0 w-full h-32 -z-10 opacity-20 pointer-events-none">
+        <div class="w-full h-full bg-cover bg-bottom" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAgTNSpW0gGLuv0Y_Rg7SDMXoJh8SbrlBHi0OkBkH7rJ-qw2g-O0YkEMcfS2iHODztfXsmduS-ajOvaG-Gnq3fWNsrfHrJqMj-D_kV85LSP7ExLDpkOdUgNdahsmaDzz35GAGu6Lf-81L7fh-p8_tB5cWaa-fNg84Bu7XO6uNeALIccMLVDZwdGev4-h82wfxxN7kQfYBlKBCo42JfPrWKc4TBZpHi44jCY0N0vR0KPeYv6kjXjB2b12vDzxJJ3oS5AndsIrUKLOHs')"></div>
+    </div>
+</body>
+</html>
