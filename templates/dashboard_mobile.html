@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Menú de Especialidades - Aroma & Grano</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&amp;family=Public+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary-fixed-dim": "#e98b5c",
+                        tertiary: "#7c5900",
+                        "on-primary-fixed-variant": "#642600",
+                        "on-error-container": "#6e1400",
+                        "on-secondary-container": "#00600d",
+                        "surface-bright": "#f6fbf3",
+                        "on-primary-container": "#562000",
+                        background: "#f6fbf3",
+                        "surface-container-highest": "#dae6d8",
+                        outline: "#737e72",
+                        "surface-container-high": "#e1ebdf",
+                        "primary-container": "#f99868",
+                        "primary-fixed": "#f99868",
+                        "on-background": "#2b352c",
+                        "surface-container": "#e8f0e5",
+                        "secondary-fixed": "#97f98a",
+                        "on-surface": "#2b352c",
+                        error: "#a73b21",
+                        surface: "#f6fbf3",
+                        "surface-variant": "#dae6d8",
+                        "error-container": "#fd795a",
+                        "surface-dim": "#d2ddd0",
+                        "on-error": "#fff7f6",
+                        "tertiary-container": "#ffc963",
+                        "on-tertiary-container": "#5e4200",
+                        "surface-tint": "#964a20",
+                        "outline-variant": "#aab5a9",
+                        "on-secondary": "#ebffe1",
+                        "on-primary": "#fff7f5",
+                        "inverse-surface": "#0b0f0b",
+                        "on-secondary-fixed-variant": "#006b10",
+                        "secondary-fixed-dim": "#8aeb7e",
+                        "on-secondary-fixed": "#004b08",
+                        "on-tertiary-fixed": "#463000",
+                        "on-surface-variant": "#576257",
+                        secondary: "#006f11",
+                        "inverse-primary": "#f99868",
+                        "surface-tint": "#964a20",
+                        "on-primary-fixed": "#2f0e00",
+                        "on-tertiary-fixed-variant": "#6a4b00",
+                        "primary-dim": "#873e15",
+                        "tertiary-dim": "#6d4d00",
+                        "error-dim": "#791903",
+                        "secondary-dim": "#00610e",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#eff6ec",
+                        "secondary-container": "#97f98a",
+                        "tertiary-fixed-dim": "#efbc57",
+                        "tertiary-fixed": "#ffc963",
+                        "surface-container": "#e8f0e5"
+                    },
+                    borderRadius: {
+                        DEFAULT: "1rem",
+                        lg: "2rem",
+                        xl: "3rem",
+                        full: "9999px"
+                    },
+                    fontFamily: {
+                        headline: ["Be Vietnam Pro"],
+                        body: ["Public Sans"],
+                        label: ["Public Sans"],
+                        display: "Be Vietnam Pro"
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        body { font-family: 'Nunito Sans', sans-serif; background-color: #faf6f0; }
+        .font-serif { font-family: 'Literata', serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-background text-on-surface pb-24">
+    <!-- TopAppBar -->
+    <header class="sticky top-0 z-50 bg-[#faf6f0] dark:bg-stone-950 shadow-[0_4px_20px_rgba(46,50,48,0.06)] flex justify-between items-center w-full px-6 py-4">
+        <span class="text-xl font-serif text-emerald-900 dark:text-emerald-100 font-semibold tracking-tight">{{ session['email'] }}</span>
+        <a href="/logout" class="p-2 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors active:scale-95 duration-150 rounded-full">
+            <span class="material-symbols-outlined text-emerald-800 dark:text-emerald-500">logout</span>
+        </a>
+    </header>
+
+    <main class="px-6 py-4 space-y-8">
+        <!-- Welcome Section -->
+        <section>
+            <h2 class="text-3xl font-headline font-bold text-on-surface leading-tight">Menú de Especialidades</h2>
+            <p class="text-on-surface-variant font-body mt-2">Disfruta del arte del café en cada sorbo.</p>
+        </section>
+
+        <!-- Category Filter -->
+        <section class="flex gap-3 overflow-x-auto hide-scrollbar -mx-6 px-6">
+            <button class="px-5 py-2 rounded-full bg-primary text-on-primary font-label text-sm font-semibold whitespace-nowrap">Todas</button>
+            <button class="px-5 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label text-sm font-medium whitespace-nowrap">Espresso</button>
+            <button class="px-5 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label text-sm font-medium whitespace-nowrap">Latte</button>
+            <button class="px-5 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label text-sm font-medium whitespace-nowrap">Cold Brew</button>
+        </section>
+
+        <!-- Featured / Most Ordered: Latte Clásico -->
+        <section>
+            <div class="relative w-full h-64 rounded-xl overflow-hidden shadow-lg group">
+                <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiLNY1oP2bZl7rbmT0SmLiStViU1c0rLf3Tw0pJkguN8bM2zO92TQHq7_iKNmBYRpk3e5PD4NIgmM-kjA3H87LSjrGBzcbLhwAFicAlm0ev0PaiAkBFZO5pLV4uf6US8IbmrMaOEa5i-Ktk3QTyxrPuI5oDL_1LE-ueVaGSYaDoTsWPXPZyqegmM2Wa1Xpz7hIMf7wE8nNbaXIJxywpJxJ3QnwiMAclVGzwmQkMEJA9W5nZ24xWQMIGCPTtKG843QcAIv92PU_IrU"/>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6">
+                    <span class="bg-tertiary-fixed text-on-tertiary-fixed text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded-md mb-2 self-start">Favorito de la Casa</span>
+                    <div class="flex justify-between items-end">
+                        <div>
+                            <h3 class="text-white text-2xl font-headline font-bold">Latte Clásico</h3>
+                            <p class="text-white font-bold text-lg mt-1">$16.500 COP</p>
+                            <p class="text-white/80 text-sm font-body">Sedoso y perfectamente equilibrado</p>
+                        </div>
+                        <button class="bg-primary hover:bg-on-primary-fixed-variant text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-transform">
+                            <span class="material-symbols-outlined">add</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Menu Grid / List -->
+        <section class="space-y-6">
+            <div class="flex items-center justify-between">
+                <h4 class="text-lg font-headline font-semibold text-on-surface">Nuestra Selección</h4>
+                <span class="text-primary font-label text-sm font-medium">Ver todos</span>
+            </div>
+            <!-- Bento-style Grid for other items -->
+            <div class="grid grid-cols-2 gap-4">
+                <!-- Item 1: Espresso -->
+                <div class="bg-surface-container-low rounded-xl p-4 flex flex-col space-y-3">
+                    <div class="relative w-full aspect-square rounded-lg overflow-hidden">
+                        <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6AtGwoxckD6ywXzxqE7_EEkWWhqiamiaBY6n3NFxUS3XD_36HYkHzosydMsZR8VJwSfD73_VypQDEraIeHu9islEFNeNoOJFJGeAmB0OHrpbBEGi45d7q1mSbr6OYyE89oLF_z5K1Fn29CE2lPSRtwMDHWr6mgvdY1mKgBUBFFGWWIUL4zp-zEJ2Y1k9zoQP9aWrKRbGqq9PVXXDH7oiSu41398GT4aiodU2laxEXpohBkAhjvyDyFyREkYzfY-2ocZManjpQIjQ"/>
+                    </div>
+                    <div class="flex flex-col flex-1">
+                        <span class="text-xs font-label text-tertiary font-bold">Espresso</span>
+                        <h5 class="font-headline font-bold text-on-surface">Doble Shot</h5>
+                        <div class="flex items-center justify-between mt-auto pt-2">
+                            <span class="font-bold text-primary">$13.500 COP</span>
+                            <button class="bg-surface-container-highest p-1 rounded-full active:scale-90 transition-transform">
+                                <span class="material-symbols-outlined text-primary text-xl">add</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Item 2: Cold Brew -->
+                <div class="bg-surface-container-low rounded-xl p-4 flex flex-col space-y-3">
+                    <div class="relative w-full aspect-square rounded-lg overflow-hidden">
+                        <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDl6Hak3z_Bu3R9hdx3uZ5m8Y6tL4Ik7rYk_Q_SKBwlAykti-NpE0eM1dYZtT3ct5w6x0T3K6eT1pLhMVS6ThWlWHG7KQFCl1nl3gG-TaeoGo4_U0HE59DiWSx0EGUcXsjzoDAD09gVigxl4qeKxe1L310c3ehAihzt19lZs7CxcHCCi16XpO29KLhZSiLy7UhdJDpjhn0VXJy4SIEvb2jR1FbuyLtGNPKrEfasFrQCQa_vapzIALDVzuu1dAV1spVRkjZ4ZlvBZPU"/>
+                    </div>
+                    <div class="flex flex-col flex-1">
+                        <span class="text-xs font-label text-tertiary font-bold">Cold Brew</span>
+                        <h5 class="font-headline font-bold text-on-surface">Vainilla Suave</h5>
+                        <div class="flex items-center justify-between mt-auto pt-2">
+                            <span class="font-bold text-primary">$14.750 COP</span>
+                            <button class="bg-surface-container-highest p-1 rounded-full active:scale-90 transition-transform">
+                                <span class="material-symbols-outlined text-primary text-xl">add</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Item 3: Latte Art Special -->
+                <div class="col-span-2 bg-surface-container-low rounded-xl p-4 flex gap-4">
+                    <div class="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
+                        <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwgY8U_jE-e1_LakccRbta-Rj4RRoxNDqwNaqo-p0U9BOGBQ9GgzcHblRbEEFKoQ-10A2e_leAFR8jN-LDZo7SqVjUFn8bRzEbbazz19DGd_9wwDxxgrpWQBFOQ_XoP5qairMN0UHBgDsiVpJpIWBfA6flVzXhyK1VC1i4Jp69IYRSuhzBygdkwlxV7lFgD5Wpzp-ZfUjujYSlmGDWl3txksmy2N5aiZtEbMIzklL7b3sUAKrPthgKKKjy7YjaToy1EpXCzUTYeNc"/>
+                    </div>
+                    <div class="flex flex-col flex-1 justify-center">
+                        <span class="text-xs font-label text-tertiary font-bold">Especialidad</span>
+                        <h5 class="font-headline font-bold text-on-surface">Mocha Avellana</h5>
+                        <p class="text-on-surface-variant text-xs line-clamp-1">Chocolate belga y crema de avellana.</p>
+                        <div class="flex items-center justify-between mt-2">
+                            <span class="font-bold text-primary">$15.500 COP</span>
+                            <button class="bg-primary text-on-primary px-3 py-1 rounded-full text-xs font-bold active:scale-90 transition-transform">
+                                Agregar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fast Order Section -->
+        <section class="bg-emerald-900 rounded-2xl p-6 text-white overflow-hidden relative">
+            <div class="relative z-10">
+                <h4 class="text-xl font-headline font-bold">¿Tienes Prisa?</h4>
+                <p class="text-emerald-100 text-sm mt-1 mb-4">Pide ahora y recoge en 5 minutos.</p>
+                <button class="bg-white text-emerald-900 font-label font-bold px-6 py-3 rounded-xl shadow-md active:scale-95 transition-transform">
+                    Recoger en Tienda
+                </button>
+            </div>
+            <span class="material-symbols-outlined absolute -right-4 -bottom-4 text-8xl text-emerald-800/40 select-none">timer</span>
+        </section>
+    </main>
+
+    <!-- BottomNavBar -->
+    <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pt-2 pb-6 bg-[#faf6f0]/95 dark:bg-stone-900/95 backdrop-blur-md shadow-[0_-4px_20px_rgba(46,50,48,0.04)] rounded-t-[24px] border-t border-stone-200/50 dark:border-stone-800/50">
+        <!-- Menú (Active) -->
+        <a class="flex flex-col items-center justify-center text-emerald-800 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-900/30 rounded-xl px-4 py-1 active:scale-90 duration-200 ease-out" href="#">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">restaurant_menu</span>
+            <span class="font-['Nunito_Sans'] text-xs font-medium">Menú</span>
+        </a>
+        <!-- Pedidos -->
+        <a class="flex flex-col items-center justify-center text-stone-500 dark:text-stone-400 hover:text-emerald-700 dark:hover:text-emerald-300 active:scale-90 duration-200 ease-out" href="#">
+            <span class="material-symbols-outlined">receipt_long</span>
+            <span class="font-['Nunito_Sans'] text-xs font-medium">Pedidos</span>
+        </a>
+        <!-- Perfil -->
+        <a class="flex flex-col items-center justify-center text-stone-500 dark:text-stone-400 hover:text-emerald-700 dark:hover:text-emerald-300 active:scale-90 duration-200 ease-out" href="#">
+            <span class="material-symbols-outlined">person</span>
+            <span class="font-['Nunito_Sans'] text-xs font-medium">Perfil</span>
+        </a>
+    </nav>
+</body>
+</html>

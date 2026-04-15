@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from supabase import create_client, Client
+from user_agents import parse
 import os
 
 app = Flask(__name__)
@@ -69,7 +70,14 @@ def register():
 def dashboard():
     if 'user_id' not in session:
         return redirect(url_for('login'))
-    return f"¡Bienvenido, {session['email']}! (Dashboard)"
+
+    user_agent = request.headers.get('User-Agent')
+    agent = parse(user_agent)
+
+    if agent.is_mobile:
+        return render_template('dashboard_mobile.html')
+    else:
+        return render_template('dashboard_pc.html')
 
 @app.route('/logout')
 def logout():
@@ -77,4 +85,4 @@ def logout():
     return redirect(url_for('login'))
 if __name__ == '__main__':
     init_db()
-    app.run(debug=True)
+    app.run(debug=True)   
