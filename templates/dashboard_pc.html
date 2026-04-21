@@ -86,6 +86,28 @@
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
+        .active-filter {
+            background-color: #964a20;
+            color: white;
+        }
+        .cart-badge {
+            position: relative;
+        }
+        .cart-badge::after {
+            content: attr(data-count);
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #f99868;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
 </head>
 <body class="bg-background text-on-background min-h-screen">
@@ -96,21 +118,23 @@
                 Aroma & Grano
             </div>
             <nav class="hidden md:flex gap-8 items-center">
-                <a class="text-primary border-b-2 border-primary pb-1 font-['Literata'] font-semibold tracking-tight" href="#" style="color: #b56236; border-color: #b56236;">Menú</a>
-                <a class="text-on-surface-variant hover:text-primary transition-colors font-['Literata'] font-semibold tracking-tight" href="#">Pedidos</a>
-                <a class="text-on-surface-variant hover:text-primary transition-colors font-['Literata'] font-semibold tracking-tight" href="#">Suscripción</a>
+                <a class="text-primary border-b-2 border-primary pb-1 font-['Literata'] font-semibold tracking-tight" href="/dashboard" style="color: #b56236; border-color: #b56236;">Menú</a>
+                <a class="text-on-surface-variant hover:text-primary transition-colors font-['Literata'] font-semibold tracking-tight" href="/orders">Pedidos</a>
+                <a class="text-on-surface-variant hover:text-primary transition-colors font-['Literata'] font-semibold tracking-tight" href="/profile">Suscripción</a>
             </nav>
             <div class="flex items-center gap-4">
-                <span class="text-on-surface">{{ session['email'] }}</span>
+                <span class="text-on-surface">{{ session['full_name'] }}</span>
                 <a href="/logout" class="p-2 hover:bg-surface-container transition-all rounded-full">
                     <span class="material-symbols-outlined text-on-surface" data-icon="logout">logout</span>
                 </a>
-                <button class="p-2 hover:bg-surface-container transition-all rounded-full">
-                    <span class="material-symbols-outlined text-on-surface" data-icon="shopping_cart">shopping_cart</span>
-                </button>
-                <button class="p-2 hover:bg-surface-container transition-all rounded-full">
+                <div class="cart-badge" data-count="0">
+                    <a href="/orders" class="p-2 hover:bg-surface-container transition-all rounded-full">
+                        <span class="material-symbols-outlined text-on-surface" data-icon="shopping_cart">shopping_cart</span>
+                    </a>
+                </div>
+                <a href="/profile" class="p-2 hover:bg-surface-container transition-all rounded-full">
                     <span class="material-symbols-outlined text-on-surface" data-icon="account_circle">account_circle</span>
-                </button>
+                </a>
             </div>
         </div>
     </header>
@@ -122,24 +146,27 @@
             <p class="text-lg text-on-surface-variant max-w-2xl mb-8 leading-relaxed">Desde el origen hasta tu taza, seleccionamos granos de fincas sostenibles para ofrecerte una experiencia sensorial única.</p>
             <div class="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
                 <div class="flex flex-wrap gap-3">
-                    <button class="px-5 py-2 bg-primary text-on-primary rounded-full font-semibold text-sm transition-all hover:opacity-90">Todas las bebidas</button>
-                    <button class="px-5 py-2 bg-secondary-container text-on-secondary-container rounded-full font-semibold text-sm transition-all hover:bg-surface-container-highest">Espresso</button>
-                    <button class="px-5 py-2 bg-secondary-container text-on-secondary-container rounded-full font-semibold text-sm transition-all hover:bg-surface-container-highest">Latte</button>
-                    <button class="px-5 py-2 bg-secondary-container text-on-secondary-container rounded-full font-semibold text-sm transition-all hover:bg-surface-container-highest">Cold Brew</button>
+                    <a href="/dashboard?category=all" class="px-5 py-2 {% if category == 'all' %}bg-primary text-on-primary{% else %}bg-secondary-container text-on-secondary-container{% endif %} rounded-full font-semibold text-sm transition-all hover:opacity-90">Todas las bebidas</a>
+                    <a href="/dashboard?category=Espresso" class="px-5 py-2 {% if category == 'Espresso' %}bg-primary text-on-primary{% else %}bg-secondary-container text-on-secondary-container{% endif %} rounded-full font-semibold text-sm transition-all hover:bg-surface-container-highest">Espresso</a>
+                    <a href="/dashboard?category=Latte" class="px-5 py-2 {% if category == 'Latte' %}bg-primary text-on-primary{% else %}bg-secondary-container text-on-secondary-container{% endif %} rounded-full font-semibold text-sm transition-all hover:bg-surface-container-highest">Latte</a>
+                    <a href="/dashboard?category=Cold Brew" class="px-5 py-2 {% if category == 'Cold Brew' %}bg-primary text-on-primary{% else %}bg-secondary-container text-on-secondary-container{% endif %} rounded-full font-semibold text-sm transition-all hover:bg-surface-container-highest">Cold Brew</a>
                 </div>
                 <div class="relative w-full md:w-64">
-                    <select class="w-full bg-surface-container-high border-none rounded-lg py-2.5 px-4 text-sm focus:ring-2 focus:ring-primary appearance-none cursor-pointer text-on-surface">
-                        <option>Filtrar por Origen</option>
-                        <option>Etiopía - Sidamo</option>
-                        <option>Colombia - Huila</option>
-                        <option>Costa Rica - Tarrazú</option>
-                    </select>
-                    <span class="material-symbols-outlined absolute right-3 top-2.5 pointer-events-none text-outline text-lg" data-icon="expand_more">expand_more</span>
+                    <form action="/dashboard" method="get" onchange="this.submit()">
+                        <input type="hidden" name="category" value="{{ category }}">
+                        <select name="origin" class="w-full bg-surface-container-high border-none rounded-lg py-2.5 px-4 text-sm focus:ring-2 focus:ring-primary appearance-none cursor-pointer text-on-surface">
+                            <option value="all" {% if origin == 'all' %}selected{% endif %}>Filtrar por Origen</option>
+                            <option value="Etiopía - Sidamo" {% if origin == 'Etiopía - Sidamo' %}selected{% endif %}>Etiopía - Sidamo</option>
+                            <option value="Colombia - Huila" {% if origin == 'Colombia - Huila' %}selected{% endif %}>Colombia - Huila</option>
+                            <option value="Costa Rica - Tarrazú" {% if origin == 'Costa Rica - Tarrazú' %}selected{% endif %}>Costa Rica - Tarrazú</option>
+                        </select>
+                        <span class="material-symbols-outlined absolute right-3 top-2.5 pointer-events-none text-outline text-lg" data-icon="expand_more">expand_more</span>
+                    </form>
                 </div>
             </div>
         </section>
 
-        <!-- Favoritos de la Mañana (Bento Grid Style) -->
+        <!-- Favoritos de la Mañana -->
         <section class="mb-16">
             <div class="flex items-center gap-3 mb-6">
                 <span class="material-symbols-outlined text-tertiary" data-icon="wb_sunny">wb_sunny</span>
@@ -147,7 +174,7 @@
                 <span class="ml-auto text-sm font-semibold text-tertiary uppercase tracking-wider">Compra Rápida</span>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <!-- Main Featured Favorite -->
+                <!-- Latte Clásico -->
                 <div class="md:col-span-2 md:row-span-2 relative group overflow-hidden rounded-xl bg-surface-container border border-outline-variant/30">
                     <img alt="Café con leche artesanal" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 min-h-[300px]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfS3NoaKbxXxkc5ud2V7LxAo04V-3ebCD7ZRzKTc42B9-IWYIjGcN9WR4q2Ih0vXoYmBq8KcLyUTFjmo2f_zKguavMDqTLaaPI2yJDv26fcyuKVT3daxNEXHK6EqKon9EIqPAkLXm52v_o2XD5XkjDBI0P6_uAP0DqpDyKrkLb-FPMR1aIBQ8pNb_OMH5XOFcaN74MPiLPQ4JXpmEwzb8ob83s7nWu-QtnmKoB6aqXsf4k6foND3hU_lU6lo19fRWIbOWvd5vbd3E"/>
                     <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex flex-col justify-end p-8">
@@ -156,14 +183,14 @@
                         <p class="text-stone-200 text-sm mb-4">Suave mezcla de espresso con leche cremosa.</p>
                         <div class="flex items-center justify-between">
                             <span class="text-2xl font-bold text-white">$16.500 COP</span>
-                            <button class="bg-primary hover:bg-on-primary-fixed-variant text-on-primary p-3 rounded-full transition-colors flex items-center gap-2">
+                            <a href="/customize/1" class="bg-primary hover:bg-on-primary-fixed-variant text-on-primary p-3 rounded-full transition-colors flex items-center gap-2">
                                 <span class="material-symbols-outlined" data-icon="add_shopping_cart">add_shopping_cart</span>
-                                <span class="font-bold">Añadir</span>
-                            </button>
+                                <span class="font-bold">Personalizar</span>
+                            </a>
                         </div>
                     </div>
                 </div>
-                <!-- Secondary Favorite 1 -->
+                <!-- Espresso Doble -->
                 <div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/30 flex flex-col justify-between group">
                     <div class="flex justify-between items-start">
                         <div>
@@ -174,12 +201,12 @@
                     </div>
                     <div class="mt-4 flex items-center justify-between">
                         <span class="material-symbols-outlined text-4xl text-outline-variant" data-icon="coffee">coffee</span>
-                        <button class="w-10 h-10 bg-surface-container-highest rounded-full flex items-center justify-center hover:bg-primary hover:text-on-primary transition-all">
-                            <span class="material-symbols-outlined" data-icon="add">add</span>
-                        </button>
+                        <a href="/customize/2" class="w-10 h-10 bg-surface-container-highest rounded-full flex items-center justify-center hover:bg-primary hover:text-on-primary transition-all">
+                            <span class="material-symbols-outlined" data-icon="tune">tune</span>
+                        </a>
                     </div>
                 </div>
-                <!-- Secondary Favorite 2 -->
+                <!-- Flat White -->
                 <div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/30 flex flex-col justify-between group">
                     <div class="flex justify-between items-start">
                         <div>
@@ -190,12 +217,12 @@
                     </div>
                     <div class="mt-4 flex items-center justify-between">
                         <span class="material-symbols-outlined text-4xl text-outline-variant" data-icon="local_cafe">local_cafe</span>
-                        <button class="w-10 h-10 bg-surface-container-highest rounded-full flex items-center justify-center hover:bg-primary hover:text-on-primary transition-all">
-                            <span class="material-symbols-outlined" data-icon="add">add</span>
-                        </button>
+                        <a href="/customize/3" class="w-10 h-10 bg-surface-container-highest rounded-full flex items-center justify-center hover:bg-primary hover:text-on-primary transition-all">
+                            <span class="material-symbols-outlined" data-icon="tune">tune</span>
+                        </a>
                     </div>
                 </div>
-                <!-- Secondary Favorite 3 (Long Horizontal on Desktop) -->
+                <!-- Cold Brew Vainilla -->
                 <div class="md:col-span-2 bg-secondary-container p-6 rounded-xl border border-outline-variant/30 flex items-center gap-6 group">
                     <div class="w-24 h-24 rounded-lg overflow-hidden shrink-0">
                         <img alt="Cold Brew con hielo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCD1xB00eMDI_b0WJ9fqmDrlRewJ7hT-30W7YPHxcHCPnk6zMB4yLdWIAqJw2TMlkdf-dZ736HJ3PmJI1gqX4Oz1kwhaE_ha9wK7msAgw3K3Od4ugMS9Bsx3OaQMZnppm47FELC8vUyR5ubRD-c6iFizjvXn5jYcTDL3zWSJdguK8vIBWHRmMZ-hn9mchWQbepAoAugHVmJjVhFMICO7Kh0rqUJKA3IrJXNEnWO62Vhnw5RuYEOjiAcLKST_FdsUxgaRTEKAFJ1oBs"/>
@@ -206,85 +233,33 @@
                             <span class="text-primary font-bold">$21.500 COP</span>
                         </div>
                         <p class="text-sm text-on-surface-variant mb-3">12 horas de extracción en frío.</p>
-                        <button class="flex items-center gap-2 text-primary font-bold text-sm hover:underline">
+                        <a href="/customize/4" class="flex items-center gap-2 text-primary font-bold text-sm hover:underline">
                             <span class="material-symbols-outlined text-sm" data-icon="bolt">bolt</span>
-                            Compra en un clic
-                        </button>
+                            Personalizar
+                        </a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Main Product Catalog -->
+        <!-- Catálogo Principal de Productos -->
         <section>
             <h2 class="text-2xl font-bold text-on-surface mb-8">Especialidades Aroma & Grano</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Product Card 1 -->
+                {% for product in products %}
                 <div class="bg-surface-container-lowest rounded-xl overflow-hidden flex flex-col border border-outline-variant/20 hover:shadow-xl transition-all duration-300">
                     <div class="h-64 relative">
-                        <img alt="Espresso shot" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDqY1gOjW8lUONfJUqUKByFxqeHx2ZNl7oXorwP9q8Bep6K6GO-28lEphkG1eGMuhZfPTEpshz39H-4oHqaFoJpfUDIUyWpnPAWdtgcM-V0x61EQPCfevrk-E_9bsKd4oXrog2Qi0lZpG73mFVN5jWendYynWpKxwI4xF72EumKiydNlBlTm89T2cLLRF3Ogd5EXDOVTVUlxBib_VL0McdOLt83ERdf8OzIk056DMpRowByU2XQ1845JKnTX3hMuGnDBfNYsD1byA"/>
+                        <img alt="{{ product.name }}" class="w-full h-full object-cover" src="{{ product.image_url }}"/>
                         <div class="absolute top-4 right-4 bg-background/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-tertiary">
-                            Intensidad 9/10
+                            {{ product.category }}
                         </div>
                     </div>
                     <div class="p-6 flex-grow flex flex-col">
                         <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-xl font-bold text-on-surface">Espresso de Origen</h3>
-                            <span class="text-xl font-bold text-primary">$13.500 COP</span>
+                            <h3 class="text-xl font-bold text-on-surface">{{ product.name }}</h3>
+                            <span class="text-xl font-bold text-primary">${{ product.price }} COP</span>
                         </div>
-                        <p class="text-on-surface-variant text-sm mb-4 leading-relaxed italic">Notas de cata: Chocolate amargo, frutos rojos y un final almendrado persistente.</p>
-                        <div class="mt-auto pt-4 border-t border-outline-variant/30 flex items-center justify-between">
-                            <div class="flex gap-1">
-                                <span class="material-symbols-outlined text-tertiary text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
-                                <span class="material-symbols-outlined text-tertiary text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
-                                <span class="material-symbols-outlined text-tertiary text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
-                                <span class="material-symbols-outlined text-tertiary text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
-                                <span class="material-symbols-outlined text-tertiary text-sm" data-icon="star_half" style="font-variation-settings: 'FILL' 1;">star_half</span>
-                            </div>
-                            <button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-bold text-sm hover:opacity-90">Ordenar</button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Product Card 2 -->
-                <div class="bg-surface-container-lowest rounded-xl overflow-hidden flex flex-col border border-outline-variant/20 hover:shadow-xl transition-all duration-300">
-                    <div class="h-64 relative">
-                        <img alt="Cold Brew" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBw5Vbu5Omg8WEFOs3wDFoQYa25oIFPxXmX09OvIQnlZWu9QbYky68AW3CDvHUem2W11Q5dZEQTyzL7-Z_XLtDQ-L7XWdeSRgY7KjpMOCVNivIl7R_E29roDYzFITTeiUHRSdbtOLXTpaI2EyqAvLcsD27rLgixzdrdc-WP84gkBYC6ghQyc3bTMBoeLyw6z5BZYAMRdCBKH8zyp5Pi6YjpGd0Yj9NJtNOffFXXll-Vblde3v5mhTOd8OupMf29wJG7NxMoM3E2p0w"/>
-                        <div class="absolute top-4 right-4 bg-background/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-tertiary">
-                            Especial de Verano
-                        </div>
-                    </div>
-                    <div class="p-6 flex-grow flex flex-col">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-xl font-bold text-on-surface">Nitro Cold Brew</h3>
-                            <span class="text-xl font-bold text-primary">$23.500 COP</span>
-                        </div>
-                        <p class="text-on-surface-variant text-sm mb-4 leading-relaxed italic">Notas de cata: Caramelo salado, cuerpo sedoso y dulzor natural refrescante.</p>
-                        <div class="mt-auto pt-4 border-t border-outline-variant/30 flex items-center justify-between">
-                            <div class="flex gap-1">
-                                <span class="material-symbols-outlined text-tertiary text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
-                                <span class="material-symbols-outlined text-tertiary text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
-                                <span class="material-symbols-outlined text-tertiary text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
-                                <span class="material-symbols-outlined text-tertiary text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
-                                <span class="material-symbols-outlined text-tertiary text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
-                            </div>
-                            <button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-bold text-sm hover:opacity-90">Ordenar</button>
-                        </div>
-                    </div>
-                </div>
-                <!-- Product Card 3 -->
-                <div class="bg-surface-container-lowest rounded-xl overflow-hidden flex flex-col border border-outline-variant/20 hover:shadow-xl transition-all duration-300">
-                    <div class="h-64 relative">
-                        <img alt="Cappuccino" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5jjBMxWVRNrgyUnQpckPfb5F6Q0E4o_TCGfgzyP6Vqf7gG4VtrsvCjB76MVZWwYTsE_8x4WMCyYP8uaV1fzIciONScA3Xqkht03VV2D9HaFSjfCDA405pYH9L6uVsXTqLKG7BuesRbQeujDPmtjFS-C6FM0iWdLqxbPXnN-Obl52dw5dll6PAj6TPtjv0bFQVrEhCqXiirae3qJFManGpU6hXtQzpw-AkyHdAdHBOJPqtacp_uxABcNKWgqxqa2bfhohiYpErdlQ"/>
-                        <div class="absolute top-4 right-4 bg-background/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-tertiary">
-                            Favorito Local
-                        </div>
-                    </div>
-                    <div class="p-6 flex-grow flex flex-col">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="text-xl font-bold text-on-surface">Capuchino de Avellana</h3>
-                            <span class="text-xl font-bold text-primary">$19.500 COP</span>
-                        </div>
-                        <p class="text-on-surface-variant text-sm mb-4 leading-relaxed italic">Notas de cata: Tostado profundo, crema densa y aroma a avellanas frescas.</p>
+                        <p class="text-on-surface-variant text-sm mb-4 leading-relaxed italic">{{ product.description }}</p>
                         <div class="mt-auto pt-4 border-t border-outline-variant/30 flex items-center justify-between">
                             <div class="flex gap-1">
                                 <span class="material-symbols-outlined text-tertiary text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
@@ -293,10 +268,11 @@
                                 <span class="material-symbols-outlined text-tertiary text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
                                 <span class="material-symbols-outlined text-outline text-sm" data-icon="star">star</span>
                             </div>
-                            <button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-bold text-sm hover:opacity-90">Ordenar</button>
+                            <a href="/customize/{{ product.id }}" class="bg-primary text-on-primary px-6 py-2 rounded-lg font-bold text-sm hover:opacity-90">Personalizar</a>
                         </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
         </section>
     </main>
@@ -306,17 +282,31 @@
         <div class="flex flex-col md:flex-row justify-between items-center px-8 gap-6 w-full max-w-7xl mx-auto">
             <div class="text-center md:text-left">
                 <div class="text-lg font-bold text-on-surface mb-2">Aroma & Grano</div>
-                <p class="font-['Nunito_Sans'] text-sm leading-relaxed text-on-surface-variant">© 2026 Aroma & Grano.</p>
+                <p class="font-['Nunito_Sans'] text-sm leading-relaxed text-on-surface-variant">© 2026 Aroma & Grano. Cosechado con amor.</p>
             </div>
             <div class="flex gap-6">
-                <a class="font-['Nunito_Sans'] text-sm text-on-surface-variant hover:text-primary transition-colors focus-within:ring-2 focus-within:ring-primary" href="#">Sostenibilidad</a>
-                <a class="font-['Nunito_Sans'] text-sm text-on-surface-variant hover:text-primary transition-colors focus-within:ring-2 focus-within:ring-primary" href="#">Contacto</a>
-                <a class="font-['Nunito_Sans'] text-sm text-on-surface-variant hover:text-primary transition-colors focus-within:ring-2 focus-within:ring-primary" href="#">Términos</a>
-            </div>
-            <div class="flex gap-4">
-                <span class="material-symbols-outlined text-outline hover:text-primary cursor-pointer transition-colors" data-icon="facebook">social_leaderboard</span>
+                <a class="font-['Nunito_Sans'] text-sm text-on-surface-variant hover:text-primary transition-colors focus-within:ring-2 focus-within:ring-primary" href="/sustainability">Sostenibilidad</a>
+                <a class="font-['Nunito_Sans'] text-sm text-on-surface-variant hover:text-primary transition-colors focus-within:ring-2 focus-within:ring-primary" href="/contact">Contacto</a>
+                <a class="font-['Nunito_Sans'] text-sm text-on-surface-variant hover:text-primary transition-colors focus-within:ring-2 focus-within:ring-primary" href="/terms">Términos</a>
             </div>
         </div>
     </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cartButtons = document.querySelectorAll('a[href^="/customize/"]');
+            cartButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    if (!this.querySelector('.product-image')) {
+                        e.preventDefault();
+                        const cartBadge = document.querySelector('.cart-badge');
+                        let count = parseInt(cartBadge.getAttribute('data-count')) || 0;
+                        count += 1;
+                        cartBadge.setAttribute('data-count', count);
+                        window.location.href = this.getAttribute('href');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

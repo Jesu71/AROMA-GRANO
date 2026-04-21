@@ -61,8 +61,7 @@
                         "surface-container-low": "#eff6ec",
                         "secondary-container": "#97f98a",
                         "tertiary-fixed-dim": "#efbc57",
-                        "tertiary-fixed": "#ffc963",
-                        "surface-container": "#e8f0e5"
+                        "tertiary-fixed": "#ffc963"
                     },
                     borderRadius: {
                         DEFAULT: "1rem",
@@ -86,12 +85,37 @@
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .active-filter {
+            background-color: #964a20 !important;
+            color: white !important;
+        }
+        .cart-badge {
+            position: relative;
+        }
+        .cart-badge::after {
+            content: attr(data-count);
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #f99868;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .product-image {
+            cursor: pointer;
+        }
     </style>
 </head>
 <body class="bg-background text-on-surface pb-24">
     <!-- TopAppBar -->
     <header class="sticky top-0 z-50 bg-[#faf6f0] dark:bg-stone-950 shadow-[0_4px_20px_rgba(46,50,48,0.06)] flex justify-between items-center w-full px-6 py-4">
-        <span class="text-xl font-serif text-emerald-900 dark:text-emerald-100 font-semibold tracking-tight">{{ session['email'] }}</span>
+        <span class="text-xl font-serif text-emerald-900 dark:text-emerald-100 font-semibold tracking-tight">{{ session['full_name'] }}</span>
         <a href="/logout" class="p-2 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors active:scale-95 duration-150 rounded-full">
             <span class="material-symbols-outlined text-emerald-800 dark:text-emerald-500">logout</span>
         </a>
@@ -106,29 +130,49 @@
 
         <!-- Category Filter -->
         <section class="flex gap-3 overflow-x-auto hide-scrollbar -mx-6 px-6">
-            <button class="px-5 py-2 rounded-full bg-primary text-on-primary font-label text-sm font-semibold whitespace-nowrap">Todas</button>
-            <button class="px-5 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label text-sm font-medium whitespace-nowrap">Espresso</button>
-            <button class="px-5 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label text-sm font-medium whitespace-nowrap">Latte</button>
-            <button class="px-5 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label text-sm font-medium whitespace-nowrap">Cold Brew</button>
+            <a href="/dashboard?category=all" class="px-5 py-2 rounded-full {% if category == 'all' %}active-filter{% else %}bg-surface-container-high text-on-surface-variant{% endif %} font-label text-sm font-semibold whitespace-nowrap">
+                Todas
+            </a>
+            <a href="/dashboard?category=Espresso" class="px-5 py-2 rounded-full {% if category == 'Espresso' %}active-filter{% else %}bg-surface-container-high text-on-surface-variant{% endif %} font-label text-sm font-medium whitespace-nowrap">
+                Espresso
+            </a>
+            <a href="/dashboard?category=Latte" class="px-5 py-2 rounded-full {% if category == 'Latte' %}active-filter{% else %}bg-surface-container-high text-on-surface-variant{% endif %} font-label text-sm font-medium whitespace-nowrap">
+                Latte
+            </a>
+            <a href="/dashboard?category=Cold Brew" class="px-5 py-2 rounded-full {% if category == 'Cold Brew' %}active-filter{% else %}bg-surface-container-high text-on-surface-variant{% endif %} font-label text-sm font-medium whitespace-nowrap">
+                Cold Brew
+            </a>
+        </section>
+
+        <!-- Filtrar por Origen -->
+        <section class="px-6">
+            <form action="/dashboard" method="get" onchange="this.submit()">
+                <input type="hidden" name="category" value="{{ category }}">
+                <select name="origin" class="w-full bg-surface-container-high border-none rounded-lg py-2.5 px-4 text-sm focus:ring-2 focus:ring-primary appearance-none cursor-pointer text-on-surface">
+                    <option value="all" {% if origin == 'all' %}selected{% endif %}>Filtrar por Origen</option>
+                    <option value="Etiopía - Sidamo" {% if origin == 'Etiopía - Sidamo' %}selected{% endif %}>Etiopía - Sidamo</option>
+                    <option value="Colombia - Huila" {% if origin == 'Colombia - Huila' %}selected{% endif %}>Colombia - Huila</option>
+                    <option value="Costa Rica - Tarrazú" {% if origin == 'Costa Rica - Tarrazú' %}selected{% endif %}>Costa Rica - Tarrazú</option>
+                </select>
+            </form>
         </section>
 
         <!-- Featured / Most Ordered: Latte Clásico -->
         <section>
             <div class="relative w-full h-64 rounded-xl overflow-hidden shadow-lg group">
-                <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiLNY1oP2bZl7rbmT0SmLiStViU1c0rLf3Tw0pJkguN8bM2zO92TQHq7_iKNmBYRpk3e5PD4NIgmM-kjA3H87LSjrGBzcbLhwAFicAlm0ev0PaiAkBFZO5pLV4uf6US8IbmrMaOEa5i-Ktk3QTyxrPuI5oDL_1LE-ueVaGSYaDoTsWPXPZyqegmM2Wa1Xpz7hIMf7wE8nNbaXIJxywpJxJ3QnwiMAclVGzwmQkMEJA9W5nZ24xWQMIGCPTtKG843QcAIv92PU_IrU"/>
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6">
-                    <span class="bg-tertiary-fixed text-on-tertiary-fixed text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded-md mb-2 self-start">Favorito de la Casa</span>
-                    <div class="flex justify-between items-end">
-                        <div>
-                            <h3 class="text-white text-2xl font-headline font-bold">Latte Clásico</h3>
-                            <p class="text-white font-bold text-lg mt-1">$16.500 COP</p>
-                            <p class="text-white/80 text-sm font-body">Sedoso y perfectamente equilibrado</p>
+                <a href="/customize/1" class="block">
+                    <img class="w-full h-full object-cover product-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiLNY1oP2bZl7rbmT0SmLiStViU1c0rLf3Tw0pJkguN8bM2zO92TQHq7_iKNmBYRpk3e5PD4NIgmM-kjA3H87LSjrGBzcbLhwAFicAlm0ev0PaiAkBFZO5pLV4uf6US8IbmrMaOEa5i-Ktk3QTyxrPuI5oDL_1LE-ueVaGSYaDoTsWPXPZyqegmM2Wa1Xpz7hIMf7wE8nNbaXIJxywpJxJ3QnwiMAclVGzwmQkMEJA9W5nZ24xWQMIGCPTtKG843QcAIv92PU_IrU"/>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6">
+                        <span class="bg-tertiary-fixed text-on-tertiary-fixed text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded-md mb-2 self-start">Favorito de la Casa</span>
+                        <div class="flex justify-between items-end">
+                            <div>
+                                <h3 class="text-white text-2xl font-headline font-bold">Latte Clásico</h3>
+                                <p class="text-white font-bold text-lg mt-1">$16.500 COP</p>
+                                <p class="text-white/80 text-sm font-body">Sedoso y perfectamente equilibrado</p>
+                            </div>
                         </div>
-                        <button class="bg-primary hover:bg-on-primary-fixed-variant text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-transform">
-                            <span class="material-symbols-outlined">add</span>
-                        </button>
                     </div>
-                </div>
+                </a>
             </div>
         </section>
 
@@ -140,55 +184,87 @@
             </div>
             <!-- Bento-style Grid for other items -->
             <div class="grid grid-cols-2 gap-4">
-                <!-- Item 1: Espresso -->
+                <!-- Espresso Doble -->
                 <div class="bg-surface-container-low rounded-xl p-4 flex flex-col space-y-3">
-                    <div class="relative w-full aspect-square rounded-lg overflow-hidden">
-                        <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6AtGwoxckD6ywXzxqE7_EEkWWhqiamiaBY6n3NFxUS3XD_36HYkHzosydMsZR8VJwSfD73_VypQDEraIeHu9islEFNeNoOJFJGeAmB0OHrpbBEGi45d7q1mSbr6OYyE89oLF_z5K1Fn29CE2lPSRtwMDHWr6mgvdY1mKgBUBFFGWWIUL4zp-zEJ2Y1k9zoQP9aWrKRbGqq9PVXXDH7oiSu41398GT4aiodU2laxEXpohBkAhjvyDyFyREkYzfY-2ocZManjpQIjQ"/>
-                    </div>
+                    <a href="/customize/2" class="block">
+                        <div class="relative w-full aspect-square rounded-lg overflow-hidden">
+                            <img class="w-full h-full object-cover product-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6AtGwoxckD6ywXzxqE7_EEkWWhqiamiaBY6n3NFxUS3XD_36HYkHzosydMsZR8VJwSfD73_VypQDEraIeHu9islEFNeNoOJFJGeAmB0OHrpbBEGi45d7q1mSbr6OYyE89oLF_z5K1Fn29CE2lPSRtwMDHWr6mgvdY1mKgBUBFFGWWIUL4zp-zEJ2Y1k9zoQP9aWrKRbGqq9PVXXDH7oiSu41398GT4aiodU2laxEXpohBkAhjvyDyFyREkYzfY-2ocZManjpQIjQ"/>
+                        </div>
+                    </a>
                     <div class="flex flex-col flex-1">
                         <span class="text-xs font-label text-tertiary font-bold">Espresso</span>
                         <h5 class="font-headline font-bold text-on-surface">Doble Shot</h5>
                         <div class="flex items-center justify-between mt-auto pt-2">
                             <span class="font-bold text-primary">$13.500 COP</span>
-                            <button class="bg-surface-container-highest p-1 rounded-full active:scale-90 transition-transform">
-                                <span class="material-symbols-outlined text-primary text-xl">add</span>
-                            </button>
+                            <a href="/customize/2" class="bg-surface-container-highest p-1 rounded-full active:scale-90 transition-transform">
+                                <span class="material-symbols-outlined text-primary text-xl">tune</span>
+                            </a>
                         </div>
                     </div>
                 </div>
-                <!-- Item 2: Cold Brew -->
+                <!-- Cold Brew Vainilla -->
                 <div class="bg-surface-container-low rounded-xl p-4 flex flex-col space-y-3">
-                    <div class="relative w-full aspect-square rounded-lg overflow-hidden">
-                        <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDl6Hak3z_Bu3R9hdx3uZ5m8Y6tL4Ik7rYk_Q_SKBwlAykti-NpE0eM1dYZtT3ct5w6x0T3K6eT1pLhMVS6ThWlWHG7KQFCl1nl3gG-TaeoGo4_U0HE59DiWSx0EGUcXsjzoDAD09gVigxl4qeKxe1L310c3ehAihzt19lZs7CxcHCCi16XpO29KLhZSiLy7UhdJDpjhn0VXJy4SIEvb2jR1FbuyLtGNPKrEfasFrQCQa_vapzIALDVzuu1dAV1spVRkjZ4ZlvBZPU"/>
-                    </div>
+                    <a href="/customize/3" class="block">
+                        <div class="relative w-full aspect-square rounded-lg overflow-hidden">
+                            <img class="w-full h-full object-cover product-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDl6Hak3z_Bu3R9hdx3uZ5m8Y6tL4Ik7rYk_Q_SKBwlAykti-NpE0eM1dYZtT3ct5w6x0T3K6eT1pLhMVS6ThWlWHG7KQFCl1nl3gG-TaeoGo4_U0HE59DiWSx0EGUcXsjzoDAD09gVigxl4qeKxe1L310c3ehAihzt19lZs7CxcHCCi16XpO29KLhZSiLy7UhdJDpjhn0VXJy4SIEvb2jR1FbuyLtGNPKrEfasFrQCQa_vapzIALDVzuu1dAV1spVRkjZ4ZlvBZPU"/>
+                        </div>
+                    </a>
                     <div class="flex flex-col flex-1">
                         <span class="text-xs font-label text-tertiary font-bold">Cold Brew</span>
                         <h5 class="font-headline font-bold text-on-surface">Vainilla Suave</h5>
                         <div class="flex items-center justify-between mt-auto pt-2">
                             <span class="font-bold text-primary">$14.750 COP</span>
-                            <button class="bg-surface-container-highest p-1 rounded-full active:scale-90 transition-transform">
-                                <span class="material-symbols-outlined text-primary text-xl">add</span>
-                            </button>
+                            <a href="/customize/3" class="bg-surface-container-highest p-1 rounded-full active:scale-90 transition-transform">
+                                <span class="material-symbols-outlined text-primary text-xl">tune</span>
+                            </a>
                         </div>
                     </div>
                 </div>
-                <!-- Item 3: Latte Art Special -->
+                <!-- Mocha Avellana -->
                 <div class="col-span-2 bg-surface-container-low rounded-xl p-4 flex gap-4">
-                    <div class="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
-                        <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwgY8U_jE-e1_LakccRbta-Rj4RRoxNDqwNaqo-p0U9BOGBQ9GgzcHblRbEEFKoQ-10A2e_leAFR8jN-LDZo7SqVjUFn8bRzEbbazz19DGd_9wwDxxgrpWQBFOQ_XoP5qairMN0UHBgDsiVpJpIWBfA6flVzXhyK1VC1i4Jp69IYRSuhzBygdkwlxV7lFgD5Wpzp-ZfUjujYSlmGDWl3txksmy2N5aiZtEbMIzklL7b3sUAKrPthgKKKjy7YjaToy1EpXCzUTYeNc"/>
-                    </div>
+                    <a href="/customize/4" class="block flex-shrink-0">
+                        <div class="w-24 h-24 rounded-lg overflow-hidden">
+                            <img class="w-full h-full object-cover product-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwgY8U_jE-e1_LakccRbta-Rj4RRoxNDqwNaqo-p0U9BOGBQ9GgzcHblRbEEFKoQ-10A2e_leAFR8jN-LDZo7SqVjUFn8bRzEbbazz19DGd_9wwDxxgrpWQBFOQ_XoP5qairMN0UHBgDsiVpJpIWBfA6flVzXhyK1VC1i4Jp69IYRSuhzBygdkwlxV7lFgD5Wpzp-ZfUjujYSlmGDWl3txksmy2N5aiZtEbMIzklL7b3sUAKrPthgKKKjy7YjaToy1EpXCzUTYeNc"/>
+                        </div>
+                    </a>
                     <div class="flex flex-col flex-1 justify-center">
                         <span class="text-xs font-label text-tertiary font-bold">Especialidad</span>
                         <h5 class="font-headline font-bold text-on-surface">Mocha Avellana</h5>
                         <p class="text-on-surface-variant text-xs line-clamp-1">Chocolate belga y crema de avellana.</p>
                         <div class="flex items-center justify-between mt-2">
                             <span class="font-bold text-primary">$15.500 COP</span>
-                            <button class="bg-primary text-on-primary px-3 py-1 rounded-full text-xs font-bold active:scale-90 transition-transform">
-                                Agregar
-                            </button>
+                            <a href="/customize/4" class="bg-primary text-on-primary px-3 py-1 rounded-full text-xs font-bold active:scale-90 transition-transform">
+                                Personalizar
+                            </a>
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <!-- Productos desde la base de datos -->
+        <section class="space-y-6">
+            <h4 class="text-lg font-headline font-semibold text-on-surface">Todos los Productos</h4>
+            <div class="grid grid-cols-2 gap-4">
+                {% for product in products %}
+                <div class="bg-surface-container-low rounded-xl p-4 flex flex-col space-y-3">
+                    <a href="/customize/{{ product.id }}" class="block">
+                        <div class="relative w-full aspect-square rounded-lg overflow-hidden">
+                            <img class="w-full h-full object-cover product-image" src="{{ product.image_url }}" alt="{{ product.name }}">
+                        </div>
+                    </a>
+                    <div class="flex flex-col flex-1">
+                        <span class="text-xs font-label text-tertiary font-bold">{{ product.category }}</span>
+                        <h5 class="font-headline font-bold text-on-surface">{{ product.name }}</h5>
+                        <div class="flex items-center justify-between mt-auto pt-2">
+                            <span class="font-bold text-primary">${{ product.price }} COP</span>
+                            <a href="/customize/{{ product.id }}" class="bg-surface-container-highest p-1 rounded-full active:scale-90 transition-transform">
+                                <span class="material-symbols-outlined text-primary text-xl">tune</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
         </section>
 
@@ -197,9 +273,9 @@
             <div class="relative z-10">
                 <h4 class="text-xl font-headline font-bold">¿Tienes Prisa?</h4>
                 <p class="text-emerald-100 text-sm mt-1 mb-4">Pide ahora y recoge en 5 minutos.</p>
-                <button class="bg-white text-emerald-900 font-label font-bold px-6 py-3 rounded-xl shadow-md active:scale-95 transition-transform">
+                <a href="/orders" class="bg-white text-emerald-900 font-label font-bold px-6 py-3 rounded-xl shadow-md active:scale-95 transition-transform block text-center">
                     Recoger en Tienda
-                </button>
+                </a>
             </div>
             <span class="material-symbols-outlined absolute -right-4 -bottom-4 text-8xl text-emerald-800/40 select-none">timer</span>
         </section>
@@ -208,20 +284,54 @@
     <!-- BottomNavBar -->
     <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pt-2 pb-6 bg-[#faf6f0]/95 dark:bg-stone-900/95 backdrop-blur-md shadow-[0_-4px_20px_rgba(46,50,48,0.04)] rounded-t-[24px] border-t border-stone-200/50 dark:border-stone-800/50">
         <!-- Menú (Active) -->
-        <a class="flex flex-col items-center justify-center text-emerald-800 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-900/30 rounded-xl px-4 py-1 active:scale-90 duration-200 ease-out" href="#">
+        <a class="flex flex-col items-center justify-center text-emerald-800 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-900/30 rounded-xl px-4 py-1 active:scale-90 duration-200 ease-out" href="/dashboard">
             <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">restaurant_menu</span>
             <span class="font-['Nunito_Sans'] text-xs font-medium">Menú</span>
         </a>
-        <!-- Pedidos -->
-        <a class="flex flex-col items-center justify-center text-stone-500 dark:text-stone-400 hover:text-emerald-700 dark:hover:text-emerald-300 active:scale-90 duration-200 ease-out" href="#">
-            <span class="material-symbols-outlined">receipt_long</span>
-            <span class="font-['Nunito_Sans'] text-xs font-medium">Pedidos</span>
-        </a>
+        <!-- Pedidos (con badge de carrito) -->
+        <div class="cart-badge" data-count="0">
+            <a class="flex flex-col items-center justify-center text-stone-500 dark:text-stone-400 hover:text-emerald-700 dark:hover:text-emerald-300 active:scale-90 duration-200 ease-out" href="/orders">
+                <span class="material-symbols-outlined">receipt_long</span>
+                <span class="font-['Nunito_Sans'] text-xs font-medium">Pedidos</span>
+            </a>
+        </div>
         <!-- Perfil -->
-        <a class="flex flex-col items-center justify-center text-stone-500 dark:text-stone-400 hover:text-emerald-700 dark:hover:text-emerald-300 active:scale-90 duration-200 ease-out" href="#">
+        <a class="flex flex-col items-center justify-center text-stone-500 dark:text-stone-400 hover:text-emerald-700 dark:hover:text-emerald-300 active:scale-90 duration-200 ease-out" href="/profile">
             <span class="material-symbols-outlined">person</span>
             <span class="font-['Nunito_Sans'] text-xs font-medium">Perfil</span>
         </a>
     </nav>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cartButtons = document.querySelectorAll('a[href^="/customize/"]');
+            cartButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    if (!this.querySelector('.product-image')) {
+                        e.preventDefault();
+                        const cartBadge = document.querySelector('.cart-badge');
+                        let count = parseInt(cartBadge.getAttribute('data-count')) || 0;
+                        count += 1;
+                        cartBadge.setAttribute('data-count', count);
+                        window.location.href = this.getAttribute('href');
+                    }
+                });
+            });
+
+            // Hacer que las imágenes sean clickeables
+            const productImages = document.querySelectorAll('.product-image');
+            productImages.forEach(image => {
+                image.addEventListener('click', function(e) {
+                    const link = this.closest('a[href^="/customize/"]');
+                    if (link) {
+                        const cartBadge = document.querySelector('.cart-badge');
+                        let count = parseInt(cartBadge.getAttribute('data-count')) || 0;
+                        count += 1;
+                        cartBadge.setAttribute('data-count', count);
+                        window.location.href = link.getAttribute('href');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
