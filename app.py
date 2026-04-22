@@ -135,29 +135,59 @@ def profile():
         return redirect(url_for('login'))
     return "Sección de Perfil - Aquí verás tu historial de pedidos y suscripciones"
 
-# --- Nuevas rutas para el footer ---
+# --- Rutas para el footer ---
 @app.route('/sustainability')
 def sustainability():
     if 'user_id' not in session:
         return redirect(url_for('login'))
-    return "Sección de Sostenibilidad - Aquí verás información sobre nuestras prácticas sostenibles."
+    return render_template('sustainability.html')
 
 @app.route('/contact')
 def contact():
     if 'user_id' not in session:
         return redirect(url_for('login'))
-    return "Sección de Contacto - Aquí podrás contactarnos para cualquier consulta."
+    return render_template('contact.html')
 
 @app.route('/terms')
 def terms():
     if 'user_id' not in session:
         return redirect(url_for('login'))
-    return "Sección de Términos y Condiciones - Aquí encontrarás los términos legales de nuestro servicio."
-# --- Fin de nuevas rutas ---
-
+    return render_template('terminos.html')
+#--------------------------------------------
 @app.route('/logout')
 def logout():
     session.clear()
+    return redirect(url_for('login'))
+
+@app.route('/forgot-password')
+def forgot_password():
+    if 'user_id' in session:
+        return redirect(url_for('dashboard'))
+    return render_template('forgot_password.html')
+
+@app.route('/send-recovery', methods=['POST'])
+def send_recovery():
+    email = request.form.get('email')
+
+    if not email:
+        flash('Por favor ingresa tu correo electrónico', 'error')
+        return redirect(url_for('forgot_password'))
+
+    # Verificar si el correo existe en la base de datos
+    user = supabase.table("users").select("*").eq("email", email).execute()
+
+    if not user.data:
+        flash('El correo electrónico no está registrado en nuestro sistema', 'error')
+        return redirect(url_for('forgot_password'))
+
+    # Simular el envío del correo de recuperación
+    # Aquí iría la lógica para enviar el correo
+
+    # Obtener el nombre del usuario para personalizar el mensaje
+    user_name = user.data[0]['full_name'] if user.data else 'Usuario'
+
+    # Simular el envío exitoso
+    flash(f'¡Correo enviado con éxito, {user_name}! Hemos enviado un enlace de recuperación a {email}. Revisa tu bandeja de entrada (y la carpeta de spam).', 'success')
     return redirect(url_for('login'))
 
 if __name__ == '__main__':

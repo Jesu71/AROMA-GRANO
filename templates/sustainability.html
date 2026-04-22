@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Sostenibilidad | Aroma & Grano</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;700;900&amp;family=Public+Sans:wght@300;400;500;600;700&amp;family=EB+Garamond:ital,wght@0,400..800;1,400..800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-error-container": "#6e1400",
+                        "surface-container-highest": "#dae6d8",
+                        "secondary": "#006f11",
+                        "surface-variant": "#dae6d8",
+                        "on-tertiary": "#fff8f1",
+                        "tertiary": "#7c5900",
+                        "outline": "#737e72",
+                        "surface": "#f6fbf3",
+                        "tertiary-dim": "#6d4d00",
+                        "on-primary": "#fff7f5",
+                        "surface-container-high": "#e1ebdf",
+                        "tertiary-container": "#ffc963",
+                        "on-secondary-container": "#00600d",
+                        "secondary-container": "#97f98a",
+                        "inverse-primary": "#f99868",
+                        "on-primary-fixed": "#2f0e00",
+                        "on-surface-variant": "#576257",
+                        "on-secondary": "#ebffe1",
+                        "tertiary-fixed": "#ffc963",
+                        "primary-fixed": "#f99868",
+                        "outline-variant": "#aab5a9",
+                        "on-background": "#2b352c",
+                        "secondary-dim": "#00610e",
+                        "on-tertiary-fixed-variant": "#6a4b00",
+                        "secondary-fixed-dim": "#8aeb7e",
+                        "on-secondary-fixed": "#004b08",
+                        "on-tertiary-fixed": "#463000",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed-variant": "#006b10",
+                        "on-surface": "#2b352c",
+                        "surface-dim": "#d2ddd0",
+                        "error-container": "#fd795a",
+                        "surface-tint": "#964a20",
+                        "on-error": "#fff7f6",
+                        "surface-container": "#e8f0e5",
+                        "background": "#f6fbf3",
+                        "inverse-on-surface": "#999e97",
+                        "on-tertiary-container": "#5e4200",
+                        "primary-container": "#f99868",
+                        "primary-fixed-dim": "#e98b5c",
+                        "on-error-container": "#6e1400",
+                        "primary": "#964a20",
+                        "secondary-fixed": "#97f98a",
+                        "on-secondary-container": "#00600d",
+                        "error-dim": "#791903",
+                        "inverse-surface": "#0b0f0b",
+                        "surface-container-low": "#eff6ec",
+                        "surface-bright": "#f6fbf3",
+                        "error": "#a73b21",
+                        "on-primary-container": "#562000",
+                        "primary-dim": "#873e15",
+                        "tertiary-fixed-dim": "#efbc57"
+                    },
+                    borderRadius: {
+                        DEFAULT: "1rem",
+                        lg: "2rem",
+                        xl: "3rem",
+                        full: "9999px"
+                    },
+                    fontFamily: {
+                        headline: ["Be Vietnam Pro", "sans-serif"],
+                        body: ["Public Sans", "sans-serif"],
+                        label: ["Public Sans", "sans-serif"],
+                        serif: ["EB Garamond", "serif"]
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Public Sans', sans-serif; }
+        h1, h2, h3 { font-family: 'EB Garamond', serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background selection:bg-primary/20">
+    <!-- TopNavBar -->
+    <header class="bg-surface-bright border-b border-outline-variant/30 sticky top-0 z-50">
+        <div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+            <div class="text-2xl font-['Literata'] italic font-bold text-primary" style="color: #b56236;">
+                Aroma & Grano
+            </div>
+            <nav class="hidden md:flex gap-8 items-center">
+                <a class="text-on-surface-variant hover:text-primary transition-colors font-['Literata'] font-semibold tracking-tight" href="/dashboard">Menú</a>
+                <a class="text-on-surface-variant hover:text-primary transition-colors font-['Literata'] font-semibold tracking-tight" href="/orders">Pedidos</a>
+                <a class="text-primary border-b-2 border-primary pb-1 font-['Literata'] font-semibold tracking-tight" href="/sustainability" style="color: #b56236;">Sostenibilidad</a>
+                <a class="text-on-surface-variant hover:text-primary transition-colors font-['Literata'] font-semibold tracking-tight" href="/profile">Suscripción</a>
+            </nav>
+            <div class="flex items-center gap-4">
+                <span class="text-on-surface">{{ session['full_name'] }}</span>
+                <a href="/logout" class="p-2 hover:bg-surface-container transition-all rounded-full">
+                    <span class="material-symbols-outlined text-on-surface" data-icon="logout">logout</span>
+                </a>
+                <div class="cart-badge" data-count="0">
+                    <a href="/orders" class="p-2 hover:bg-surface-container transition-all rounded-full">
+                        <span class="material-symbols-outlined text-on-surface" data-icon="shopping_cart">shopping_cart</span>
+                    </a>
+                </div>
+                <a href="/profile" class="p-2 hover:bg-surface-container transition-all rounded-full">
+                    <span class="material-symbols-outlined text-on-surface" data-icon="account_circle">account_circle</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Section 1: Hero Section -->
+        <section class="relative h-[870px] min-h-[600px] flex items-center justify-center overflow-hidden mx-4 mt-4 rounded-xl">
+            <div class="absolute inset-0 z-0">
+                <img class="w-full h-full object-cover brightness-75" data-alt="toma cinematográfica de exuberantes plantaciones de café en terrazas en una ladera de montaña brumosa al amanecer con luz dorada cálida" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2CwHZPMWAVew3Qgwq3fX1V9mjIXuZxBQsxb241ngRXmn6riaISLURAEqQrgJ6d-8IbD__oFqmL3VXu7airdzKiMb2ysOjv7mFVI5sbiW1FShh1ITCP-WiZTzV9JxMEYv2nL6ARm6EPOHmdtXq6H9ecNqLPMhsiR-uuAwKZMSjsWTCSxEQhdlGamTuwWmYl9BKNo2m9xzVwfJadyTeDT1BWhEFkAkQNBaT4tm7TjPdrn8VUf_Q33qkxsl3CX7rcBRjbtWT49E4u3s"/>
+            </div>
+            <div class="relative z-10 text-center px-6 max-w-4xl">
+                <span class="text-on-primary font-label tracking-[0.2em] uppercase text-sm mb-4 block opacity-90">Arraigados en la Ética</span>
+                <h1 class="text-5xl md:text-7xl lg:text-8xl text-on-primary mb-8 font-serif italic">Cuidando la tierra, empoderando las manos que cosechan.</h1>
+                <div class="flex flex-col md:flex-row gap-4 justify-center">
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Our Commitment (Bento Grid) -->
+        <section class="max-w-7xl mx-auto px-6 py-24">
+            <div class="mb-16">
+                <h2 class="text-4xl md:text-6xl text-primary font-serif mb-6">Nuestro Compromiso</h2>
+                <p class="text-xl text-on-surface-variant max-w-2xl font-body leading-relaxed">Creemos que el café debe saber bien y hacer el bien. Nuestro compromiso con la sostenibilidad abarca cada faceta de nuestro ciclo de producción.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                <!-- Direct Trade -->
+                <div class="md:col-span-8 bg-surface-container rounded-xl p-10 flex flex-col justify-between border border-outline-variant/30">
+                    <div>
+                        <span class="material-symbols-outlined text-4xl text-primary mb-6">handshake</span>
+                        <h3 class="text-3xl font-serif text-on-surface mb-4">Relaciones de Comercio Directo</h3>
+                        <p class="text-lg text-on-surface-variant max-w-xl leading-relaxed">Al eliminar intermediarios, garantizamos que más del 80% del precio final llegue directamente a nuestros agricultores. Esto les permite invertir en sus tierras y familias, creando un ciclo de prosperidad generacional.</p>
+                    </div>
+                    <div class="mt-8 flex items-center gap-4 text-primary font-bold">
+                    </div>
+                </div>
+                <!-- Fair Wages -->
+                <div class="md:col-span-4 bg-primary text-on-primary rounded-xl p-10 flex flex-col border border-primary-dim">
+                    <span class="material-symbols-outlined text-4xl mb-6">payments</span>
+                    <h3 class="text-3xl font-serif mb-4">Salarios Justos</h3>
+                    <p class="text-on-primary/80 leading-relaxed mb-6">Cada recolector, clasificador y tostador recibe un salario significativamente superior al estándar del salario vital, fomentando un entorno digno para toda la comunidad.</p>
+                    <div class="mt-auto pt-4 text-5xl font-black opacity-30">100%</div>
+                </div>
+                <!-- Environmental Stewardship -->
+                <div class="md:col-span-12 lg:col-span-12 bg-surface-container-high rounded-xl overflow-hidden flex flex-col md:flex-row border border-outline-variant/30">
+                    <div class="p-10 md:w-1/2">
+                        <span class="material-symbols-outlined text-4xl text-secondary mb-6">eco</span>
+                        <h3 class="text-3xl font-serif text-on-surface mb-4">Gestión Ambiental</h3>
+                        <p class="text-lg text-on-surface-variant leading-relaxed mb-6">Desde la conservación del agua en nuestras estaciones de lavado hasta técnicas de cultivo de sombra que protegen la biodiversidad local, priorizamos el planeta tanto como el grano.</p>
+                        <ul class="space-y-3">
+                            <li class="flex items-center gap-3 text-on-surface-variant"><span class="material-symbols-outlined text-secondary text-sm">check_circle</span> Plantas de procesamiento de residuo cero</li>
+                            <li class="flex items-center gap-3 text-on-surface-variant"><span class="material-symbols-outlined text-secondary text-sm">check_circle</span> Rutas de transporte neutras en carbono</li>
+                            <li class="flex items-center gap-3 text-on-surface-variant"><span class="material-symbols-outlined text-secondary text-sm">check_circle</span> Iniciativa de reforestación: 1 árbol por bolsa vendida</li>
+                        </ul>
+                    </div>
+                    <div class="md:w-1/2 h-64 md:h-auto overflow-hidden">
+                        <img class="w-full h-full object-cover" data-alt="exuberante follaje de selva tropical con vibrantes hojas exóticas que muestran la riqueza de un ecosistema forestal protegido" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYdTDePkW02kwK9uLlO8rn4469xTi4jW0YUy4DtLpochnhOvpxhzlv7zOOpgxTs9NfxRCLY_wTcPZ3jePpXnoEwb4MBTZBRAqLC0spaizFCUsn5zBLaoRNpvubEMg5N5R_s-e6B2vtxY4HjE9CZbVbkZPgym4ILKAKxqOANBV7yiR7OSil2Mhu0Jnn6TDdd5LbLICD-LJgduH1lTIgk2zFuOVyDGKkBSNFaxRplhVeHMp09_xAhDWgsfqVJnPNV1Wtcm7w65v3ZsQ"/>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Eco-Friendly Packaging (Visual Cards) -->
+        <section class="bg-surface-dim/30 py-24 px-6">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-6xl text-on-surface font-serif mb-4">Empaque que Devuelve</h2>
+                    <p class="text-lg text-on-surface-variant max-w-2xl mx-auto">Hemos pasado años perfeccionando nuestras bolsas para asegurar que tu café se mantenga fresco sin dejar rastro en el medio ambiente.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div class="relative group">
+                        <div class="absolute -inset-4 bg-primary/10 rounded-xl blur-2xl group-hover:bg-primary/20 transition-all"></div>
+                        <img class="relative rounded-xl shadow-2xl w-full aspect-square object-cover" data-alt="bolsas de café de papel kraft minimalistas con tipografía elegante mostradas sobre una superficie de madera limpia bajo luz natural suave" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcDAB2xYxn0z-q73DjZR7WCv5k7AnkxXmqQxLpotsBzRZI9AhdfH9KUOwfScT2f5YZwQ5kNfzscp82tZ-0eCVqwdgylv04ZUinDq4X8fwLXA4FqaeG72EzQ5gVkaQVkR3tZR_6PTGvxJ9gWdf-iC3zrddWe_yGO7fFZtmrQDp56zeyHpobUax_PPqliCl3TBIJ1Ffnvs53HfY1YyDhdNolrBTMF-Ux7Tm_0UlCblOwPP6bVSNwAEb3_4B_6fiStOyxrwLECktcdPA"/>
+                    </div>
+                    <div class="space-y-12">
+                        <div class="flex gap-6">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+                                <span class="material-symbols-outlined">compost</span>
+                            </div>
+                            <div>
+                                <h4 class="text-2xl font-serif text-on-surface mb-2">Materiales Compostables</h4>
+                                <p class="text-on-surface-variant leading-relaxed">Nuestras bolsas están hechas de materiales de origen vegetal y cuentan con certificación de compostaje doméstico, incluyendo el cierre y la válvula.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-6">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-tertiary-container flex items-center justify-center text-on-tertiary-container">
+                                <span class="material-symbols-outlined">ink_eraser</span>
+                            </div>
+                            <div>
+                                <h4 class="text-2xl font-serif text-on-surface mb-2">Tintas a Base de Agua</h4>
+                                <p class="text-on-surface-variant leading-relaxed">Utilizamos tintas de soja no tóxicas para todas nuestras impresiones, garantizando que no se filtren productos químicos nocivos en la tierra.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-6">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container">
+                                <span class="material-symbols-outlined">recycling</span>
+                            </div>
+                            <div>
+                                <h4 class="text-2xl font-serif text-on-surface mb-2">Programa de Recarga</h4>
+                                <p class="text-on-surface-variant leading-relaxed">Suscríbete a nuestro programa de recarga en frascos de vidrio para reducir los residuos hasta en un 95% a lo largo de un año.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: From Seed to Cup (Horizontal Timeline) -->
+        <section class="max-w-7xl mx-auto px-6 py-24">
+            <h2 class="text-4xl md:text-6xl text-primary font-serif mb-16 text-center italic">El Viaje Sostenible</h2>
+            <div class="relative">
+                <!-- Connecting Line -->
+                <div class="absolute top-1/2 left-0 w-full h-px bg-outline-variant/30 hidden lg:block -translate-y-1/2"></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+                    <!-- Step 1 -->
+                    <div class="relative bg-surface p-8 rounded-xl border border-outline-variant/20 hover:border-primary transition-colors group">
+                        <div class="w-12 h-12 rounded-full bg-background border-2 border-primary text-primary flex items-center justify-center font-bold text-xl mb-6 relative z-10 group-hover:bg-primary group-hover:text-on-primary transition-all">1</div>
+                        <h4 class="text-xl font-serif text-on-surface mb-3">Siembra Ética</h4>
+                        <p class="text-sm text-on-surface-variant leading-relaxed">Se plantan semillas orgánicas en suelos ricos en nutrientes sin pesticidas sintéticos, preservando el ecosistema local.</p>
+                    </div>
+                    <!-- Step 2 -->
+                    <div class="relative bg-surface p-8 rounded-xl border border-outline-variant/20 hover:border-primary transition-colors group">
+                        <div class="w-12 h-12 rounded-full bg-background border-2 border-primary text-primary flex items-center justify-center font-bold text-xl mb-6 relative z-10 group-hover:bg-primary group-hover:text-on-primary transition-all">2</div>
+                        <h4 class="text-xl font-serif text-on-surface mb-3">Cosecha Consciente</h4>
+                        <p class="text-sm text-on-surface-variant leading-relaxed">Solo se recolectan a mano los frutos maduros, garantizando una calidad superior y evitando desperdicios innecesarios.</p>
+                    </div>
+                    <!-- Step 3 -->
+                    <div class="relative bg-surface p-8 rounded-xl border border-outline-variant/20 hover:border-primary transition-colors group">
+                        <div class="w-12 h-12 rounded-full bg-background border-2 border-primary text-primary flex items-center justify-center font-bold text-xl mb-6 relative z-10 group-hover:bg-primary group-hover:text-on-primary transition-all">3</div>
+                        <h4 class="text-xl font-serif text-on-surface mb-3">Procesamiento Solar</h4>
+                        <p class="text-sm text-on-surface-variant leading-relaxed">Los granos se secan al sol en camas elevadas o se procesan en estaciones de lavado con energía solar para minimizar el uso de electricidad.</p>
+                    </div>
+                    <!-- Step 4 -->
+                    <div class="relative bg-surface p-8 rounded-xl border border-outline-variant/20 hover:border-primary transition-colors group">
+                        <div class="w-12 h-12 rounded-full bg-background border-2 border-primary text-primary flex items-center justify-center font-bold text-xl mb-6 relative z-10 group-hover:bg-primary group-hover:text-on-primary transition-all">4</div>
+                        <h4 class="text-xl font-serif text-on-surface mb-3">Preparación Residuo Cero</h4>
+                        <p class="text-sm text-on-surface-variant leading-relaxed">Tus posos de café usados son perfectos para el compostaje, cerrando el ciclo de vuelta a la tierra para la próxima cosecha.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="max-w-5xl mx-auto px-6 py-24">
+            <div class="bg-inverse-surface text-on-surface-variant p-12 md:p-20 rounded-xl text-center relative overflow-hidden">
+                <div class="absolute inset-0 opacity-10">
+                    <img class="w-full h-full object-cover" data-alt="primer plano abstracto de granos de café de tueste oscuro con textura aceitosa sutil y tonos marrón profundo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYuWqO689kkFq6h1RoQ6KIHiV224mPtdy6y13GhzF7RM_KyU3ObhNSwf5CzBh-qjw2NHW3S74AA8Ai169LphZQKAZNOSe1dY25hj4W9GQP4SNpotbHHP1FOFCdKuXCdWUrLoTt_ih8Kwiam9ju-JvRVAGQ2BYXfwbj_ROZa2lHkoxvSzxpcfKw1_my-QIOjv0vftBRc-8ff8x3VNnrwdds4OVUY-5OMdLyLdzQATm5uZw0n7GnNurumwwdDaAS_Opa_aFmBEee9xY"/>
+                </div>
+                <div class="relative z-10">
+                    <h2 class="text-4xl md:text-6xl text-white font-serif mb-6 italic">Únete al movimiento.</h2>
+                    <p class="text-xl text-stone-300 mb-10 max-w-xl mx-auto">Siente la diferencia que el origen ético y las prácticas sostenibles marcan en cada taza.</p>
+                    <a href="/dashboard" class="bg-primary text-on-primary px-12 py-5 rounded-full font-bold text-lg hover:scale-105 transition-transform active:scale-95 shadow-xl">Comprar Café Ético</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- Footer -->
+    <footer class="bg-surface-container-low border-t border-outline-variant/30 py-12 mt-16">
+        <div class="flex flex-col md:flex-row justify-between items-center px-8 gap-6 w-full max-w-7xl mx-auto">
+            <div class="text-center md:text-left">
+                <div class="text-lg font-bold text-on-surface mb-2">Aroma & Grano</div>
+                <p class="font-['Nunito_Sans'] text-sm leading-relaxed text-on-surface-variant">© 2026 Aroma & Grano. Cosechado con amor.</p>
+            </div>
+            <div class="flex gap-6">
+                <a class="font-['Nunito_Sans'] text-sm text-on-surface-variant hover:text-primary transition-colors focus-within:ring-2 focus-within:ring-primary" href="/sustainability">Sostenibilidad</a>
+                <a class="font-['Nunito_Sans'] text-sm text-on-surface-variant hover:text-primary transition-colors focus-within:ring-2 focus-within:ring-primary" href="/contact">Contacto</a>
+                <a class="font-['Nunito_Sans'] text-sm text-on-surface-variant hover:text-primary transition-colors focus-within:ring-2 focus-within:ring-primary" href="/terms">Términos</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
