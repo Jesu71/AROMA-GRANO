@@ -1,3 +1,5 @@
 Flask
 supabase
 user-agents
+flask-socketio
+python-dotenv
