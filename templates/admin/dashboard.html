@@ -5,7 +5,36 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Aroma & Grano - Panel de Administración</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;700;900&amp;family=Public+Sans:wght@400;500;700&amp;family=EB+Garamond:wght@600;800&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;700;900&family=Public+Sans:wght@400;500;700&family=EB+Garamond:wght@600;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        surface: '#f6fbf3',
+                        'surface-container': '#eef3eb',
+                        'surface-container-low': '#f1f6ee',
+                        'surface-container-lowest': '#ffffff',
+                        'surface-container-high': '#e5eae2',
+                        'on-surface': '#1a1c19',
+                        'on-surface-variant': '#43483f',
+                        primary: '#964a20',
+                        'primary-dim': '#7a3c1a',
+                        'on-primary': '#ffffff',
+                        secondary: '#006f11',
+                        'secondary-dim': '#005a0e',
+                        tertiary: '#7c5900',
+                        'tertiary-dim': '#634700',
+                        'on-tertiary': '#ffffff',
+                        error: '#ba1a1a',
+                        'error-dim': '#930000',
+                        'on-error': '#ffffff',
+                        'outline-variant': '#c2c9bd',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
         .material-symbols-outlined {
             font-family: 'Material Symbols Outlined';
@@ -116,19 +145,33 @@
         .notification-badge.new-notification::after {
             animation: pulse-badge 0.6s ease-in-out;
         }
+        @media (max-width: 640px) {
+            .notification-dropdown {
+                width: calc(100vw - 2rem);
+                right: -0.5rem;
+            }
+        }
     </style>
 </head>
 <body class="bg-surface font-body text-on-surface antialiased">
+    <!-- Sidebar Overlay (móvil) -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-40 hidden transition-opacity duration-300 opacity-0" onclick="toggleSidebar()"></div>
+
     <!-- Sidebar -->
-    <aside class="fixed left-0 top-0 bottom-0 w-64 z-50 flex flex-col p-4 bg-surface-container-lowest border-r border-outline-variant/30">
-        <div class="flex items-center gap-3 mb-10 px-4">
-            <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary">
-                <span class="material-symbols-outlined">local_cafe</span>
+    <aside id="sidebar" class="fixed left-0 top-0 bottom-0 w-[280px] z-50 flex flex-col p-4 bg-[#ffffff] border-r border-[#c2c9bd]/30 shadow-xl -translate-x-full md:translate-x-0 md:shadow-none transition-transform duration-300 ease-in-out">
+        <div class="flex items-center justify-between mb-8 px-2">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary flex-shrink-0">
+                    <span class="material-symbols-outlined">local_cafe</span>
+                </div>
+                <div class="min-w-0">
+                    <h1 class="font-display text-xl font-bold text-primary leading-tight">Aroma & Grano</h1>
+                    <p class="text-[10px] text-on-surface-variant font-medium uppercase tracking-wider">Panel de Admin</p>
+                </div>
             </div>
-            <div>
-                <h1 class="font-display text-2xl font-bold text-primary">Aroma & Grano</h1>
-                <p class="text-xs text-on-surface-variant font-medium uppercase tracking-wider">Panel de Administración</p>
-            </div>
+            <button class="md:hidden p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors flex-shrink-0" onclick="toggleSidebar()">
+                <span class="material-symbols-outlined">close</span>
+            </button>
         </div>
 
         <nav class="flex-1 space-y-1.5">
@@ -142,13 +185,13 @@
             </a>
         </nav>
 
-        <div class="mt-auto p-4 rounded-xl bg-surface-container">
+        <div class="mt-auto p-4 rounded-xl bg-[#eef3eb]">
             <div class="flex items-center gap-3 mb-3">
-                <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary flex-shrink-0">
                     <span class="material-symbols-outlined">account_circle</span>
                 </div>
-                <div>
-                    <p class="text-sm font-bold">{{ session['full_name'] }}</p>
+                <div class="min-w-0">
+                    <p class="text-sm font-bold truncate">{{ session['full_name'] }}</p>
                     <p class="text-xs text-on-surface-variant">Administrador</p>
                 </div>
             </div>
@@ -160,11 +203,14 @@
     </aside>
 
     <!-- TopNavBar -->
-    <header class="fixed top-0 right-0 left-0 z-40 flex items-center justify-between px-6 py-3 ml-64 bg-surface-container-lowest/90 backdrop-blur-md border-b border-outline-variant/30 shadow-sm">
-        <div class="flex items-center gap-4 w-1/3">
+    <header class="fixed top-0 right-0 left-0 z-30 flex items-center justify-between px-4 md:px-6 py-3 ml-0 md:ml-[280px] bg-[#ffffff]/95 backdrop-blur-md border-b border-[#c2c9bd]/30 shadow-sm">
+        <div class="flex items-center gap-3 flex-1 md:w-1/3">
+            <button class="md:hidden p-2 text-on-surface-variant hover:bg-surface-container transition-colors active:scale-95 duration-150 rounded-full" onclick="toggleSidebar()">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
             <div class="relative w-full">
                 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
-                <input class="w-full bg-surface-container-low border-none rounded-full py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary/20"
+                <input class="w-full bg-[#f1f6ee] border-none rounded-full py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary/20"
                        placeholder="Buscar productos..."
                        id="searchInput"
                        onkeyup="searchProducts()"
@@ -178,7 +224,7 @@
                     <span class="material-symbols-outlined">notifications</span>
                 </button>
                 <div class="notification-dropdown" id="notificationDropdown">
-                    <div class="p-3 border-b border-outline-variant/30 flex items-center justify-between">
+                    <div class="p-3 border-b border-[#c2c9bd]/30 flex items-center justify-between">
                         <h4 class="font-medium text-on-surface">Notificaciones recientes</h4>
                         <button onclick="clearNotifications()" class="flex items-center gap-1 text-xs text-on-surface-variant hover:text-error font-medium transition-colors" title="Limpiar notificaciones">
                             <span class="material-symbols-outlined text-sm">Cleaning_services</span>
@@ -196,18 +242,18 @@
     </header>
 
     <!-- Main Content -->
-    <main class="ml-64 pt-20 min-h-screen pb-10">
-        <div class="p-6 max-w-7xl mx-auto">
+    <main class="ml-0 md:ml-[280px] pt-16 md:pt-20 min-h-screen pb-10">
+        <div class="p-4 md:p-6 max-w-7xl mx-auto">
             <!-- Header Section -->
-            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6 md:mb-8">
                 <div>
                     <div class="flex items-center gap-2 mb-2">
                         <span class="material-symbols-outlined text-primary">restaurant_menu</span>
-                        <h2 class="font-display text-3xl font-bold text-primary">Gestión del Menú</h2>
+                        <h2 class="font-display text-2xl md:text-3xl font-bold text-primary">Gestión del Menú</h2>
                     </div>
-                    <p class="text-on-surface-variant max-w-md">Administra el inventario de bebidas, ajusta precios en tiempo real y actualiza las categorías.</p>
+                    <p class="text-on-surface-variant max-w-md text-sm md:text-base">Administra el inventario de bebidas, ajusta precios en tiempo real y actualiza las categorías.</p>
                 </div>
-                <button class="flex items-center gap-2 px-5 py-2.5 bg-primary text-on-primary rounded-full font-medium shadow-md hover:shadow-lg active:scale-95 transition-all"
+                <button class="flex items-center gap-2 px-5 py-2.5 bg-primary text-on-primary rounded-full font-medium shadow-md hover:shadow-lg active:scale-95 transition-all w-full md:w-auto justify-center"
                         onclick="openProductModal()">
                     <span class="material-symbols-outlined">add</span>
                     <span>Agregar Producto</span>
@@ -215,47 +261,47 @@
             </div>
 
             <!-- Stats Cards -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-                <div class="bg-surface-container p-5 rounded-lg border border-outline-variant/30">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5 mb-6 md:mb-8">
+                <div class="bg-[#eef3eb] p-4 md:p-5 rounded-lg border border-[#c2c9bd]/30">
                     <div class="flex items-center gap-2 mb-2">
                         <span class="material-symbols-outlined text-primary text-lg">inventory_2</span>
-                        <span class="text-xs font-bold uppercase tracking-widest text-primary-dim">Productos Totales</span>
+                        <span class="text-[10px] md:text-xs font-bold uppercase tracking-widest text-primary/70">Productos Totales</span>
                     </div>
-                    <span class="text-2xl font-display font-bold">{{ products|length }}</span>
+                    <span class="text-xl md:text-2xl font-display font-bold">{{ products|length }}</span>
                 </div>
-                <div class="bg-surface-container p-5 rounded-lg border border-outline-variant/30">
+                <div class="bg-[#eef3eb] p-4 md:p-5 rounded-lg border border-[#c2c9bd]/30">
                     <div class="flex items-center gap-2 mb-2">
                         <span class="material-symbols-outlined text-secondary text-lg">star</span>
-                        <span class="text-xs font-bold uppercase tracking-widest text-secondary-dim">Más Vendido</span>
+                        <span class="text-[10px] md:text-xs font-bold uppercase tracking-widest text-secondary/70">Más Vendido</span>
                     </div>
-                    <span class="text-2xl font-display font-bold">{% if products|length > 0 %}{{ products[0].name }}{% else %}N/A{% endif %}</span>
+                    <span class="text-lg md:text-2xl font-display font-bold truncate block">{% if products|length > 0 %}{{ products[0].name }}{% else %}N/A{% endif %}</span>
                 </div>
-                <div class="bg-surface-container p-5 rounded-lg border border-outline-variant/30">
+                <div class="bg-[#eef3eb] p-4 md:p-5 rounded-lg border border-[#c2c9bd]/30">
                     <div class="flex items-center gap-2 mb-2">
                         <span class="material-symbols-outlined text-tertiary text-lg">category</span>
-                        <span class="text-xs font-bold uppercase tracking-widest text-tertiary-dim">Categorías</span>
+                        <span class="text-[10px] md:text-xs font-bold uppercase tracking-widest text-tertiary/70">Categorías</span>
                     </div>
-                    <span class="text-2xl font-display font-bold">{{ categories|length }}</span>
+                    <span class="text-xl md:text-2xl font-display font-bold">{{ categories|length }}</span>
                 </div>
-                <div class="bg-surface-container p-5 rounded-lg border border-outline-variant/30">
+                <div class="bg-[#eef3eb] p-4 md:p-5 rounded-lg border border-[#c2c9bd]/30">
                     <div class="flex items-center gap-2 mb-2">
                         <span class="material-symbols-outlined text-on-surface-variant text-lg">check_circle</span>
-                        <span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Disponibilidad</span>
+                        <span class="text-[10px] md:text-xs font-bold uppercase tracking-widest text-on-surface-variant/70">Disponibilidad</span>
                     </div>
-                    <span class="text-2xl font-display font-bold">{{ availability }}%</span>
+                    <span class="text-xl md:text-2xl font-display font-bold">{{ availability }}%</span>
                 </div>
             </div>
 
             <!-- Products Table -->
-            <div class="bg-surface-container-lowest rounded-xl overflow-hidden flex flex-col border border-outline-variant/20">
-                <div class="px-6 py-4 border-b border-outline-variant/30 bg-surface-container flex items-center justify-between">
+            <div class="bg-[#ffffff] rounded-xl overflow-hidden flex flex-col border border-[#c2c9bd]/20">
+                <div class="px-4 md:px-6 py-4 border-b border-[#c2c9bd]/30 bg-[#eef3eb] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div class="flex items-center gap-2">
                         <span class="material-symbols-outlined text-primary">coffee</span>
                         <h3 class="font-bold text-lg text-on-surface">Productos de Café</h3>
                     </div>
                     <div class="flex items-center gap-2">
                         <span class="text-xs text-on-surface-variant font-medium">Filtrar por:</span>
-                        <select class="text-xs font-bold border border-outline-variant/30 bg-surface-container-lowest rounded-lg px-3 py-1 focus:ring-2 focus:ring-primary/20"
+                        <select class="text-xs font-bold border border-[#c2c9bd]/30 bg-[#ffffff] rounded-lg px-3 py-1 focus:ring-2 focus:ring-primary/20"
                                 id="categoryFilter"
                                 onchange="filterByCategory()">
                             <option value="all">Todos</option>
@@ -269,32 +315,32 @@
                 <div class="overflow-x-auto">
                     <table class="w-full text-left" id="productsTable">
                         <thead>
-                            <tr class="text-xs font-bold uppercase tracking-wider text-on-surface-variant bg-surface-container">
-                                <th class="px-6 py-4">
+                            <tr class="text-xs font-bold uppercase tracking-wider text-on-surface-variant bg-[#eef3eb]">
+                                <th class="px-4 md:px-6 py-4">
                                     <div class="flex items-center gap-1">
                                         <span class="material-symbols-outlined text-sm">coffee</span>
                                         <span>Producto</span>
                                     </div>
                                 </th>
-                                <th class="px-6 py-4 text-right">
+                                <th class="px-4 md:px-6 py-4 text-right">
                                     <div class="flex items-center justify-end gap-1">
-                                        <span>Precio ($ COP)</span>
-                                        <span class="material-symbols-outlined text-sm">paid</span>
+                                        <span>Precio</span>
+                                        <span class="material-symbols-outlined text-sm hidden md:inline">paid</span>
                                     </div>
                                 </th>
-                                <th class="px-6 py-4">
+                                <th class="px-4 md:px-6 py-4 hidden sm:table-cell">
                                     <div class="flex items-center gap-1">
                                         <span class="material-symbols-outlined text-sm">category</span>
                                         <span>Categoría</span>
                                     </div>
                                 </th>
-                                <th class="px-6 py-4">
+                                <th class="px-4 md:px-6 py-4 hidden md:table-cell">
                                     <div class="flex items-center gap-1">
                                         <span class="material-symbols-outlined text-sm">inventory</span>
                                         <span>Estado</span>
                                     </div>
                                 </th>
-                                <th class="px-6 py-4 text-center">
+                                <th class="px-4 md:px-6 py-4 text-center">
                                     <div class="flex items-center justify-center gap-1">
                                         <span class="material-symbols-outlined text-sm">settings</span>
                                         <span>Acciones</span>
@@ -302,27 +348,36 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-outline-variant/30">
+                        <tbody class="divide-y divide-[#c2c9bd]/30">
                             {% for product in products %}
                             <tr class="hover:bg-primary/5 transition-colors group product-row" data-category="{{ product.category }}" data-name="{{ product.name|lower }}" data-id="{{ product.id }}">
-                                <td class="px-6 py-4">
+                                <td class="px-4 md:px-6 py-4">
                                     <div class="flex items-center gap-3">
-                                        <img class="product-image" src="{{ product.image_url }}" alt="{{ product.name }}">
-                                        <div>
-                                            <p class="font-bold text-on-surface">{{ product.name }}</p>
-                                            <p class="text-xs text-on-surface-variant">{{ product.description }}</p>
+                                        <img class="product-image w-10 h-10 md:w-12 md:h-12" src="{{ product.image_url }}" alt="{{ product.name }}">
+                                        <div class="min-w-0">
+                                            <p class="font-bold text-on-surface truncate">{{ product.name }}</p>
+                                            <p class="text-xs text-on-surface-variant truncate max-w-[180px] md:max-w-none">{{ product.description }}</p>
+                                            <!-- Info visible solo en móvil -->
+                                            <div class="sm:hidden flex items-center gap-2 mt-1">
+                                                <span class="px-2 py-0.5 bg-[#eef3eb] rounded-full text-[10px] font-medium">{{ product.category }}</span>
+                                                {% if product.status == 'active' %}
+                                                <span class="text-[10px] font-bold text-secondary">Activo</span>
+                                                {% else %}
+                                                <span class="text-[10px] font-bold text-tertiary">Bajo Stock</span>
+                                                {% endif %}
+                                            </div>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 text-right font-display font-bold text-primary">
+                                <td class="px-4 md:px-6 py-4 text-right font-display font-bold text-primary text-sm md:text-base whitespace-nowrap">
                                     ${{ "{:,}".format(product.price) }}
                                 </td>
-                                <td class="px-6 py-4">
-                                    <span class="px-3 py-1 bg-surface-container rounded-full text-xs font-medium">
+                                <td class="px-4 md:px-6 py-4 hidden sm:table-cell">
+                                    <span class="px-3 py-1 bg-[#eef3eb] rounded-full text-xs font-medium">
                                         {{ product.category }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4">
+                                <td class="px-4 md:px-6 py-4 hidden md:table-cell">
                                     {% if product.status == 'active' %}
                                     <div class="flex items-center gap-1.5 text-secondary font-bold text-xs status-active">
                                         <span class="w-2 h-2 rounded-full bg-secondary"></span>
@@ -335,8 +390,8 @@
                                     </div>
                                     {% endif %}
                                 </td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center justify-center gap-2">
+                                <td class="px-4 md:px-6 py-4">
+                                    <div class="flex items-center justify-center gap-1 md:gap-2">
                                         <button class="p-2 text-primary hover:bg-primary/10 rounded-full transition-colors"
                                                 onclick="editProduct({{ product.id }})">
                                             <span class="material-symbols-outlined text-sm">edit</span>
@@ -357,23 +412,28 @@
     </main>
 
     <!-- Product Modal -->
-    <div id="productModal" class="fixed inset-0 bg-black/50 z-[1000] flex items-center justify-center p-4 hidden">
-        <div class="w-full max-w-2xl rounded-xl overflow-hidden shadow-2xl">
-            <div class="p-6 border-b border-outline-variant/30 flex items-center gap-2">
-                <span class="material-symbols-outlined text-primary">coffee</span>
-                <h3 id="modalTitle" class="font-display text-xl font-bold text-on-surface">Agregar Nuevo Producto</h3>
+    <div id="productModal" class="fixed inset-0 bg-black/50 z-[1000] flex items-end md:items-center justify-center p-0 md:p-4 hidden">
+        <div class="w-full md:max-w-2xl rounded-t-2xl md:rounded-xl overflow-hidden shadow-2xl max-h-[90vh] md:max-h-none overflow-y-auto bg-[#f6fbf3]">
+            <div class="p-4 md:p-6 border-b border-[#c2c9bd]/30 flex items-center justify-between bg-[#eef3eb]">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">coffee</span>
+                    <h3 id="modalTitle" class="font-display text-xl font-bold text-on-surface">Agregar Nuevo Producto</h3>
+                </div>
+                <button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full" onclick="closeProductModal()">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
             </div>
 
-            <form id="productForm" class="p-6 space-y-5" method="POST" action="{{ url_for('admin_products') }}">
+            <form id="productForm" class="p-4 md:p-6 space-y-4 md:space-y-5" method="POST" action="{{ url_for('admin_products') }}">
                 <input type="hidden" id="productId" name="id">
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
                     <div class="space-y-1.5">
                         <div class="flex items-center gap-1">
                             <span class="material-symbols-outlined text-sm text-on-surface-variant">text_fields</span>
                             <label class="text-sm font-medium text-on-surface-variant" for="productName">Nombre del Producto</label>
                         </div>
-                        <input class="w-full px-4 py-2.5 bg-surface-container-low border border-outline-variant/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+                        <input class="w-full px-4 py-2.5 bg-[#ffffff] border border-[#c2c9bd]/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                                id="productName"
                                name="name"
                                required/>
@@ -384,7 +444,7 @@
                             <span class="material-symbols-outlined text-sm text-on-surface-variant">category</span>
                             <label class="text-sm font-medium text-on-surface-variant" for="productCategory">Categoría</label>
                         </div>
-                        <select class="w-full px-4 py-2.5 bg-surface-container-low border border-outline-variant/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+                        <select class="w-full px-4 py-2.5 bg-[#ffffff] border border-[#c2c9bd]/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                                 id="productCategory"
                                 name="category"
                                 required>
@@ -401,20 +461,20 @@
                         <span class="material-symbols-outlined text-sm text-on-surface-variant">description</span>
                         <label class="text-sm font-medium text-on-surface-variant" for="productDescription">Descripción</label>
                     </div>
-                    <textarea class="w-full px-4 py-2.5 bg-surface-container-low border border-outline-variant/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+                    <textarea class="w-full px-4 py-2.5 bg-[#ffffff] border border-[#c2c9bd]/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                               id="productDescription"
                               name="description"
                               rows="3"
                               required></textarea>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-5">
                     <div class="space-y-1.5">
                         <div class="flex items-center gap-1">
                             <span class="material-symbols-outlined text-sm text-on-surface-variant">paid</span>
                             <label class="text-sm font-medium text-on-surface-variant" for="productPrice">Precio ($ COP)</label>
                         </div>
-                        <input class="w-full px-4 py-2.5 bg-surface-container-low border border-outline-variant/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+                        <input class="w-full px-4 py-2.5 bg-[#ffffff] border border-[#c2c9bd]/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                                id="productPrice"
                                name="price"
                                type="number"
@@ -427,7 +487,7 @@
                             <span class="material-symbols-outlined text-sm text-on-surface-variant">inventory</span>
                             <label class="text-sm font-medium text-on-surface-variant" for="productStatus">Estado</label>
                         </div>
-                        <select class="w-full px-4 py-2.5 bg-surface-container-low border border-outline-variant/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+                        <select class="w-full px-4 py-2.5 bg-[#ffffff] border border-[#c2c9bd]/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                                 id="productStatus"
                                 name="status"
                                 required>
@@ -441,7 +501,7 @@
                             <span class="material-symbols-outlined text-sm text-on-surface-variant">image</span>
                             <label class="text-sm font-medium text-on-surface-variant" for="productImage">URL de la Imagen</label>
                         </div>
-                        <input class="w-full px-4 py-2.5 bg-surface-container-low border border-outline-variant/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+                        <input class="w-full px-4 py-2.5 bg-[#ffffff] border border-[#c2c9bd]/30 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                                id="productImage"
                                name="image_url"
                                placeholder="https://ejemplo.com/imagen.jpg"
@@ -449,17 +509,17 @@
                     </div>
                 </div>
 
-                <div class="flex justify-end gap-3 pt-4 border-t border-outline-variant/30">
+                <div class="flex justify-end gap-3 pt-4 border-t border-[#c2c9bd]/30">
                     <button type="button"
-                            class="px-5 py-2 bg-surface-container text-on-surface-variant rounded-lg font-medium hover:bg-surface-container-high transition-colors flex items-center gap-1.5"
+                            class="px-4 md:px-5 py-2 bg-[#eef3eb] text-on-surface-variant rounded-lg font-medium hover:bg-[#e5eae2] transition-colors flex items-center gap-1.5"
                             onclick="closeProductModal()">
                         <span class="material-symbols-outlined text-sm">close</span>
                         <span>Cancelar</span>
                     </button>
                     <button type="submit"
-                            class="px-5 py-2 bg-primary text-on-primary rounded-lg font-medium hover:bg-primary-dim transition-colors flex items-center gap-1.5">
+                            class="px-4 md:px-5 py-2 bg-primary text-on-primary rounded-lg font-medium hover:bg-primary-dim transition-colors flex items-center gap-1.5">
                         <span class="material-symbols-outlined text-sm">save</span>
-                        <span>Guardar Producto</span>
+                        <span>Guardar</span>
                     </button>
                 </div>
             </form>
@@ -467,28 +527,28 @@
     </div>
 
     <!-- Delete Confirmation Modal -->
-    <div id="deleteModal" class="fixed inset-0 bg-black/50 z-[1000] flex items-center justify-center p-4 hidden">
-        <div class="w-full max-w-md rounded-xl overflow-hidden shadow-2xl">
-            <div class="p-6">
+    <div id="deleteModal" class="fixed inset-0 bg-black/50 z-[1000] flex items-end md:items-center justify-center p-0 md:p-4 hidden">
+        <div class="w-full md:max-w-md rounded-t-2xl md:rounded-xl overflow-hidden shadow-2xl bg-[#f6fbf3]">
+            <div class="p-4 md:p-6">
                 <div class="flex items-center gap-4 mb-5">
-                    <div class="w-12 h-12 rounded-full bg-error/10 flex items-center justify-center text-error">
+                    <div class="w-12 h-12 rounded-full bg-error/10 flex items-center justify-center text-error flex-shrink-0">
                         <span class="material-symbols-outlined text-2xl">delete</span>
                     </div>
                     <div>
                         <h3 class="font-display text-xl font-bold text-on-surface">Confirmar Eliminación</h3>
-                        <p class="text-on-surface-variant">Esta acción no se puede deshacer</p>
+                        <p class="text-on-surface-variant text-sm">Esta acción no se puede deshacer</p>
                     </div>
                 </div>
 
-                <p class="text-on-surface-variant mb-6">¿Estás seguro que deseas eliminar este producto permanentemente? El producto será removido de la base de datos.</p>
+                <p class="text-on-surface-variant mb-6 text-sm md:text-base">¿Estás seguro que deseas eliminar este producto permanentemente? El producto será removido de la base de datos.</p>
 
                 <div class="flex justify-end gap-3">
-                    <button class="px-5 py-2 bg-surface-container text-on-surface-variant rounded-lg font-medium hover:bg-surface-container-high transition-colors flex items-center gap-1.5"
+                    <button class="px-4 md:px-5 py-2 bg-[#eef3eb] text-on-surface-variant rounded-lg font-medium hover:bg-[#e5eae2] transition-colors flex items-center gap-1.5"
                             onclick="closeDeleteModal()">
                         <span class="material-symbols-outlined text-sm">close</span>
                         <span>Cancelar</span>
                     </button>
-                    <button id="confirmDeleteBtn" class="px-5 py-2 bg-error text-on-error rounded-lg font-medium hover:bg-error-dim transition-colors flex items-center gap-1.5">
+                    <button id="confirmDeleteBtn" class="px-4 md:px-5 py-2 bg-error text-on-error rounded-lg font-medium hover:bg-error-dim transition-colors flex items-center gap-1.5">
                         <span class="material-symbols-outlined text-sm">delete</span>
                         <span>Eliminar</span>
                     </button>
@@ -502,6 +562,41 @@
         let currentDeleteId = null;
         let notificationPollInterval = null;
         let previousUnreadCount = 0;
+
+        // =====================
+        // SIDEBAR MÓVIL
+        // =====================
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const isOpen = !sidebar.classList.contains('-translate-x-full');
+
+            if (isOpen) {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('opacity-0');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+            } else {
+                overlay.classList.remove('hidden');
+                requestAnimationFrame(() => {
+                    overlay.classList.remove('opacity-0');
+                    sidebar.classList.remove('-translate-x-full');
+                });
+            }
+        }
+
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            if (window.innerWidth >= 768) {
+                overlay.classList.add('hidden');
+                overlay.classList.add('opacity-0');
+            } else {
+                if (sidebar.classList.contains('-translate-x-full')) {
+                    overlay.classList.add('hidden');
+                    overlay.classList.add('opacity-0');
+                }
+            }
+        });
 
         // =====================
         // SISTEMA DE NOTIFICACIONES EN TIEMPO REAL
@@ -518,7 +613,6 @@
 
                 const data = await response.json();
 
-                // Filtrar notificaciones que fueron limpiadas visualmente
                 const clearedAt = localStorage.getItem('notificationsClearedAt');
                 let filteredNotifications = data.notifications;
                 if (clearedAt) {
@@ -527,7 +621,6 @@
                     });
                 }
 
-                // Contar no leídas solo de las visibles
                 const visibleUnreadCount = filteredNotifications.filter(n => !n.is_read).length;
 
                 const badge = document.getElementById('notificationBadge');
@@ -613,15 +706,12 @@
         }
 
         function clearNotifications() {
-            // Guardar timestamp en localStorage para filtrar las ya vistas
             localStorage.setItem('notificationsClearedAt', new Date().toISOString());
 
-            // Marcar todas como leídas en la base de datos
             fetch('/admin/notifications/mark-read', { method: 'POST' }).catch(err => {
                 console.error('Error marking notifications as read:', err);
             });
 
-            // Actualizar la interfaz inmediatamente
             const container = document.getElementById('notificationsContent');
             if (container) {
                 container.innerHTML = `
@@ -632,7 +722,6 @@
                 `;
             }
 
-            // Resetear badge a 0
             const badge = document.getElementById('notificationBadge');
             if (badge) {
                 badge.setAttribute('data-count', '0');
@@ -774,6 +863,7 @@
                 row.style.display = shouldShow ? '' : 'none';
             });
         }
+
         // =====================
         // EVENT LISTENERS
         // =====================

@@ -4,9 +4,11 @@ from user_agents import parse
 import os
 from functools import wraps
 from datetime import datetime
+from flask_cors import CORS
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
+CORS(app)
 
 # Configuración de Supabase
 url: str = "https://lmvulmiiuoknceifvrcy.supabase.co"
