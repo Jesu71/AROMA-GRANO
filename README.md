@@ -1,12 +1,15 @@
 Instalación
 
 1. Clona el repositorio:
+   
 git clone https://github.com/tu-usuario/tu-repo.git
 
-2. Instala las dependencias:
+3. Instala las dependencias:
+   
 pip install -r requirements.txt
 
-3. Ejecuta la aplicación:
+4. Ejecuta la aplicación:
+
    python app.py
 
 
