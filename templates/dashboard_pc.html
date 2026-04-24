@@ -7,75 +7,40 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&amp;family=Public+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-    <script id="tailwind-config">
+    <script>
         tailwind.config = {
             darkMode: "class",
             theme: {
                 extend: {
                     colors: {
-                        "tertiary-container": "#ffc963",
-                        "on-tertiary-container": "#5e4200",
-                        "error-container": "#fd795a",
-                        outline: "#737e72",
-                        "on-secondary-fixed-variant": "#006b10",
-                        "on-error-container": "#6e1400",
-                        "tertiary-fixed": "#ffc963",
-                        "on-tertiary-fixed": "#463000",
-                        "inverse-surface": "#0b0f0b",
-                        "surface-container-highest": "#dae6d8",
-                        "on-surface": "#2b352c",
-                        "primary-fixed": "#f99868",
-                        "secondary-fixed": "#97f98a",
-                        "primary-container": "#f99868",
-                        "on-background": "#2b352c",
-                        "inverse-on-surface": "#999e97",
-                        "on-primary-fixed": "#2f0e00",
-                        "on-secondary-fixed": "#004b08",
-                        "surface-container-lowest": "#ffffff",
-                        "on-secondary-container": "#00600d",
-                        "surface-variant": "#dae6d8",
-                        "on-error": "#fff7f6",
-                        "surface-bright": "#f6fbf3",
-                        "surface-container-low": "#eff6ec",
-                        "inverse-primary": "#f99868",
-                        tertiary: "#7c5900",
-                        secondary: "#006f11",
-                        "on-primary-container": "#562000",
-                        background: "#f6fbf3",
-                        "surface-container": "#e8f0e5",
-                        "outline-variant": "#aab5a9",
-                        "surface-container-high": "#e1ebdf",
-                        "primary-fixed-dim": "#e98b5c",
-                        primary: "#964a20",
-                        "on-primary-fixed-variant": "#642600",
-                        error: "#a73b21",
-                        surface: "#f6fbf3",
-                        "on-tertiary-fixed-variant": "#6a4b00",
-                        "on-primary": "#fff7f5",
-                        "on-secondary": "#ebffe1",
-                        "on-surface-variant": "#576257",
-                        "secondary-container": "#97f98a",
-                        "surface-dim": "#d2ddd0",
-                        "tertiary-fixed-dim": "#efbc57",
-                        "surface-tint": "#964a20",
-                        "on-tertiary": "#fff8f1",
-                        "primary-dim": "#873e15",
-                        "tertiary-dim": "#6d4d00",
-                        "error-dim": "#791903",
-                        "secondary-dim": "#00610e"
+                        "tertiary-container": "#ffc963", "on-tertiary-container": "#5e4200",
+                        "error-container": "#fd795a", outline: "#737e72",
+                        "on-secondary-fixed-variant": "#006b10", "on-error-container": "#6e1400",
+                        "tertiary-fixed": "#ffc963", "on-tertiary-fixed": "#463000",
+                        "inverse-surface": "#0b0f0b", "surface-container-highest": "#dae6d8",
+                        "on-surface": "#2b352c", "primary-fixed": "#f99868",
+                        "secondary-fixed": "#97f98a", "primary-container": "#f99868",
+                        "on-background": "#2b352c", "inverse-on-surface": "#999e97",
+                        "on-primary-fixed": "#2f0e00", "on-secondary-fixed": "#004b08",
+                        "surface-container-lowest": "#ffffff", "on-secondary-container": "#00600d",
+                        "surface-variant": "#dae6d8", "on-error": "#fff7f6",
+                        "surface-bright": "#f6fbf3", "surface-container-low": "#eff6ec",
+                        "inverse-primary": "#f99868", tertiary: "#7c5900",
+                        secondary: "#006f11", "on-primary-container": "#562000",
+                        background: "#f6fbf3", "surface-container": "#e8f0e5",
+                        "outline-variant": "#aab5a9", "surface-container-high": "#e1ebdf",
+                        "primary-fixed-dim": "#e98b5c", primary: "#964a20",
+                        "on-primary-fixed-variant": "#642600", error: "#a73b21",
+                        surface: "#f6fbf3", "on-tertiary-fixed-variant": "#6a4b00",
+                        "on-primary": "#fff7f5", "on-secondary": "#ebffe1",
+                        "on-surface-variant": "#576257", "secondary-container": "#97f98a",
+                        "surface-dim": "#d2ddd0", "tertiary-fixed-dim": "#efbc57",
+                        "surface-tint": "#964a20", "on-tertiary": "#fff8f1",
+                        "primary-dim": "#873e15", "tertiary-dim": "#6d4d00",
+                        "error-dim": "#791903", "secondary-dim": "#00610e"
                     },
-                    borderRadius: {
-                        DEFAULT: "1rem",
-                        lg: "2rem",
-                        xl: "3rem",
-                        full: "9999px"
-                    },
-                    fontFamily: {
-                        headline: ["Be Vietnam Pro"],
-                        body: ["Public Sans"],
-                        label: ["Public Sans"],
-                        display: "Be Vietnam Pro"
-                    }
+                    borderRadius: { DEFAULT: "1rem", lg: "2rem", xl: "3rem", full: "9999px" },
+                    fontFamily: { headline: ["Be Vietnam Pro"], body: ["Public Sans"], label: ["Public Sans"], display: "Be Vietnam Pro" }
                 }
             }
         };
@@ -83,31 +48,17 @@
     <style>
         body { font-family: 'Nunito Sans', sans-serif; }
         h1, h2, h3, .headline { font-family: 'Literata', serif; }
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        .active-filter {
-            background-color: #964a20;
-            color: white;
-        }
-        .cart-badge {
-            position: relative;
-        }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .active-filter { background-color: #964a20; color: white; }
+        .cart-badge { position: relative; }
         .cart-badge::after {
             content: attr(data-count);
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background-color: #f99868;
-            color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            position: absolute; top: -8px; right: -8px;
+            background-color: #f99868; color: white; border-radius: 50%;
+            width: 18px; height: 18px; font-size: 12px;
+            display: flex; align-items: center; justify-content: center;
         }
+        .cart-badge[data-count="0"]::after { display: none; }
     </style>
 </head>
 <body class="bg-background text-on-background min-h-screen">
@@ -115,7 +66,7 @@
     <header class="bg-surface-bright border-b border-outline-variant/30 sticky top-0 z-50">
         <div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
             <div class="text-2xl font-['Literata'] italic font-bold text-primary" style="color: #b56236;">
-                Aroma & Grano
+                Aroma &amp; Grano
             </div>
             <nav class="hidden md:flex gap-8 items-center">
                 <a class="text-primary border-b-2 border-primary pb-1 font-['Literata'] font-semibold tracking-tight" href="/dashboard" style="color: #b56236; border-color: #b56236;">Menú</a>
@@ -125,15 +76,15 @@
             <div class="flex items-center gap-4">
                 <span class="text-on-surface">{{ session['full_name'] }}</span>
                 <a href="/logout" class="p-2 hover:bg-surface-container transition-all rounded-full">
-                    <span class="material-symbols-outlined text-on-surface" data-icon="logout">logout</span>
+                    <span class="material-symbols-outlined text-on-surface">logout</span>
                 </a>
-                <div class="cart-badge" data-count="0">
+                <div class="cart-badge" data-count="{{ cart_count }}">
                     <a href="/orders" class="p-2 hover:bg-surface-container transition-all rounded-full">
-                        <span class="material-symbols-outlined text-on-surface" data-icon="shopping_cart">shopping_cart</span>
+                        <span class="material-symbols-outlined text-on-surface">shopping_cart</span>
                     </a>
                 </div>
                 <a href="/profile" class="p-2 hover:bg-surface-container transition-all rounded-full">
-                    <span class="material-symbols-outlined text-on-surface" data-icon="account_circle">account_circle</span>
+                    <span class="material-symbols-outlined text-on-surface">account_circle</span>
                 </a>
             </div>
         </div>
@@ -160,7 +111,7 @@
                             <option value="Colombia - Huila" {% if origin == 'Colombia - Huila' %}selected{% endif %}>Colombia - Huila</option>
                             <option value="Costa Rica - Tarrazú" {% if origin == 'Costa Rica - Tarrazú' %}selected{% endif %}>Costa Rica - Tarrazú</option>
                         </select>
-                        <span class="material-symbols-outlined absolute right-3 top-2.5 pointer-events-none text-outline text-lg" data-icon="expand_more">expand_more</span>
+                        <span class="material-symbols-outlined absolute right-3 top-2.5 pointer-events-none text-outline text-lg">expand_more</span>
                     </form>
                 </div>
             </div>
@@ -169,12 +120,11 @@
         <!-- Favoritos de la Mañana -->
         <section class="mb-16">
             <div class="flex items-center gap-3 mb-6">
-                <span class="material-symbols-outlined text-tertiary" data-icon="wb_sunny">wb_sunny</span>
+                <span class="material-symbols-outlined text-tertiary">wb_sunny</span>
                 <h2 class="text-2xl font-bold text-on-surface">Favoritos de la Mañana</h2>
                 <span class="ml-auto text-sm font-semibold text-tertiary uppercase tracking-wider">Compra Rápida</span>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <!-- Latte Clásico -->
                 <div class="md:col-span-2 md:row-span-2 relative group overflow-hidden rounded-xl bg-surface-container border border-outline-variant/30">
                     <img alt="Café con leche artesanal" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 min-h-[300px]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfS3NoaKbxXxkc5ud2V7LxAo04V-3ebCD7ZRzKTc42B9-IWYIjGcN9WR4q2Ih0vXoYmBq8KcLyUTFjmo2f_zKguavMDqTLaaPI2yJDv26fcyuKVT3daxNEXHK6EqKon9EIqPAkLXm52v_o2XD5XkjDBI0P6_uAP0DqpDyKrkLb-FPMR1aIBQ8pNb_OMH5XOFcaN74MPiLPQ4JXpmEwzb8ob83s7nWu-QtnmKoB6aqXsf4k6foND3hU_lU6lo19fRWIbOWvd5vbd3E"/>
                     <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex flex-col justify-end p-8">
@@ -184,13 +134,12 @@
                         <div class="flex items-center justify-between">
                             <span class="text-2xl font-bold text-white">$16.500 COP</span>
                             <a href="/customize/1" class="bg-primary hover:bg-on-primary-fixed-variant text-on-primary p-3 rounded-full transition-colors flex items-center gap-2">
-                                <span class="material-symbols-outlined" data-icon="add_shopping_cart">add_shopping_cart</span>
+                                <span class="material-symbols-outlined">add_shopping_cart</span>
                                 <span class="font-bold">Personalizar</span>
                             </a>
                         </div>
                     </div>
                 </div>
-                <!-- Espresso Doble -->
                 <div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/30 flex flex-col justify-between group">
                     <div class="flex justify-between items-start">
                         <div>
@@ -200,13 +149,12 @@
                         <span class="text-primary font-bold">$13.500 COP</span>
                     </div>
                     <div class="mt-4 flex items-center justify-between">
-                        <span class="material-symbols-outlined text-4xl text-outline-variant" data-icon="coffee">coffee</span>
+                        <span class="material-symbols-outlined text-4xl text-outline-variant">coffee</span>
                         <a href="/customize/2" class="w-10 h-10 bg-surface-container-highest rounded-full flex items-center justify-center hover:bg-primary hover:text-on-primary transition-all">
-                            <span class="material-symbols-outlined" data-icon="tune">tune</span>
+                            <span class="material-symbols-outlined">tune</span>
                         </a>
                     </div>
                 </div>
-                <!-- Flat White -->
                 <div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/30 flex flex-col justify-between group">
                     <div class="flex justify-between items-start">
                         <div>
@@ -216,13 +164,12 @@
                         <span class="text-primary font-bold">$18.500 COP</span>
                     </div>
                     <div class="mt-4 flex items-center justify-between">
-                        <span class="material-symbols-outlined text-4xl text-outline-variant" data-icon="local_cafe">local_cafe</span>
+                        <span class="material-symbols-outlined text-4xl text-outline-variant">local_cafe</span>
                         <a href="/customize/3" class="w-10 h-10 bg-surface-container-highest rounded-full flex items-center justify-center hover:bg-primary hover:text-on-primary transition-all">
-                            <span class="material-symbols-outlined" data-icon="tune">tune</span>
+                            <span class="material-symbols-outlined">tune</span>
                         </a>
                     </div>
                 </div>
-                <!-- Cold Brew Vainilla -->
                 <div class="md:col-span-2 bg-secondary-container p-6 rounded-xl border border-outline-variant/30 flex items-center gap-6 group">
                     <div class="w-24 h-24 rounded-lg overflow-hidden shrink-0">
                         <img alt="Cold Brew con hielo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCD1xB00eMDI_b0WJ9fqmDrlRewJ7hT-30W7YPHxcHCPnk6zMB4yLdWIAqJw2TMlkdf-dZ736HJ3PmJI1gqX4Oz1kwhaE_ha9wK7msAgw3K3Od4ugMS9Bsx3OaQMZnppm47FELC8vUyR5ubRD-c6iFizjvXn5jYcTDL3zWSJdguK8vIBWHRmMZ-hn9mchWQbepAoAugHVmJjVhFMICO7Kh0rqUJKA3IrJXNEnWO62Vhnw5RuYEOjiAcLKST_FdsUxgaRTEKAFJ1oBs"/>
@@ -234,7 +181,7 @@
                         </div>
                         <p class="text-sm text-on-surface-variant mb-3">12 horas de extracción en frío.</p>
                         <a href="/customize/4" class="flex items-center gap-2 text-primary font-bold text-sm hover:underline">
-                            <span class="material-symbols-outlined text-sm" data-icon="bolt">bolt</span>
+                            <span class="material-symbols-outlined text-sm">bolt</span>
                             Personalizar
                         </a>
                     </div>
@@ -242,7 +189,7 @@
             </div>
         </section>
 
-        <!-- Catálogo Principal de Productos -->
+        <!-- Catálogo Principal -->
         <section>
             <h2 class="text-2xl font-bold text-on-surface mb-8">Especialidades Aroma & Grano</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -262,11 +209,11 @@
                         <p class="text-on-surface-variant text-sm mb-4 leading-relaxed italic">{{ product.description }}</p>
                         <div class="mt-auto pt-4 border-t border-outline-variant/30 flex items-center justify-between">
                             <div class="flex gap-1">
-                                <span class="material-symbols-outlined text-tertiary text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
-                                <span class="material-symbols-outlined text-tertiary text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
-                                <span class="material-symbols-outlined text-tertiary text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
-                                <span class="material-symbols-outlined text-tertiary text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
-                                <span class="material-symbols-outlined text-outline text-sm" data-icon="star">star</span>
+                                <span class="material-symbols-outlined text-tertiary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                                <span class="material-symbols-outlined text-tertiary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                                <span class="material-symbols-outlined text-tertiary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                                <span class="material-symbols-outlined text-tertiary text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                                <span class="material-symbols-outlined text-outline text-sm">star</span>
                             </div>
                             <a href="/customize/{{ product.id }}" class="bg-primary text-on-primary px-6 py-2 rounded-lg font-bold text-sm hover:opacity-90">Personalizar</a>
                         </div>
@@ -285,12 +232,13 @@
                 <p class="font-['Nunito_Sans'] text-sm leading-relaxed text-on-surface-variant">© 2026 Aroma & Grano. Cosechado con amor.</p>
             </div>
             <div class="flex gap-6">
-                <a class="font-['Nunito_Sans'] text-sm text-on-surface-variant hover:text-primary transition-colors focus-within:ring-2 focus-within:ring-primary" href="/sustainability">Sostenibilidad</a>
-                <a class="font-['Nunito_Sans'] text-sm text-on-surface-variant hover:text-primary transition-colors focus-within:ring-2 focus-within:ring-primary" href="/contact">Contacto</a>
-                <a class="font-['Nunito_Sans'] text-sm text-on-surface-variant hover:text-primary transition-colors focus-within:ring-2 focus-within:ring-primary" href="/terms">Términos</a>
+                <a class="font-['Nunito_Sans'] text-sm text-on-surface-variant hover:text-primary transition-colors" href="/sustainability">Sostenibilidad</a>
+                <a class="font-['Nunito_Sans'] text-sm text-on-surface-variant hover:text-primary transition-colors" href="/contact">Contacto</a>
+                <a class="font-['Nunito_Sans'] text-sm text-on-surface-variant hover:text-primary transition-colors" href="/terms">Términos</a>
             </div>
         </div>
     </footer>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const cartButtons = document.querySelectorAll('a[href^="/customize/"]');

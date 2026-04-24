@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Personalizar - Aroma & Grano</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&family=Public+Sans:wght@400;500;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-container": "#ffc963", "on-tertiary-container": "#5e4200",
+                        "error-container": "#fd795a", outline: "#737e72",
+                        "on-secondary-fixed-variant": "#006b10", "on-error-container": "#6e1400",
+                        "tertiary-fixed": "#ffc963", "on-tertiary-fixed": "#463000",
+                        "inverse-surface": "#0b0f0b", "surface-container-highest": "#dae6d8",
+                        "on-surface": "#2b352c", "primary-fixed": "#f99868",
+                        "secondary-fixed": "#97f98a", "primary-container": "#f99868",
+                        "on-background": "#2b352c", "inverse-on-surface": "#999e97",
+                        "on-primary-fixed": "#2f0e00", "on-secondary-fixed": "#004b08",
+                        "surface-container-lowest": "#ffffff", "on-secondary-container": "#00600d",
+                        "surface-variant": "#dae6d8", "on-error": "#fff7f6",
+                        "surface-bright": "#f6fbf3", "surface-container-low": "#eff6ec",
+                        "inverse-primary": "#f99868", tertiary: "#7c5900",
+                        secondary: "#006f11", "on-primary-container": "#562000",
+                        background: "#f6fbf3", "surface-container": "#e8f0e5",
+                        "outline-variant": "#aab5a9", "surface-container-high": "#e1ebdf",
+                        "primary-fixed-dim": "#e98b5c", primary: "#964a20",
+                        "on-primary-fixed-variant": "#642600", error: "#a73b21",
+                        surface: "#f6fbf3", "on-tertiary-fixed-variant": "#6a4b00",
+                        "on-primary": "#fff7f5", "on-secondary": "#ebffe1",
+                        "on-surface-variant": "#576257", "secondary-container": "#97f98a",
+                        "surface-dim": "#d2ddd0", "tertiary-fixed-dim": "#efbc57",
+                        "surface-tint": "#964a20", "on-tertiary": "#fff8f1",
+                        "primary-dim": "#873e15", "tertiary-dim": "#6d4d00",
+                        "error-dim": "#791903", "secondary-dim": "#00610e"
+                    },
+                    borderRadius: { DEFAULT: "1rem", lg: "2rem", xl: "3rem", full: "9999px" },
+                    fontFamily: { headline: ["Be Vietnam Pro"], body: ["Public Sans"], label: ["Public Sans"], display: "Be Vietnam Pro" }
+                }
+            }
+        };
+    </script>
+    <style>
+        body { font-family: 'Public Sans', sans-serif; }
+        h1, h2, h3, .headline { font-family: 'Be Vietnam Pro', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .cart-badge { position: relative; }
+        .cart-badge::after {
+            content: attr(data-count); position: absolute; top: -8px; right: -8px;
+            background-color: #f99868; color: white; border-radius: 50%;
+            width: 18px; height: 18px; font-size: 12px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .cart-badge[data-count="0"]::after { display: none; }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none;
+            width: 24px; height: 24px; border-radius: 50%;
+            background: #964a20; cursor: pointer; border: 4px solid white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 24px; height: 24px; border-radius: 50%;
+            background: #964a20; cursor: pointer; border: 4px solid white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+    <!-- TopNavBar -->
+    <header class="bg-surface-bright border-b border-outline-variant/30 sticky top-0 z-50">
+        <div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+            <div class="text-2xl font-['Literata'] italic font-bold text-primary" style="color: #b56236;">
+                Aroma &amp; Grano
+            </div>
+            <nav class="hidden md:flex gap-8 items-center">
+                <a class="text-primary border-b-2 border-primary pb-1 font-['Literata'] font-semibold tracking-tight" href="/dashboard" style="color: #b56236; border-color: #b56236;">Menú</a>
+                <a class="text-on-surface-variant hover:text-primary transition-colors font-['Literata'] font-semibold tracking-tight" href="/orders">Pedidos</a>
+                <a class="text-on-surface-variant hover:text-primary transition-colors font-['Literata'] font-semibold tracking-tight" href="/profile">Suscripción</a>
+            </nav>
+            <div class="flex items-center gap-4">
+                <span class="text-on-surface">{{ session['full_name'] }}</span>
+                <a href="/logout" class="p-2 hover:bg-surface-container transition-all rounded-full">
+                    <span class="material-symbols-outlined text-on-surface">logout</span>
+                </a>
+                <div class="cart-badge" data-count="{{ cart_count }}">
+                    <a href="/orders" class="p-2 hover:bg-surface-container transition-all rounded-full">
+                        <span class="material-symbols-outlined text-on-surface">shopping_cart</span>
+                    </a>
+                </div>
+                <a href="/profile" class="p-2 hover:bg-surface-container transition-all rounded-full">
+                    <span class="material-symbols-outlined text-on-surface">account_circle</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-8 md:py-12">
+        <!-- Breadcrumb -->
+        <div class="flex items-center gap-2 text-sm text-on-surface-variant mb-8">
+            <a href="/dashboard" class="hover:text-primary transition-colors">Menú</a>
+            <span class="material-symbols-outlined text-sm">chevron_right</span>
+            <span class="text-on-surface font-medium">{{ product.name }}</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <!-- Left Column: Product Visualization & Barista Wisdom -->
+            <div class="lg:col-span-5 space-y-8">
+                <div class="relative aspect-square rounded-xl overflow-hidden shadow-lg group">
+                    <img alt="{{ product.name }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="{{ product.image_url }}"/>
+                    <div class="absolute bottom-4 left-4 right-4 bg-white/80 backdrop-blur-md p-4 rounded-lg">
+                        <p class="text-primary font-bold text-sm uppercase tracking-wider mb-1">Selección Actual</p>
+                        <h2 class="headline text-2xl text-on-surface">{{ product.name }}</h2>
+                    </div>
+                </div>
+
+                <!-- Barista Insight -->
+                <div class="bg-surface-container rounded-xl p-6 border border-outline-variant/30 relative overflow-hidden">
+                    <div class="absolute -right-4 -bottom-4 opacity-10">
+                        <span class="material-symbols-outlined text-9xl">coffee</span>
+                    </div>
+                    <div class="flex items-start gap-4 relative z-10">
+                        <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                            <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">person</span>
+                        </div>
+                        <div>
+                            <h3 class="headline text-lg mb-2">Notas del Barista</h3>
+                            <p class="text-on-surface-variant leading-relaxed italic" id="baristaNote">
+                                "Si eliges <span class="text-primary font-bold">Etiopía</span>, prepárate para una explosión floral y cítrica. Combina de maravilla con leche de avena, que resalta su dulzor natural sin opacar el perfil de jazmín."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Customization Controls -->
+            <div class="lg:col-span-7 space-y-10">
+                <!-- Product Title & Description -->
+                <div>
+                    <span class="bg-tertiary-fixed text-on-tertiary-fixed text-xs uppercase tracking-widest font-bold px-3 py-1 rounded-full">{{ product.category }}</span>
+                    <h1 class="headline text-3xl md:text-4xl font-bold text-on-surface mt-3">{{ product.name }}</h1>
+                    <p class="text-on-surface-variant mt-2 leading-relaxed">{{ product.description }}</p>
+                </div>
+
+                <!-- Origin Selection -->
+                <section>
+                    <div class="flex items-center gap-2 mb-6">
+                        <span class="material-symbols-outlined text-primary">travel_explore</span>
+                        <h3 class="headline text-xl">Origen del Grano</h3>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4">
+                        <button type="button" onclick="selectOrigin('Etiopía')" class="origin-btn group relative flex flex-col items-center p-5 rounded-xl border-2 border-primary bg-primary/5 text-left transition-all active:scale-95" data-origin="Etiopía">
+                            <div class="w-14 h-14 rounded-full bg-amber-100 flex items-center justify-center mb-3 shadow-md ring-2 ring-primary">
+                                <span class="material-symbols-outlined text-amber-700 text-2xl" style="font-variation-settings: 'FILL' 1;">public</span>
+                            </div>
+                            <span class="font-bold text-on-surface text-sm">Etiopía</span>
+                            <span class="text-[10px] text-on-surface-variant text-center mt-1">Floral • Cítrico</span>
+                            <div class="absolute top-2 right-2">
+                                <span class="material-symbols-outlined text-primary text-lg origin-check" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            </div>
+                        </button>
+                        <button type="button" onclick="selectOrigin('Colombia')" class="origin-btn group relative flex flex-col items-center p-5 rounded-xl border-2 border-transparent bg-surface-container-low hover:border-outline-variant transition-all active:scale-95" data-origin="Colombia">
+                            <div class="w-14 h-14 rounded-full bg-emerald-100 flex items-center justify-center mb-3 shadow-sm group-hover:shadow-md transition-shadow">
+                                <span class="material-symbols-outlined text-emerald-700 text-2xl">public</span>
+                            </div>
+                            <span class="font-bold text-on-surface text-sm">Colombia</span>
+                            <span class="text-[10px] text-on-surface-variant text-center mt-1">Chocolate • Nuez</span>
+                            <div class="absolute top-2 right-2 hidden">
+                                <span class="material-symbols-outlined text-primary text-lg origin-check" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            </div>
+                        </button>
+                        <button type="button" onclick="selectOrigin('Costa Rica')" class="origin-btn group relative flex flex-col items-center p-5 rounded-xl border-2 border-transparent bg-surface-container-low hover:border-outline-variant transition-all active:scale-95" data-origin="Costa Rica">
+                            <div class="w-14 h-14 rounded-full bg-sky-100 flex items-center justify-center mb-3 shadow-sm group-hover:shadow-md transition-shadow">
+                                <span class="material-symbols-outlined text-sky-700 text-2xl">public</span>
+                            </div>
+                            <span class="font-bold text-on-surface text-sm">Costa Rica</span>
+                            <span class="text-[10px] text-on-surface-variant text-center mt-1">Cítrico • Miel</span>
+                            <div class="absolute top-2 right-2 hidden">
+                                <span class="material-symbols-outlined text-primary text-lg origin-check" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            </div>
+                        </button>
+                    </div>
+                </section>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Milk Selection -->
+                    <section>
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="material-symbols-outlined text-primary">opacity</span>
+                            <h3 class="headline text-lg">Tipo de Leche</h3>
+                        </div>
+                        <select id="milkType" onchange="updatePrice()" class="w-full bg-surface-container border border-outline-variant/30 rounded-lg p-3 text-on-surface focus:ring-2 focus:ring-primary appearance-none cursor-pointer">
+                            <option value="Entera">Entera (Tradicional)</option>
+                            <option value="Deslactosada">Deslactosada (+$500)</option>
+                            <option value="Avena" selected>Avena (Recomendado) (+$1.000)</option>
+                            <option value="Almendras">Almendras (+$1.500)</option>
+                            <option value="Coco">Coco (+$1.200)</option>
+                            <option value="Sin leche">Sin leche</option>
+                        </select>
+                    </section>
+
+                    <!-- Temperature -->
+                    <section>
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="material-symbols-outlined text-primary">device_thermostat</span>
+                            <h3 class="headline text-lg">Temperatura</h3>
+                        </div>
+                        <div class="flex gap-2">
+                            <button type="button" onclick="selectTemp('Frío')" class="temp-btn flex-1 py-3 px-4 rounded-lg bg-surface-container text-on-surface font-semibold hover:bg-surface-container-high transition-colors flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined text-blue-400 text-sm">ac_unit</span>
+                                Frío
+                            </button>
+                            <button type="button" onclick="selectTemp('Caliente')" class="temp-btn flex-1 py-3 px-4 rounded-lg bg-primary text-on-primary font-semibold shadow-md flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined text-orange-200 text-sm">thermostat</span>
+                                Caliente
+                            </button>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Sweetness Slider -->
+                <section>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">glucose</span>
+                            <h3 class="headline text-lg">Nivel de Dulzor</h3>
+                        </div>
+                        <span class="text-primary font-bold" id="sweetnessLabel">50% (Medio)</span>
+                    </div>
+                    <input id="sweetness" class="w-full h-2 bg-surface-container rounded-lg appearance-none cursor-pointer accent-primary" max="100" min="0" type="range" value="50" oninput="updateSweetness()"/>
+                    <div class="flex justify-between mt-2 text-xs text-on-surface-variant uppercase tracking-tighter">
+                        <span>Sin azúcar</span>
+                        <span>Natural</span>
+                        <span>Muy dulce</span>
+                    </div>
+                </section>
+
+                <!-- Quantity -->
+                <section>
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="material-symbols-outlined text-primary">shopping_cart</span>
+                        <h3 class="headline text-lg">Cantidad</h3>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <button type="button" onclick="changeQty(-1)" class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center hover:bg-surface-container-high transition-colors">
+                            <span class="material-symbols-outlined">remove</span>
+                        </button>
+                        <span class="text-xl font-bold text-on-surface w-8 text-center" id="quantityDisplay">1</span>
+                        <button type="button" onclick="changeQty(1)" class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center hover:bg-surface-container-high transition-colors">
+                            <span class="material-symbols-outlined">add</span>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Action Section -->
+                <form method="POST" action="/add-to-cart" class="pt-6 border-t border-outline-variant/30 flex flex-col sm:flex-row items-center justify-between gap-6">
+                    <input type="hidden" name="product_id" value="{{ product.id }}"/>
+                    <input type="hidden" name="product_name" value="{{ product.name }}"/>
+                    <input type="hidden" name="product_image_url" value="{{ product.image_url }}"/>
+                    <input type="hidden" name="unit_price" value="{{ product.price }}"/>
+                    <input type="hidden" name="origin" id="inputOrigin" value="Etiopía"/>
+                    <input type="hidden" name="milk_type" id="inputMilk" value="Avena"/>
+                    <input type="hidden" name="temperature" id="inputTemp" value="Caliente"/>
+                    <input type="hidden" name="sweetness" id="inputSweetness" value="50"/>
+                    <input type="hidden" name="quantity" id="inputQuantity" value="1"/>
+                    <input type="hidden" name="milk_surcharge" id="inputMilkSurcharge" value="1000"/>
+
+                    <div>
+                        <p class="text-sm text-on-surface-variant">Precio Total</p>
+                        <p class="text-3xl font-bold text-on-surface" id="totalPrice">${{ "{:,}".format(product.price + 1000) }} COP</p>
+                    </div>
+                    <button type="submit" class="w-full sm:w-auto px-10 py-4 bg-primary text-on-primary rounded-xl font-bold text-lg flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transition-all active:scale-95">
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_shopping_cart</span>
+                        Añadir al Carrito
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-surface-container-low border-t border-outline-variant/30 py-12 mt-16">
+        <div class="flex flex-col md:flex-row justify-between items-center px-8 gap-6 w-full max-w-7xl mx-auto">
+            <div class="text-center md:text-left">
+                <div class="text-lg font-bold text-on-surface mb-2">Aroma & Grano</div>
+                <p class="text-sm leading-relaxed text-on-surface-variant">© 2026 Aroma & Grano. Cosechado con amor.</p>
+            </div>
+            <div class="flex gap-6">
+                <a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="/sustainability">Sostenibilidad</a>
+                <a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="/contact">Contacto</a>
+                <a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="/terms">Términos</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const basePrice = {{ product.price }};
+        const milkSurcharges = {
+            'Entera': 0, 'Deslactosada': 500, 'Avena': 1000,
+            'Almendras': 1500, 'Coco': 1200, 'Sin leche': 0
+        };
+        const baristaNotes = {
+            'Etiopía': '"Si eliges <span class="text-primary font-bold">Etiopía</span>, prepárate para una explosión floral y cítrica. Combina de maravilla con leche de avena, que resalta su dulzor natural sin opacar el perfil de jazmín."',
+            'Colombia': '"El grano <span class="text-primary font-bold">colombiano</span> te ofrece un cuerpo rico con notas de chocolate y nuez. La leche entera potencia su cremosidad, mientras que la temperatura caliente libera todos sus aromas."',
+            'Costa Rica': '"<span class="text-primary font-bold">Costa Rica Tarrazú</span> es limpio y brillante, con acidez vibrante. Prueba con leche de almendras para un perfil más ligero que deja brillar sus notas de frutas tropicales."'
+        };
+
+        let selectedOrigin = 'Etiopía';
+        let selectedTemp = 'Caliente';
+        let quantity = 1;
+
+        function selectOrigin(origin) {
+            selectedOrigin = origin;
+            document.querySelectorAll('.origin-btn').forEach(btn => {
+                const o = btn.getAttribute('data-origin');
+                if (o === origin) {
+                    btn.classList.remove('border-transparent', 'bg-surface-container-low');
+                    btn.classList.add('border-primary', 'bg-primary/5');
+                    const checkWrap = btn.querySelector('.origin-check').parentElement;
+                    if (checkWrap) checkWrap.classList.remove('hidden');
+                    const circle = btn.querySelector('div:first-child');
+                    if (circle) { circle.classList.add('ring-2', 'ring-primary'); }
+                } else {
+                    btn.classList.add('border-transparent', 'bg-surface-container-low');
+                    btn.classList.remove('border-primary', 'bg-primary/5');
+                    const checkWrap = btn.querySelector('.origin-check').parentElement;
+                    if (checkWrap) checkWrap.classList.add('hidden');
+                    const circle = btn.querySelector('div:first-child');
+                    if (circle) { circle.classList.remove('ring-2', 'ring-primary'); }
+                }
+            });
+            document.getElementById('inputOrigin').value = origin;
+            document.getElementById('baristaNote').innerHTML = baristaNotes[origin] || baristaNotes['Etiopía'];
+        }
+
+        function selectTemp(temp) {
+            selectedTemp = temp;
+            document.querySelectorAll('.temp-btn').forEach(btn => {
+                const isHot = btn.textContent.trim().includes('Caliente');
+                if ((temp === 'Caliente' && isHot) || (temp === 'Frío' && !isHot)) {
+                    btn.classList.remove('bg-surface-container', 'text-on-surface');
+                    btn.classList.add('bg-primary', 'text-on-primary', 'shadow-md');
+                } else {
+                    btn.classList.add('bg-surface-container', 'text-on-surface');
+                    btn.classList.remove('bg-primary', 'text-on-primary', 'shadow-md');
+                }
+            });
+            document.getElementById('inputTemp').value = temp;
+        }
+
+        function updateSweetness() {
+            const val = document.getElementById('sweetness').value;
+            let label = 'Medio';
+            if (val <= 15) label = 'Sin azúcar';
+            else if (val <= 35) label = 'Bajo';
+            else if (val <= 65) label = 'Medio';
+            else if (val <= 85) label = 'Alto';
+            else label = 'Muy dulce';
+            document.getElementById('sweetnessLabel').textContent = val + '% (' + label + ')';
+            document.getElementById('inputSweetness').value = val;
+        }
+
+        function changeQty(delta) {
+            quantity = Math.max(1, Math.min(10, quantity + delta));
+            document.getElementById('quantityDisplay').textContent = quantity;
+            document.getElementById('inputQuantity').value = quantity;
+            updatePrice();
+        }
+
+        function updatePrice() {
+            const milk = document.getElementById('milkType').value;
+            const surcharge = milkSurcharges[milk] || 0;
+            const total = (basePrice + surcharge) * quantity;
+            document.getElementById('totalPrice').textContent = '$' + total.toLocaleString('es-CO') + ' COP';
+            document.getElementById('inputMilk').value = milk;
+            document.getElementById('inputMilkSurcharge').value = surcharge;
+        }
+
+        // Inicializar
+        updatePrice();
+    </script>
+</body>
+</html>

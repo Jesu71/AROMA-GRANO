@@ -3,3 +3,4 @@ supabase
 user-agents
 flask-socketio
 python-dotenv
+flask_cors

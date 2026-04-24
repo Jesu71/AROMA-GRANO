@@ -7,74 +7,40 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&amp;family=Public+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-    <script id="tailwind-config">
+    <script>
         tailwind.config = {
             darkMode: "class",
             theme: {
                 extend: {
                     colors: {
-                        "primary-fixed-dim": "#e98b5c",
-                        tertiary: "#7c5900",
-                        "on-primary-fixed-variant": "#642600",
-                        "on-error-container": "#6e1400",
-                        "on-secondary-container": "#00600d",
-                        "surface-bright": "#f6fbf3",
-                        "on-primary-container": "#562000",
-                        background: "#f6fbf3",
-                        "surface-container-highest": "#dae6d8",
-                        outline: "#737e72",
-                        "surface-container-high": "#e1ebdf",
-                        "primary-container": "#f99868",
-                        "primary-fixed": "#f99868",
-                        "on-background": "#2b352c",
-                        "surface-container": "#e8f0e5",
-                        "secondary-fixed": "#97f98a",
-                        "on-surface": "#2b352c",
-                        error: "#a73b21",
-                        surface: "#f6fbf3",
-                        "surface-variant": "#dae6d8",
-                        "error-container": "#fd795a",
-                        "surface-dim": "#d2ddd0",
-                        "on-error": "#fff7f6",
-                        "tertiary-container": "#ffc963",
-                        "on-tertiary-container": "#5e4200",
-                        "surface-tint": "#964a20",
-                        "outline-variant": "#aab5a9",
-                        "on-secondary": "#ebffe1",
-                        "on-primary": "#fff7f5",
-                        "inverse-surface": "#0b0f0b",
-                        "on-secondary-fixed-variant": "#006b10",
-                        "secondary-fixed-dim": "#8aeb7e",
-                        "on-secondary-fixed": "#004b08",
-                        "on-tertiary-fixed": "#463000",
-                        "on-surface-variant": "#576257",
-                        secondary: "#006f11",
-                        "inverse-primary": "#f99868",
-                        "surface-tint": "#964a20",
-                        "on-primary-fixed": "#2f0e00",
-                        "on-tertiary-fixed-variant": "#6a4b00",
-                        "primary-dim": "#873e15",
-                        "tertiary-dim": "#6d4d00",
-                        "error-dim": "#791903",
-                        "secondary-dim": "#00610e",
-                        "surface-container-lowest": "#ffffff",
-                        "surface-container-low": "#eff6ec",
-                        "secondary-container": "#97f98a",
-                        "tertiary-fixed-dim": "#efbc57",
-                        "tertiary-fixed": "#ffc963"
+                        "primary-fixed-dim": "#e98b5c", tertiary: "#7c5900",
+                        "on-primary-fixed-variant": "#642600", "on-error-container": "#6e1400",
+                        "on-secondary-container": "#00600d", "surface-bright": "#f6fbf3",
+                        "on-primary-container": "#562000", background: "#f6fbf3",
+                        "surface-container-highest": "#dae6d8", outline: "#737e72",
+                        "surface-container-high": "#e1ebdf", "primary-container": "#f99868",
+                        "primary-fixed": "#f99868", "on-background": "#2b352c",
+                        "surface-container": "#e8f0e5", "secondary-fixed": "#97f98a",
+                        "on-surface": "#2b352c", error: "#a73b21", surface: "#f6fbf3",
+                        "surface-variant": "#dae6d8", "error-container": "#fd795a",
+                        "surface-dim": "#d2ddd0", "on-error": "#fff7f6",
+                        "tertiary-container": "#ffc963", "on-tertiary-container": "#5e4200",
+                        "surface-tint": "#964a20", "outline-variant": "#aab5a9",
+                        "on-secondary": "#ebffe1", "on-primary": "#fff7f5",
+                        "inverse-surface": "#0b0f0b", "on-secondary-fixed-variant": "#006b10",
+                        "secondary-fixed-dim": "#8aeb7e", "on-secondary-fixed": "#004b08",
+                        "on-tertiary-fixed": "#463000", "on-surface-variant": "#576257",
+                        secondary: "#006f11", "inverse-primary": "#f99868",
+                        "on-tertiary-fixed-variant": "#6a4b00", "on-primary-fixed": "#2f0e00",
+                        "on-tertiary": "#fff8f1", primary: "#964a20",
+                        "inverse-on-surface": "#999e97", "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#eff6ec", "secondary-container": "#97f98a",
+                        "tertiary-fixed-dim": "#efbc57", "tertiary-fixed": "#ffc963",
+                        "primary-dim": "#873e15", "secondary-dim": "#00610e",
+                        "error-dim": "#791903", "tertiary-dim": "#6d4d00"
                     },
-                    borderRadius: {
-                        DEFAULT: "1rem",
-                        lg: "2rem",
-                        xl: "3rem",
-                        full: "9999px"
-                    },
-                    fontFamily: {
-                        headline: ["Be Vietnam Pro"],
-                        body: ["Public Sans"],
-                        label: ["Public Sans"],
-                        display: "Be Vietnam Pro"
-                    }
+                    borderRadius: { DEFAULT: "1rem", lg: "2rem", xl: "3rem", full: "9999px" },
+                    fontFamily: { headline: ["Be Vietnam Pro"], body: ["Public Sans"], label: ["Public Sans"], display: "Be Vietnam Pro" }
                 }
             }
         };
@@ -85,39 +51,24 @@
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .active-filter {
-            background-color: #964a20 !important;
-            color: white !important;
-        }
-        .cart-badge {
-            position: relative;
-        }
+        .active-filter { background-color: #964a20 !important; color: white !important; }
+        .cart-badge { position: relative; }
         .cart-badge::after {
-            content: attr(data-count);
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background-color: #f99868;
-            color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            content: attr(data-count); position: absolute; top: -8px; right: -8px;
+            background-color: #f99868; color: white; border-radius: 50%;
+            width: 18px; height: 18px; font-size: 12px;
+            display: flex; align-items: center; justify-content: center;
         }
-        .product-image {
-            cursor: pointer;
-        }
+        .cart-badge[data-count="0"]::after { display: none; }
+        .product-image { cursor: pointer; }
     </style>
 </head>
 <body class="bg-background text-on-surface pb-24">
     <!-- TopAppBar -->
-    <header class="sticky top-0 z-50 bg-[#faf6f0] dark:bg-stone-950 shadow-[0_4px_20px_rgba(46,50,48,0.06)] flex justify-between items-center w-full px-6 py-4">
-        <span class="text-xl font-serif text-emerald-900 dark:text-emerald-100 font-semibold tracking-tight">{{ session['full_name'] }}</span>
-        <a href="/logout" class="p-2 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors active:scale-95 duration-150 rounded-full">
-            <span class="material-symbols-outlined text-emerald-800 dark:text-emerald-500">logout</span>
+    <header class="sticky top-0 z-50 bg-[#faf6f0] shadow-[0_4px_20px_rgba(46,50,48,0.06)] flex justify-between items-center w-full px-6 py-4">
+        <span class="text-xl font-serif text-emerald-900 font-semibold tracking-tight">{{ session['full_name'] }}</span>
+        <a href="/logout" class="p-2 hover:bg-stone-100 transition-colors active:scale-95 duration-150 rounded-full">
+            <span class="material-symbols-outlined text-emerald-800">logout</span>
         </a>
     </header>
 
@@ -157,7 +108,7 @@
             </form>
         </section>
 
-        <!-- Featured / Most Ordered: Latte Clásico -->
+        <!-- Featured -->
         <section>
             <div class="relative w-full h-64 rounded-xl overflow-hidden shadow-lg group">
                 <a href="/customize/1" class="block">
@@ -176,15 +127,13 @@
             </div>
         </section>
 
-        <!-- Menu Grid / List -->
+        <!-- Menu Grid -->
         <section class="space-y-6">
             <div class="flex items-center justify-between">
                 <h4 class="text-lg font-headline font-semibold text-on-surface">Nuestra Selección</h4>
                 <span class="text-primary font-label text-sm font-medium">Ver todos</span>
             </div>
-            <!-- Bento-style Grid for other items -->
             <div class="grid grid-cols-2 gap-4">
-                <!-- Espresso Doble -->
                 <div class="bg-surface-container-low rounded-xl p-4 flex flex-col space-y-3">
                     <a href="/customize/2" class="block">
                         <div class="relative w-full aspect-square rounded-lg overflow-hidden">
@@ -202,7 +151,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Cold Brew Vainilla -->
                 <div class="bg-surface-container-low rounded-xl p-4 flex flex-col space-y-3">
                     <a href="/customize/3" class="block">
                         <div class="relative w-full aspect-square rounded-lg overflow-hidden">
@@ -220,7 +168,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Mocha Avellana -->
                 <div class="col-span-2 bg-surface-container-low rounded-xl p-4 flex gap-4">
                     <a href="/customize/4" class="block flex-shrink-0">
                         <div class="w-24 h-24 rounded-lg overflow-hidden">
@@ -282,25 +229,23 @@
     </main>
 
     <!-- BottomNavBar -->
-    <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pt-2 pb-6 bg-[#faf6f0]/95 dark:bg-stone-900/95 backdrop-blur-md shadow-[0_-4px_20px_rgba(46,50,48,0.04)] rounded-t-[24px] border-t border-stone-200/50 dark:border-stone-800/50">
-        <!-- Menú (Active) -->
-        <a class="flex flex-col items-center justify-center text-emerald-800 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-900/30 rounded-xl px-4 py-1 active:scale-90 duration-200 ease-out" href="/dashboard">
+    <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pt-2 pb-6 bg-[#faf6f0]/95 backdrop-blur-md shadow-[0_-4px_20px_rgba(46,50,48,0.04)] rounded-t-[24px] border-t border-stone-200/50">
+        <a class="flex flex-col items-center justify-center text-emerald-800 font-bold bg-emerald-50 rounded-xl px-4 py-1 active:scale-90 duration-200 ease-out" href="/dashboard">
             <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">restaurant_menu</span>
             <span class="font-['Nunito_Sans'] text-xs font-medium">Menú</span>
         </a>
-        <!-- Pedidos (con badge de carrito) -->
-        <div class="cart-badge" data-count="0">
-            <a class="flex flex-col items-center justify-center text-stone-500 dark:text-stone-400 hover:text-emerald-700 dark:hover:text-emerald-300 active:scale-90 duration-200 ease-out" href="/orders">
+        <div class="cart-badge" data-count="{{ cart_count }}">
+            <a class="flex flex-col items-center justify-center text-stone-500 hover:text-emerald-700 active:scale-90 duration-200 ease-out" href="/orders">
                 <span class="material-symbols-outlined">receipt_long</span>
                 <span class="font-['Nunito_Sans'] text-xs font-medium">Pedidos</span>
             </a>
         </div>
-        <!-- Perfil -->
-        <a class="flex flex-col items-center justify-center text-stone-500 dark:text-stone-400 hover:text-emerald-700 dark:hover:text-emerald-300 active:scale-90 duration-200 ease-out" href="/profile">
+        <a class="flex flex-col items-center justify-center text-stone-500 hover:text-emerald-700 active:scale-90 duration-200 ease-out" href="/profile">
             <span class="material-symbols-outlined">person</span>
             <span class="font-['Nunito_Sans'] text-xs font-medium">Perfil</span>
         </a>
     </nav>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const cartButtons = document.querySelectorAll('a[href^="/customize/"]');
@@ -317,7 +262,6 @@
                 });
             });
 
-            // Hacer que las imágenes sean clickeables
             const productImages = document.querySelectorAll('.product-image');
             productImages.forEach(image => {
                 image.addEventListener('click', function(e) {

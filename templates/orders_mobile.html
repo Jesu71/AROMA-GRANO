@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Mis Pedidos - Aroma & Grano</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&family=Public+Sans:wght@400;500;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            darkMode: "class", theme: { extend: { colors: {
+                "primary-fixed-dim": "#e98b5c", tertiary: "#7c5900",
+                "on-surface": "#2b352c", background: "#f6fbf3",
+                "surface-container-highest": "#dae6d8", "surface-container-high": "#e1ebdf",
+                "primary-fixed": "#f99868", "on-background": "#2b352c",
+                "surface-container": "#e8f0e5", "on-surface-variant": "#576257",
+                secondary: "#006f11", "surface-container-low": "#eff6ec",
+                primary: "#964a20", error: "#a73b21", surface: "#f6fbf3",
+                "on-primary": "#fff7f5", "surface-bright": "#f6fbf3",
+                "surface-container-lowest": "#ffffff", "outline-variant": "#aab5a9",
+                "secondary-container": "#97f98a", "tertiary-fixed": "#ffc963",
+                "on-tertiary-fixed": "#463000", "on-secondary": "#ebffe1",
+                "primary-dim": "#873e15", "tertiary-dim": "#6d4d00",
+                "error-dim": "#791903", "secondary-dim": "#00610e",
+                "tertiary-fixed-dim": "#efbc57"
+            }, borderRadius: { DEFAULT: "1rem", lg: "2rem", xl: "3rem", full: "9999px" },
+            fontFamily: { headline: ["Be Vietnam Pro"], body: ["Public Sans"], label: ["Public Sans"] }}}
+        };
+    </script>
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .cart-badge { position: relative; }
+        .cart-badge::after {
+            content: attr(data-count); position: absolute; top: -8px; right: -8px;
+            background-color: #f99868; color: white; border-radius: 50%;
+            width: 18px; height: 18px; font-size: 12px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .cart-badge[data-count="0"]::after { display: none; }
+    </style>
+</head>
+<body class="bg-background text-on-surface pb-24">
+    <!-- TopAppBar -->
+    <header class="bg-[#faf6f0] shadow-[0_4px_20px_rgba(46,50,48,0.06)] flex justify-between items-center w-full px-6 py-4 sticky top-0 z-50">
+        <span class="text-xl font-headline font-semibold text-on-surface">Mi Carrito</span>
+        <div class="cart-badge" data-count="{{ cart_count }}">
+            <a href="/orders" class="p-2 hover:bg-stone-100 transition-colors rounded-full">
+                <span class="material-symbols-outlined text-stone-600">shopping_cart</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="px-5 py-5 space-y-3">
+        {% if cart_items %}
+            {% for item in cart_items %}
+            <div class="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant/20">
+                <div class="flex gap-3">
+                    <img src="{{ item.product_image_url }}" alt="{{ item.product_name }}" class="w-14 h-14 rounded-lg object-cover shrink-0"/>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-sm text-on-surface">{{ item.product_name }}</h3>
+                            <a href="/remove-from-cart/{{ item.id }}" class="p-1 text-error hover:bg-error/10 rounded-full transition-colors">
+                                <span class="material-symbols-outlined text-sm">close</span>
+                            </a>
+                        </div>
+                        <div class="flex flex-wrap gap-1 mt-1">
+                            <span class="text-[10px] bg-surface-container px-1.5 py-0.5 rounded">{{ item.origin }}</span>
+                            <span class="text-[10px] bg-surface-container px-1.5 py-0.5 rounded">{{ item.milk_type }}</span>
+                            <span class="text-[10px] bg-surface-container px-1.5 py-0.5 rounded">{{ item.temperature }}</span>
+                        </div>
+                        <div class="flex justify-between items-center mt-2">
+                            <span class="text-primary font-bold text-sm">${{ "{:,}".format(item.total_price) }} COP</span>
+                            <span class="text-xs text-on-surface-variant">×{{ item.quantity }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- Total -->
+            <div class="bg-surface-container rounded-2xl p-5 mt-4">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-on-surface-variant text-sm">Subtotal</span>
+                    <span class="font-bold text-on-surface">${{ "{:,}".format(total) }} COP</span>
+                </div>
+                <div class="flex justify-between items-center mb-5 pt-3 border-t border-outline-variant/30">
+                    <span class="text-lg font-bold text-on-surface">Total</span>
+                    <span class="text-xl font-bold text-primary">${{ "{:,}".format(total) }} COP</span>
+                </div>
+                <a href="/checkout" class="w-full bg-primary text-white font-bold py-4 px-6 rounded-2xl flex items-center justify-center gap-3 active:scale-95 transition-transform">
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">payments</span>
+                    Proceder al Pago
+                </a>
+            </div>
+        {% else %}
+            <div class="text-center py-16">
+                <span class="material-symbols-outlined text-5xl text-outline-variant mb-4 block">shopping_cart</span>
+                <h2 class="text-lg font-bold text-on-surface mb-2">Tu carrito está vacío</h2>
+                <p class="text-on-surface-variant text-sm mb-6">Agrega productos desde nuestro menú</p>
+                <a href="/dashboard" class="px-6 py-3 bg-primary text-on-primary rounded-full font-bold">Ver Menú</a>
+            </div>
+        {% endif %}
+    </main>
+
+    <!-- BottomNavBar -->
+    <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pt-2 pb-6 bg-[#faf6f0]/95 backdrop-blur-md shadow-[0_-4px_20px_rgba(46,50,48,0.04)] rounded-t-[24px] border-t border-stone-200/50">
+        <a class="flex flex-col items-center justify-center text-stone-500 hover:text-emerald-700 active:scale-90 duration-200" href="/dashboard">
+            <span class="material-symbols-outlined">restaurant_menu</span>
+            <span class="text-xs font-medium">Menú</span>
+        </a>
+        <div class="cart-badge" data-count="{{ cart_count }}">
+            <a class="flex flex-col items-center justify-center text-emerald-800 font-bold bg-emerald-50 rounded-xl px-4 py-1" href="/orders">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+                <span class="text-xs font-medium">Pedidos</span>
+            </a>
+        </div>
+        <a class="flex flex-col items-center justify-center text-stone-500 hover:text-emerald-700 active:scale-90 duration-200" href="/profile">
+            <span class="material-symbols-outlined">person</span>
+            <span class="text-xs font-medium">Perfil</span>
+        </a>
+    </nav>
+</body>
+</html>
