@@ -261,20 +261,13 @@
             </div>
 
             <!-- Stats Cards -->
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5 mb-6 md:mb-8">
+            <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5 mb-6 md:mb-8">
                 <div class="bg-[#eef3eb] p-4 md:p-5 rounded-lg border border-[#c2c9bd]/30">
                     <div class="flex items-center gap-2 mb-2">
                         <span class="material-symbols-outlined text-primary text-lg">inventory_2</span>
                         <span class="text-[10px] md:text-xs font-bold uppercase tracking-widest text-primary/70">Productos Totales</span>
                     </div>
                     <span class="text-xl md:text-2xl font-display font-bold">{{ products|length }}</span>
-                </div>
-                <div class="bg-[#eef3eb] p-4 md:p-5 rounded-lg border border-[#c2c9bd]/30">
-                    <div class="flex items-center gap-2 mb-2">
-                        <span class="material-symbols-outlined text-secondary text-lg">star</span>
-                        <span class="text-[10px] md:text-xs font-bold uppercase tracking-widest text-secondary/70">Más Vendido</span>
-                    </div>
-                    <span class="text-lg md:text-2xl font-display font-bold truncate block">{% if products|length > 0 %}{{ products[0].name }}{% else %}N/A{% endif %}</span>
                 </div>
                 <div class="bg-[#eef3eb] p-4 md:p-5 rounded-lg border border-[#c2c9bd]/30">
                     <div class="flex items-center gap-2 mb-2">
