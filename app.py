@@ -87,7 +87,6 @@ def clean_orphan_cart_items(user_id):
 
 
 def get_active_products():
-    """Obtiene todos los productos activos del menú actual."""
     try:
         products_data = supabase.table("products").select("*").execute()
         if not products_data.data:
@@ -100,7 +99,6 @@ def get_active_products():
 
 
 def get_cheapest_product():
-    """Obtiene el producto más barato activo de la base de datos."""
     active = get_active_products()
     if not active:
         return None
@@ -108,7 +106,6 @@ def get_cheapest_product():
 
 
 def get_random_product():
-    """Obtiene un producto aleatorio activo del menú. Siempre dinámico según el menú actual."""
     active = get_active_products()
     if not active:
         return None
@@ -556,12 +553,10 @@ def redeem_reward():
         flash(f'Necesitas {points_required} puntos. Tienes {current_points}.', 'error')
         return redirect(url_for('profile'))
 
-    # Descontar puntos
     new_points = current_points - points_required
     supabase.table("users").update({"loyalty_points": new_points}).eq("id", session['user_id']).execute()
 
     if reward_type == 'coffee':
-        # Café gratis: el más barato, crear pedido en historial con total $0
         cheapest = get_cheapest_product()
         if not cheapest:
             supabase.table("users").update({"loyalty_points": current_points}).eq("id", session['user_id']).execute()
@@ -595,7 +590,6 @@ def redeem_reward():
         flash(f'☕ ¡Canjeaste un Café Gratis ({cheapest.get("name", "Café")})! Puedes pasar a recogerlo a nuestra tienda en Chapinero Alto. Se descontaron {points_required} puntos.', 'success')
 
     else:
-        # 20% descuento: café ALEATORIO del menú actual
         random_product = get_random_product()
         if not random_product:
             supabase.table("users").update({"loyalty_points": current_points}).eq("id", session['user_id']).execute()
@@ -726,7 +720,30 @@ def sustainability():
 def contact():
     if 'user_id' not in session:
         return redirect(url_for('login'))
-    return render_template('contact.html')
+    cart_count = get_cart_count(session['user_id'])
+    return render_template('contact.html', cart_count=cart_count)
+
+
+@app.route('/send-contact', methods=['POST'])
+def send_contact():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    name = request.form.get('name', '').strip()
+    email = request.form.get('email', '').strip()
+    message = request.form.get('message', '').strip()
+
+    if not name or not email or not message:
+        flash('Por favor completa todos los campos.', 'error')
+        return redirect(url_for('contact'))
+
+    if '@' not in email:
+        flash('El correo electrónico debe contener @.', 'error')
+        return redirect(url_for('contact'))
+
+    create_notification('contact_message', f'Contacto de {name} ({email}): {message}')
+    flash('¡Mensaje enviado con éxito! Te responderemos pronto.', 'success')
+    return redirect(url_for('contact'))
 
 
 @app.route('/terms')
