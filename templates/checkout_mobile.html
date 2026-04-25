@@ -1,119 +1,319 @@
 <!DOCTYPE html>
 <html class="light" lang="es">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Pasarela de Pago - Aroma & Grano</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&family=Public+Sans:wght@400;500;700&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <script>
-        tailwind.config = {
-            darkMode: "class", theme: { extend: { colors: {
-                "primary-fixed-dim": "#e98b5c", tertiary: "#7c5900",
-                "on-surface": "#2b352c", background: "#f6fbf3",
-                "surface-container-highest": "#dae6d8", "surface-container-high": "#e1ebdf",
-                "primary-fixed": "#f99868", "on-background": "#2b352c",
-                "surface-container": "#e8f0e5", "on-surface-variant": "#576257",
-                secondary: "#006f11", "surface-container-low": "#eff6ec",
-                primary: "#964a20", error: "#a73b21", surface: "#f6fbf3",
-                "on-primary": "#fff7f5", "surface-bright": "#f6fbf3",
-                "surface-container-lowest": "#ffffff", "outline-variant": "#aab5a9",
-                "secondary-container": "#97f98a", "tertiary-fixed": "#ffc963",
-                "on-tertiary-fixed": "#463000", "on-secondary": "#ebffe1",
-                "primary-dim": "#873e15", "tertiary-dim": "#6d4d00",
-                "error-dim": "#791903", "secondary-dim": "#00610e",
-                "tertiary-fixed-dim": "#efbc57"
-            }, borderRadius: { DEFAULT: "1rem", lg: "2rem", xl: "3rem", full: "9999px" },
-            fontFamily: { headline: ["Be Vietnam Pro"], body: ["Public Sans"], label: ["Public Sans"] }}}
-        };
-    </script>
-    <style>
-        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-        .cart-badge { position: relative; }
-        .cart-badge::after {
-            content: attr(data-count); position: absolute; top: -8px; right: -8px;
-            background-color: #f99868; color: white; border-radius: 50%;
-            width: 18px; height: 18px; font-size: 12px;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .cart-badge[data-count="0"]::after { display: none; }
-    </style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Aroma & Grano - Pagar</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&family=Public+Sans:wght@400;500;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"tertiary-container":"#ffc963","on-tertiary-container":"#5e4200","error-container":"#fd795a",outline:"#737e72","on-secondary-fixed-variant":"#006b10","on-error-container":"#6e1400","tertiary-fixed":"#ffc963","on-tertiary-fixed":"#463000","inverse-surface":"#0b0f0b","surface-container-highest":"#dae6d8","on-surface":"#2b352c","primary-fixed":"#f99868","secondary-fixed":"#97f98a","primary-container":"#f99868","on-background":"#2b352c","inverse-on-surface":"#999e97","on-secondary-container":"#00600d","surface-variant":"#dae6d8","on-error":"#fff7f6","surface-bright":"#f6fbf3","surface-container-low":"#eff6ec","inverse-primary":"#f99868",tertiary:"#7c5900",secondary:"#006f11","on-primary-container":"#562000",background:"#f6fbf3","surface-container":"#e8f0e5","outline-variant":"#aab5a9","surface-container-high":"#e1ebdf","primary-fixed-dim":"#e98b5c",primary:"#964a20","on-primary-fixed-variant":"#642600",error:"#a73b21",surface:"#f6fbf3","on-tertiary-fixed-variant":"#6a4b00","on-secondary":"#ebffe1","on-surface-variant":"#576257","secondary-container":"#97f98a","surface-dim":"#d2ddd0","tertiary-fixed-dim":"#efbc57","surface-tint":"#964a20","on-tertiary":"#fff8f1","on-primary":"#fff7f5","secondary-fixed-dim":"#8aeb7e","primary-dim":"#873e15","tertiary-dim":"#6d4d00","secondary-dim":"#00610e","error-dim":"#791903","surface-container-lowest":"#ffffff"},borderRadius:{DEFAULT:"1rem",lg:"2rem",xl:"3rem",full:"9999px"},fontFamily:{headline:["Be Vietnam Pro"],body:["Public Sans"],label:["Public Sans"],display:"Be Vietnam Pro"}}}};</script>
+<style>
+body{font-family:'Public Sans',sans-serif;-webkit-tap-highlight-color:transparent}
+h1,h2,h3,.headline{font-family:'Be Vietnam Pro',sans-serif}
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{animation:spin .8s linear infinite}
+@keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-10px)}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+@keyframes popIn{0%{transform:scale(0);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+.slide-down{animation:slideDown .3s ease}
+.slide-out{animation:slideOut .25s ease forwards}
+.scale-in{animation:scaleIn .4s cubic-bezier(.34,1.56,.64,1)}
+.pop-in{animation:popIn .55s cubic-bezier(.34,1.56,.64,1) .15s both}
+.card-glow{box-shadow:0 6px 30px rgba(0,0,0,0.18)}
+.input-focus:focus{outline:none;border-color:#964a20;box-shadow:0 0 0 3px rgba(150,74,32,0.12)}
+</style>
 </head>
-<body class="bg-background text-on-surface pb-24">
-    <!-- TopAppBar -->
-    <header class="bg-[#faf6f0] shadow-[0_4px_20px_rgba(46,50,48,0.06)] flex justify-between items-center w-full px-6 py-4 sticky top-0 z-50">
-        <a href="/orders" class="p-2 hover:bg-stone-100 transition-colors rounded-full active:scale-95 duration-150">
-            <span class="material-symbols-outlined text-stone-600">arrow_back</span>
-        </a>
-        <h1 class="text-lg font-headline font-semibold text-on-surface">Pasarela de Pago</h1>
-        <div class="cart-badge" data-count="{{ cart_count }}">
-            <a href="/orders" class="p-2 hover:bg-stone-100 transition-colors rounded-full">
-                <span class="material-symbols-outlined text-stone-600">shopping_cart</span>
-            </a>
+<body class="bg-background text-on-background min-h-screen pb-44">
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div id="flashContainer" class="fixed left-0 w-full z-40 flex flex-col items-center gap-2 px-4 pointer-events-none" style="top:56px">
+{% for category, message in messages %}
+<div class="slide-down max-w-sm w-full px-3.5 py-2.5 rounded-xl shadow-lg text-xs font-medium flex items-center gap-2 pointer-events-auto cursor-pointer
+  {% if category == 'success' %}bg-emerald-600 text-white
+  {% elif category == 'error' %}bg-red-600 text-white
+  {% elif category == 'warning' %}bg-amber-500 text-white
+  {% else %}bg-surface-container-high text-on-surface border border-outline-variant{% endif %}"
+  onclick="dismissFlash(this)">
+  <span class="material-symbols-outlined text-base flex-shrink-0" style="font-variation-settings:'FILL' 1">
+    {{ 'check_circle' if category == 'success' else 'error' if category == 'error' else 'warning' }}</span>
+  <span class="flex-grow leading-snug">{{ message }}</span>
+  <span class="material-symbols-outlined text-sm opacity-60 flex-shrink-0">close</span>
+</div>
+{% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+
+<div id="processingOverlay" class="fixed inset-0 z-[200] bg-black/60 backdrop-blur-sm flex flex-col items-center justify-center hidden">
+  <div class="bg-surface-container-lowest rounded-2xl p-7 shadow-2xl flex flex-col items-center gap-3 max-w-xs mx-4 fade-in">
+    <div class="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full spinner"></div>
+    <p id="processingText" class="font-bold headline text-base text-on-surface text-center">Procesando pago...</p>
+    <p class="text-[11px] text-on-surface-variant text-center">No cierres esta ventana</p>
+  </div>
+</div>
+
+<div id="successOverlay" class="fixed inset-0 z-[250] bg-black/50 backdrop-blur-sm flex flex-col items-center justify-center hidden">
+  <div class="bg-surface-container-lowest rounded-2xl p-7 shadow-2xl flex flex-col items-center gap-4 max-w-xs mx-4 scale-in text-center">
+    <div class="w-[72px] h-[72px] rounded-full bg-emerald-500 flex items-center justify-center pop-in shadow-lg shadow-emerald-500/30">
+      <span class="material-symbols-outlined text-white" style="font-size:36px;font-variation-settings:'FILL' 1,'wght' 300,'GRAD' 0,'opsz' 36">check</span>
+    </div>
+    <div>
+      <h2 class="text-xl font-bold headline text-on-surface">¡Pedido Confirmado!</h2>
+      <p class="text-xs text-on-surface-variant mt-1.5 leading-relaxed">¡Perfecto! Puedes ir a la tienda a recogerlo y allá te lo entregan listo o te dicen si aún le falta.</p>
+    </div>
+    <div class="w-full bg-surface-container rounded-xl p-3.5 space-y-1.5 text-left">
+      <div class="flex justify-between text-xs">
+        <span class="text-on-surface-variant">Total pagado</span>
+        <span class="font-bold text-on-surface">${{ "{:,}".format(total) if total else '0' }} COP</span>
+      </div>
+      <div class="flex justify-between text-xs">
+        <span class="text-on-surface-variant">Método</span>
+        <span class="font-semibold text-on-surface" id="successMethod">—</span>
+      </div>
+      <div class="flex justify-between text-xs">
+        <span class="text-on-surface-variant">Recogida</span>
+        <span class="font-semibold text-on-surface">En tienda · 8–12 min</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-2 bg-emerald-50 text-emerald-800 px-3.5 py-2 rounded-xl w-full">
+      <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1">storefront</span>
+      <span class="text-[11px] font-medium leading-snug">Calle 70 # 9-45, Chapinero Alto, Bogotá</span>
+    </div>
+    <button onclick="goToMenu()" class="w-full bg-primary text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-transform text-sm">
+      <span class="material-symbols-outlined text-lg">restaurant_menu</span>
+      Volver al Menú
+    </button>
+    <p id="successCountdown" class="text-[10px] text-on-surface-variant">Redirigiendo en 5 segundos...</p>
+  </div>
+</div>
+
+<header class="sticky top-0 z-50 bg-[#faf6f0] shadow-[0_2px_12px_rgba(46,50,48,0.05)] flex justify-between items-center w-full px-4 py-3">
+  <a href="{{ url_for('orders') }}" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-stone-100 transition-colors active:scale-95 text-emerald-800">
+    <span class="material-symbols-outlined">arrow_back</span>
+  </a>
+  <h1 class="text-lg font-bold headline text-emerald-900">Finalizar Compra</h1>
+  <div class="w-10"></div>
+</header>
+
+<main class="px-4 pt-5 space-y-5 max-w-lg mx-auto">
+{% if cart_items %}
+
+<section class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/30 flex items-center gap-3">
+  <div class="bg-primary/10 p-2.5 rounded-full text-primary flex-shrink-0">
+    <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">storefront</span>
+  </div>
+  <div class="flex-1 min-w-0">
+    <h2 class="text-xs font-bold text-on-surface uppercase tracking-wider">Recoger en Tienda</h2>
+    <p class="text-on-surface-variant text-xs mt-0.5">Calle 70 # 9-45, Chapinero Alto, Bogotá</p>
+    <div class="flex items-center gap-1.5 mt-1 text-primary font-bold">
+      <span class="material-symbols-outlined text-[16px]">schedule</span>
+      <span class="text-xs">8 – 12 min</span>
+    </div>
+  </div>
+</section>
+
+<section class="space-y-3">
+  <h3 class="text-base font-bold text-on-surface flex justify-between items-center px-1">
+    Resumen <span class="text-xs font-normal text-on-surface-variant font-body">{{ cart_count }} producto{{ 's' if cart_count != 1 else '' }}</span>
+  </h3>
+  <div class="space-y-2.5">
+    {% for item in cart_items %}
+    <div class="bg-surface p-3.5 rounded-xl shadow-[0_2px_12px_rgba(46,50,48,0.04)] border border-outline-variant/15 flex gap-3">
+      <img src="{{ item.product_image_url or 'https://picsum.photos/seed/coffee' + item.product_name|replace(' ', '') + '/128/128.jpg' }}"
+           alt="{{ item.product_name }}" class="w-16 h-16 object-cover rounded-lg bg-surface-container flex-shrink-0"
+           onerror="this.src='https://picsum.photos/seed/fallback{{ loop.index }}/128/128.jpg'"/>
+      <div class="flex-1 flex flex-col justify-between min-w-0">
+        <div>
+          <div class="flex justify-between items-start gap-2">
+            <h4 class="font-bold text-on-surface text-sm leading-tight">{{ item.product_name }}</h4>
+            <span class="font-bold text-on-surface text-sm flex-shrink-0">${{ "{:,}".format(item.total_price) }}</span>
+          </div>
+          <p class="text-[11px] text-on-surface-variant mt-0.5">{{ item.milk_type }} · {{ item.temperature }}{% if item.quantity > 1 %} · x{{ item.quantity }}{% endif %}</p>
         </div>
-    </header>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
 
-    <main class="px-6 py-8">
-        <div class="text-center">
-            <div class="w-20 h-20 rounded-full bg-surface-container flex items-center justify-center mx-auto mb-5">
-                <span class="material-symbols-outlined text-4xl text-outline-variant">payments</span>
-            </div>
-            <h2 class="text-2xl font-headline font-bold text-on-surface mb-2">Pasarela de Pagos</h2>
-            <p class="text-on-surface-variant text-sm max-w-sm mx-auto mb-2 leading-relaxed">Este módulo se encuentra en desarrollo. Pronto podrás realizar pagos de forma segura.</p>
-            <div class="flex items-center justify-center gap-2 mt-3 mb-6">
-                <span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
-                <span class="text-xs font-medium text-tertiary">Módulo en desarrollo</span>
-            </div>
+<section class="space-y-3">
+  <h3 class="text-base font-bold text-on-surface px-1 flex items-center gap-2">
+    <span class="material-symbols-outlined text-primary text-lg">payment</span>
+    Método de Pago
+  </h3>
+  <div id="paymentMethodsContainer" class="space-y-2"></div>
 
-            {% if cart_items %}
-            <!-- Resumen -->
-            <div class="bg-surface-container rounded-2xl p-5 text-left mb-6">
-                <h3 class="font-bold text-on-surface text-sm mb-3">Resumen del Pedido</h3>
-                {% for item in cart_items %}
-                <div class="flex justify-between items-center py-2 {% if not loop.last %}border-b border-outline-variant/20{% endif %}">
-                    <div class="flex-1 min-w-0">
-                        <p class="text-xs font-medium text-on-surface truncate">{{ item.product_name }}</p>
-                        <p class="text-[10px] text-on-surface-variant">{{ item.origin }} · {{ item.milk_type }} · ×{{ item.quantity }}</p>
-                    </div>
-                    <span class="text-xs font-bold text-on-surface ml-3">${{ "{:,}".format(item.total_price) }}</span>
-                </div>
-                {% endfor %}
-                <div class="flex justify-between items-center pt-3 mt-2 border-t-2 border-outline-variant/30">
-                    <span class="font-bold text-on-surface text-sm">Total</span>
-                    <span class="text-lg font-bold text-primary">${{ "{:,}".format(total) }} COP</span>
-                </div>
+  <div id="cardFormContainer" class="hidden slide-down">
+    <div class="border-t border-outline-variant/20 pt-4 space-y-4">
+      <div id="cardPreview" class="card-glow rounded-xl p-4 text-white relative overflow-hidden" style="background:linear-gradient(135deg,#1a1a2e,#16213e)">
+        <div class="absolute inset-0 opacity-10" style="background-image:radial-gradient(circle at 20% 80%,white 1px,transparent 1px),radial-gradient(circle at 80% 20%,white 1px,transparent 1px);background-size:35px 35px"></div>
+        <div class="relative z-10">
+          <div class="flex justify-between items-start mb-4">
+            <div id="cardBrandDisplay" class="text-lg font-bold tracking-wider opacity-60">TARJETA</div>
+            <div id="cardTypeLabel" class="text-[9px] font-bold uppercase tracking-widest opacity-70 bg-white/10 px-1.5 py-0.5 rounded">Crédito</div>
+          </div>
+          <div id="cardNumberDisplay" class="text-sm tracking-[0.18em] font-mono mb-3 opacity-90">•••• •••• •••• ••••</div>
+          <div class="flex justify-between items-end">
+            <div>
+              <div class="text-[8px] uppercase tracking-wider opacity-50 mb-0.5">Titular</div>
+              <div id="cardNameDisplay" class="text-xs font-semibold tracking-wide opacity-90">NOMBRE AQUÍ</div>
             </div>
-
-            <form method="POST" action="/process-payment">
-                <button type="submit" class="w-full bg-primary text-white font-bold py-4 px-6 rounded-2xl flex items-center justify-center gap-2 active:scale-95 transition-transform">
-                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-                    Confirmar Pedido (Simulado)
-                </button>
-            </form>
-            <p class="text-[10px] text-on-surface-variant mt-2 text-center">Esto confirmará tu pedido sin cobro real.</p>
-            {% else %}
-            <a href="/dashboard" class="px-6 py-3 bg-primary text-on-primary rounded-full font-bold inline-block mt-4">Volver al Menú</a>
-            {% endif %}
+            <div class="text-right">
+              <div class="text-[8px] uppercase tracking-wider opacity-50 mb-0.5">Vence</div>
+              <div id="cardExpiryDisplay" class="text-xs font-semibold opacity-90">MM/AA</div>
+            </div>
+          </div>
         </div>
-    </main>
-
-    <!-- BottomNavBar -->
-    <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pt-2 pb-6 bg-[#faf6f0]/95 backdrop-blur-md shadow-[0_-4px_20px_rgba(46,50,48,0.04)] rounded-t-[24px] border-t border-stone-200/50">
-        <a class="flex flex-col items-center justify-center text-stone-500 hover:text-emerald-700 active:scale-90 duration-200" href="/dashboard">
-            <span class="material-symbols-outlined">restaurant_menu</span>
-            <span class="text-xs font-medium">Menú</span>
-        </a>
-        <div class="cart-badge" data-count="{{ cart_count }}">
-            <a class="flex flex-col items-center justify-center text-emerald-800 font-bold bg-emerald-50 rounded-xl px-4 py-1" href="/orders">
-                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
-                <span class="text-xs font-medium">Pedidos</span>
-            </a>
+      </div>
+      <div class="flex bg-surface-container rounded-lg p-0.5 gap-0.5">
+        <button id="btnCredit" onclick="setCardType('credit')" class="flex-1 py-2 text-xs font-bold rounded-md transition-all bg-primary text-white">Crédito</button>
+        <button id="btnDebit" onclick="setCardType('debit')" class="flex-1 py-2 text-xs font-bold rounded-md transition-all text-on-surface-variant hover:bg-surface-container-high">Débito</button>
+      </div>
+      <div class="space-y-2.5">
+        <div>
+          <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-0.5 block">Número de tarjeta</label>
+          <div class="relative">
+            <input id="cardNumberInput" type="text" maxlength="19" placeholder="0000 0000 0000 0000" inputmode="numeric"
+                   class="input-focus w-full bg-surface-container-low border border-outline-variant/40 rounded-lg px-3 py-2.5 text-on-surface font-mono tracking-wider text-sm pr-14"
+                   oninput="onCardNumberInput(this)"/>
+            <div id="cardBrandIcon" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] font-bold tracking-widest opacity-40">—</div>
+          </div>
         </div>
-        <a class="flex flex-col items-center justify-center text-stone-500 hover:text-emerald-700 active:scale-90 duration-200" href="/profile">
-            <span class="material-symbols-outlined">person</span>
-            <span class="text-xs font-medium">Perfil</span>
-        </a>
-    </nav>
+        <div>
+          <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-0.5 block">Nombre del titular</label>
+          <input id="cardNameInput" type="text" placeholder="JUAN PÉREZ" autocomplete="cc-name"
+                 class="input-focus w-full bg-surface-container-low border border-outline-variant/40 rounded-lg px-3 py-2.5 text-on-surface uppercase tracking-wide text-sm"
+                 oninput="onCardNameInput(this)"/>
+        </div>
+        <div class="grid grid-cols-2 gap-2.5">
+          <div>
+            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-0.5 block">Vencimiento</label>
+            <input id="cardExpiryInput" type="text" maxlength="5" placeholder="MM/AA" inputmode="numeric"
+                   class="input-focus w-full bg-surface-container-low border border-outline-variant/40 rounded-lg px-3 py-2.5 text-on-surface font-mono tracking-wider text-sm"
+                   oninput="onCardExpiryInput(this)"/>
+          </div>
+          <div>
+            <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-0.5 block">CVV</label>
+            <input id="cardCvvInput" type="password" maxlength="4" placeholder="•••" inputmode="numeric"
+                   class="input-focus w-full bg-surface-container-low border border-outline-variant/40 rounded-lg px-3 py-2.5 text-on-surface font-mono tracking-widest text-sm"/>
+          </div>
+        </div>
+        <label class="flex items-center gap-2 cursor-pointer select-none">
+          <input id="saveCardCheckbox" type="checkbox" checked class="w-3.5 h-3.5 rounded accent-primary"/>
+          <span class="text-xs text-on-surface-variant">Guardar tarjeta</span>
+        </label>
+        <div id="cardError" class="text-[11px] text-error font-medium hidden"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-3">
+    <button onclick="processExternalPay('apple')" class="h-12 rounded-xl flex items-center justify-center gap-1.5 transition-all active:scale-95 bg-black text-white">
+      <svg class="h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M17.72 7.4c-.48.55-1.25.98-2.02.92-.1-.77.28-1.59.73-2.1.48-.55 1.32-.96 2-.99.08.81-.24 1.6-.71 2.17zm.7 1.1c-1.12-.07-2.08.64-2.61.64s-1.36-.6-2.24-.59c-1.15.02-2.21.67-2.8 1.7-1.2 2.07-.31 5.13.85 6.81.57.83 1.25 1.76 2.15 1.73.86-.04 1.19-.56 2.23-.56s1.34.56 2.25.54c.93-.02 1.51-.84 2.08-1.68.65-.96.92-1.89.93-1.94-.02-.01-1.79-.69-1.81-2.73-.02-1.7 1.39-2.52 1.45-2.56-.79-1.17-2.02-1.3-2.46-1.32z"/></svg>
+      <span class="font-bold text-xs">Pay</span>
+    </button>
+    <button onclick="processExternalPay('google')" class="h-12 rounded-xl flex items-center justify-center gap-1.5 transition-all active:scale-95 bg-white text-gray-700 border border-gray-200">
+      <svg class="h-4" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+      <span class="font-bold text-xs">Pay</span>
+    </button>
+  </div>
+</section>
+
+<section class="space-y-2 px-1 pt-1">
+  {% for item in cart_items %}
+  <div class="flex justify-between text-on-surface-variant text-xs">
+    <span class="truncate mr-3">{{ item.product_name }}{% if item.quantity > 1 %} x{{ item.quantity }}{% endif %}</span>
+    <span class="flex-shrink-0">${{ "{:,}".format(item.total_price) }}</span>
+  </div>
+  {% endfor %}
+  <div class="flex justify-between text-lg font-bold text-on-surface pt-2 border-t border-outline-variant/30">
+    <span>Total</span>
+    <span>${{ "{:,}".format(total) }} COP</span>
+  </div>
+</section>
+
+<div class="h-4"></div>
+
+{% else %}
+<div class="flex flex-col items-center justify-center py-16 text-center">
+  <span class="material-symbols-outlined text-5xl text-outline-variant mb-3">shopping_cart</span>
+  <h2 class="text-xl font-bold headline text-on-surface mb-2">Carrito vacío</h2>
+  <p class="text-sm text-on-surface-variant mb-5">Añade productos desde el menú para continuar.</p>
+  <a href="{{ url_for('dashboard') }}" class="bg-primary text-white font-bold px-6 py-2.5 rounded-xl text-sm">Ver Menú</a>
+</div>
+{% endif %}
+</main>
+
+<div id="bottomBar" class="fixed bottom-0 left-0 w-full z-50 pointer-events-none">
+  <div class="px-4 pb-3 pointer-events-auto">
+    <button id="confirmBtn" onclick="handleConfirm()" disabled
+      class="w-full bg-primary text-white h-14 rounded-2xl shadow-[0_8px_25px_rgba(150,74,32,0.3)] flex items-center justify-center gap-2 font-bold text-base active:scale-95 duration-200 ease-out disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100">
+      <span class="material-symbols-outlined text-lg" id="confirmBtnIcon">lock</span>
+      <span id="confirmBtnText">Selecciona método de pago</span>
+    </button>
+  </div>
+  <nav class="bg-[#faf6f0]/95 backdrop-blur-md shadow-[0_-2px_12px_rgba(46,50,48,0.04)] border-t border-stone-200/50 flex justify-around items-center px-4 pt-1.5 pb-5 pointer-events-auto">
+    <a class="flex flex-col items-center justify-center text-stone-500 text-[10px] font-medium" href="{{ url_for('dashboard') }}">
+      <span class="material-symbols-outlined text-[22px]">restaurant_menu</span><span>Menú</span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-emerald-800 text-[10px] font-bold bg-emerald-50 rounded-xl px-3 py-0.5" href="{{ url_for('orders') }}">
+      <span class="material-symbols-outlined text-[22px]" style="font-variation-settings:'FILL' 1">receipt_long</span><span>Pedidos</span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-stone-500 text-[10px] font-medium" href="{{ url_for('profile') }}">
+      <span class="material-symbols-outlined text-[22px]">person</span><span>Perfil</span>
+    </a>
+  </nav>
+</div>
+
+<script>
+const TOTAL={{ total }};
+const DASHBOARD_URL='{{ url_for("dashboard") }}';
+const PROCESS_URL='{{ url_for("process_payment") }}';
+const STORAGE_KEY='aroma_grano_cards';
+let selectedMethod=null,newCardType='credit',lastPayMethodLabel='Tarjeta';
+const brandConfig={visa:{name:'VISA',color:'#1a1f71',gradient:'linear-gradient(135deg,#1a1f71,#2d3a8c)'},mastercard:{name:'MASTERCARD',color:'#eb001b',gradient:'linear-gradient(135deg,#eb001b,#f79e1b)'},amex:{name:'AMEX',color:'#006fcf',gradient:'linear-gradient(135deg,#006fcf,#00a4ef)'},discover:{name:'DISCOVER',color:'#ff6000',gradient:'linear-gradient(135deg,#ff6000,#ff9500)'},default:{name:'TARJETA',color:'#1a1a2e',gradient:'linear-gradient(135deg,#1a1a2e,#16213e)'}};
+
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('#flashContainer > div').forEach((f,i)=>{setTimeout(()=>dismissFlash(f),4000+i*400)});renderPaymentMethods();updateConfirmBtn()});
+
+function dismissFlash(el){if(!el||el.classList.contains('slide-out'))return;el.classList.add('slide-out');setTimeout(()=>{if(el.parentNode)el.parentNode.removeChild(el)},250)}
+function loadCards(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]')}catch{return[]}}
+function saveCards(c){localStorage.setItem(STORAGE_KEY,JSON.stringify(c))}
+function detectBrand(n){const s=n.replace(/\D/g,'');if(/^4/.test(s))return'visa';if(/^5[1-5]/.test(s)||/^2[2-7]/.test(s))return'mastercard';if(/^3[47]/.test(s))return'amex';if(/^6(?:011|5)/.test(s))return'discover';return null}
+function luhnCheck(n){const s=n.replace(/\D/g,'');if(s.length<13)return false;let sum=0,alt=false;for(let i=s.length-1;i>=0;i--){let d=parseInt(s[i],10);if(alt){d*=2;if(d>9)d-=9}sum+=d;alt=!alt}return sum%10===0}
+function formatCardNum(v){return v.replace(/\D/g,'').substring(0,16).replace(/(.{4})/g,'$1 ').trim()}
+function formatExpiry(v){const c=v.replace(/\D/g,'').substring(0,4);return c.length>=3?c.substring(0,2)+'/'+c.substring(2):c}
+
+function onCardNumberInput(el){const pos=el.selectionStart,prev=el.value;el.value=formatCardNum(el.value);const d=el.value.length-prev.length;try{el.setSelectionRange(pos+d,pos+d)}catch{}const brand=detectBrand(el.value),icon=document.getElementById('cardBrandIcon'),preview=document.getElementById('cardPreview'),bd=document.getElementById('cardBrandDisplay');if(brand){const c=brandConfig[brand];icon.textContent=c.name;icon.style.opacity='1';icon.style.color=c.color;preview.style.background=c.gradient;bd.textContent=c.name;bd.style.opacity='0.9'}else{icon.textContent='—';icon.style.opacity='0.4';icon.style.color='';preview.style.background=brandConfig.default.gradient;bd.textContent='TARJETA';bd.style.opacity='0.6'}const digits=el.value.replace(/\D/g,'');document.getElementById('cardNumberDisplay').textContent=digits.length>0?formatCardNum(digits.padEnd(16,'•')):'•••• •••• •••• ••••';hideError()}
+function onCardNameInput(el){el.value=el.value.toUpperCase();document.getElementById('cardNameDisplay').textContent=el.value||'NOMBRE AQUÍ';hideError()}
+function onCardExpiryInput(el){el.value=formatExpiry(el.value);document.getElementById('cardExpiryDisplay').textContent=el.value||'MM/AA';hideError()}
+function setCardType(t){newCardType=t;const bc=document.getElementById('btnCredit'),bd=document.getElementById('btnDebit'),l=document.getElementById('cardTypeLabel');if(t==='credit'){bc.className='flex-1 py-2 text-xs font-bold rounded-md transition-all bg-primary text-white';bd.className='flex-1 py-2 text-xs font-bold rounded-md transition-all text-on-surface-variant hover:bg-surface-container-high';l.textContent='Crédito'}else{bd.className='flex-1 py-2 text-xs font-bold rounded-md transition-all bg-primary text-white';bc.className='flex-1 py-2 text-xs font-bold rounded-md transition-all text-on-surface-variant hover:bg-surface-container-high';l.textContent='Débito'}}
+function showError(m){const e=document.getElementById('cardError');e.textContent=m;e.classList.remove('hidden')}
+function hideError(){document.getElementById('cardError').classList.add('hidden')}
+
+function selectMethod(m){selectedMethod=m;document.getElementById('cardFormContainer').classList.toggle('hidden',m!=='new-card');renderPaymentMethods();updateConfirmBtn()}
+function updateConfirmBtn(){const btn=document.getElementById('confirmBtn'),icon=document.getElementById('confirmBtnIcon'),text=document.getElementById('confirmBtnText');if(selectedMethod==='new-card'||(selectedMethod&&selectedMethod.startsWith('saved-'))){btn.disabled=false;icon.textContent='credit_card';text.textContent='Pagar $'+TOTAL.toLocaleString('es-CO')+' COP'}else{btn.disabled=true;icon.textContent='lock';text.textContent='Selecciona método de pago'}}
+function getBrandSVG(brand,sz){sz=sz||22;const c=brandConfig[brand]||brandConfig.default;if(brand==='mastercard')return'<svg width="'+sz+'" height="'+sz+'" viewBox="0 0 40 40"><circle cx="16" cy="20" r="10" fill="#eb001b" opacity="0.9"/><circle cx="24" cy="20" r="10" fill="#f79e1b" opacity="0.9"/><path d="M20 12a10 10 0 010 16 10 10 0 000-16z" fill="#ff5f00" opacity="0.9"/></svg>';return'<span style="color:'+c.color+';font-size:'+(sz*0.55)+'px;font-weight:800;letter-spacing:0.04em">'+c.name+'</span>'}
+function getMethodLabel(m){if(m==='new-card'){const brand=detectBrand(document.getElementById('cardNumberInput').value)||'default';return(brandConfig[brand].name!=='TARJETA'?brandConfig[brand].name+' ':'')+(newCardType==='credit'?'Crédito':'Débito')+' ••'+(document.getElementById('cardNumberInput').value.replace(/\D/g,'').slice(-2)||'••')}if(m&&m.startsWith('saved-')){const cards=loadCards(),idx=parseInt(m.split('-')[1]);if(cards[idx]){const c=cards[idx];return(brandConfig[c.brand].name!=='TARJETA'?brandConfig[c.brand].name+' ':'')+(c.type==='credit'?'Crédito':'Débito')+' ••'+c.lastFour.slice(-2)}}return'Tarjeta'}
+
+function renderPaymentMethods(){const ct=document.getElementById('paymentMethodsContainer'),cards=loadCards();let h='';cards.forEach((c,i)=>{const sel=selectedMethod==='saved-'+i;h+='<div class="'+(sel?'border-2 border-primary bg-primary/5':'border border-outline-variant/30 bg-surface-container-low')+' rounded-lg p-3 flex items-center gap-2.5 cursor-pointer transition-all" onclick="selectMethod(\'saved-'+i+'\')"><div class="rounded-full border-2 '+(sel?'border-primary bg-primary text-white':'border-outline-variant bg-surface')+' flex items-center justify-center flex-shrink-0" style="width:18px;height:18px">'+(sel?'<div style="width:7px;height:7px" class="rounded-full bg-white"></div>':'')+'</div><div class="flex-shrink-0">'+getBrandSVG(c.brand,22)+'</div><div class="flex-grow min-w-0"><div class="text-xs font-bold text-on-surface">•••• '+c.lastFour+'</div><div class="text-[10px] text-on-surface-variant">'+c.holderName+' · '+c.expiryMonth+'/'+c.expiryYear+'</div></div><span class="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded '+(c.type==='credit'?'bg-primary/10 text-primary':'bg-secondary/10 text-secondary')+'">'+(c.type==='credit'?'Créd':'Déb')+'</span><button onclick="event.stopPropagation();deleteCard('+i+')" class="p-0.5 rounded-full hover:bg-error/10 text-on-surface-variant/60 hover:text-error transition-colors flex-shrink-0"><span class="material-symbols-outlined" style="font-size:14px">close</span></button></div>'});const isN=selectedMethod==='new-card';h+='<div class="'+(isN?'border-2 border-primary bg-primary/5':'border border-dashed border-outline-variant/50 bg-surface-container-low')+' rounded-lg p-3 flex items-center gap-2.5 cursor-pointer transition-all" onclick="selectMethod(\'new-card\')"><div class="rounded-full border-2 '+(isN?'border-primary bg-primary text-white':'border-outline-variant bg-surface')+' flex items-center justify-center flex-shrink-0" style="width:18px;height:18px">'+(isN?'<div style="width:7px;height:7px" class="rounded-full bg-white"></div>':'')+'</div><span class="material-symbols-outlined text-on-surface-variant text-lg">add_card</span><span class="text-xs font-bold text-on-surface-variant">Agregar tarjeta nueva</span></div>';ct.innerHTML=h}
+function deleteCard(i){const cards=loadCards();cards.splice(i,1);saveCards(cards);if(selectedMethod==='saved-'+i)selectedMethod=null;else if(selectedMethod&&selectedMethod.startsWith('saved-')){const idx=parseInt(selectedMethod.split('-')[1]);if(idx>i)selectedMethod='saved-'+(idx-1)}renderPaymentMethods();updateConfirmBtn()}
+function validateNewCard(){const num=document.getElementById('cardNumberInput').value.replace(/\D/g,''),name=document.getElementById('cardNameInput').value.trim(),exp=document.getElementById('cardExpiryInput').value,cvv=document.getElementById('cardCvvInput').value;if(num.length<13){showError('Número de tarjeta inválido');return null}if(!luhnCheck(num)){showError('Número de tarjeta no válido');return null}if(name.length<3){showError('Ingresa el nombre del titular');return null}if(!/^\d{2}\/\d{2}$/.test(exp)){showError('Fecha inválida (MM/AA)');return null}const m=parseInt(exp.split('/')[0]),y=parseInt('20'+exp.split('/')[1]);if(m<1||m>12){showError('Mes inválido');return null}if(new Date(y,m)<=new Date()){showError('Tarjeta vencida');return null}if(cvv.length<3){showError('CVV inválido');return null}return{id:Date.now(),type:newCardType,brand:detectBrand(num)||'default',lastFour:num.slice(-4),holderName:name.toUpperCase(),expiryMonth:exp.split('/')[0],expiryYear:exp.split('/')[1]}}
+
+function handleConfirm(){if(!selectedMethod)return;if(selectedMethod==='new-card'){const card=validateNewCard();if(!card)return;if(document.getElementById('saveCardCheckbox').checked){const cards=loadCards();cards.push(card);saveCards(cards)}lastPayMethodLabel=getMethodLabel('new-card')}else if(selectedMethod.startsWith('saved-')){lastPayMethodLabel=getMethodLabel(selectedMethod)}processPayment()}
+
+function processPayment(){showProcessing('Procesando pago...');setTimeout(()=>{fetch(PROCESS_URL,{method:'POST',headers:{'X-Requested-With':'XMLHttpRequest'}}).then(()=>showSuccess(lastPayMethodLabel)).catch(()=>{window.location.href=PROCESS_URL})},2000)}
+
+function processExternalPay(p){const name=p==='apple'?'Apple Pay':'Google Pay';lastPayMethodLabel=name;showProcessing('Conectando con '+name+'...');setTimeout(()=>{window.open(p==='apple'?'https://www.apple.com/co/apple-pay/':'https://pay.google.com/','_blank')},600);setTimeout(()=>{document.getElementById('processingText').textContent=name+' autorizó el pago';document.querySelector('#processingOverlay .spinner').style.borderTopColor='#34a853'},1200);setTimeout(()=>{fetch(PROCESS_URL,{method:'POST',headers:{'X-Requested-With':'XMLHttpRequest'}}).then(()=>showSuccess(name)).catch(()=>{window.location.href=PROCESS_URL})},2200)}
+
+function showProcessing(t){const o=document.getElementById('processingOverlay'),s=o.querySelector('.spinner');document.getElementById('processingText').textContent=t;s.style.borderTopColor='#964a20';o.classList.remove('hidden')}
+
+function showSuccess(methodLabel){document.getElementById('processingOverlay').classList.add('hidden');document.getElementById('successMethod').textContent=methodLabel;document.getElementById('successOverlay').classList.remove('hidden');let countdown=5;const el=document.getElementById('successCountdown');const timer=setInterval(()=>{countdown--;if(countdown<=0){clearInterval(timer);goToMenu()}else{el.textContent='Redirigiendo en '+countdown+' segundo'+(countdown!==1?'s':'')+'...'}},1000)}
+
+function goToMenu(){window.location.href=DASHBOARD_URL}
+</script>
 </body>
 </html>

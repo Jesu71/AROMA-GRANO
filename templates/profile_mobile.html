@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Perfil | Aroma & Grano</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&family=Public+Sans:wght@400;500;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary-fixed-dim":"#e98b5c",tertiary:"#7c5900","on-primary-fixed-variant":"#642600","on-error-container":"#6e1400","on-secondary-container":"#00600d","surface-bright":"#f6fbf3","on-primary-container":"#562000",background:"#f6fbf3","surface-container-highest":"#dae6d8",outline:"#737e72","surface-container-high":"#e1ebdf","primary-container":"#f99868","primary-fixed":"#f99868","on-background":"#2b352c","surface-container":"#e8f0e5","secondary-fixed":"#97f98a","on-surface":"#2b352c",error:"#a73b21",surface:"#f6fbf3","surface-variant":"#dae6d8","error-container":"#fd795a","surface-dim":"#d2ddd0","on-error":"#fff7f6","tertiary-container":"#ffc963","on-tertiary-container":"#5e4200","surface-tint":"#964a20","outline-variant":"#aab5a9","on-secondary":"#ebffe1","on-primary":"#fff7f5","inverse-surface":"#0b0f0b","on-secondary-fixed-variant":"#006b10","secondary-fixed-dim":"#8aeb7e","on-secondary-fixed":"#004b08","on-tertiary-fixed":"#463000","on-surface-variant":"#576257",secondary:"#006f11","inverse-primary":"#f99868","on-tertiary-fixed-variant":"#6a4b00","on-primary-fixed":"#2f0e00","on-tertiary":"#fff8f1",primary:"#964a20","inverse-on-surface":"#999e97","surface-container-lowest":"#ffffff","surface-container-low":"#eff6ec",secondary-container":"#97f98a","tertiary-fixed-dim":"#efbc57","tertiary-fixed":"#ffc963","primary-dim":"#873e15","secondary-dim":"#00610e","error-dim":"#791903","tertiary-dim":"#6d4d00"},borderRadius:{DEFAULT:"1rem",lg:"2rem",xl:"3rem",full:"9999px"},fontFamily:{headline:["Be Vietnam Pro"],body:["Public Sans"],label:["Public Sans"],display:"Be Vietnam Pro"}}}};
+</script>
+<style>
+body{font-family:'Nunito Sans',sans-serif;-webkit-tap-highlight-color:transparent}
+h1,h2,h3,.headline{font-family:'Literata',serif}
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+.cart-badge{position:relative}
+.cart-badge::after{content:attr(data-count);position:absolute;top:-6px;right:-6px;background-color:#f99868;color:white;border-radius:50%;width:16px;height:16px;font-size:10px;display:flex;align-items:center;justify-content:center}
+.cart-badge[data-count="0"]::after{display:none}
+.loyalty-oro{background:linear-gradient(135deg,#7c5d1e 0%,#5c4414 100%)}
+.loyalty-plata{background:linear-gradient(135deg,#6b7280 0%,#4b5563 100%)}
+.loyalty-verde{background:linear-gradient(135deg,#4a7c59 0%,#3d6b4c 100%)}
+.input-focus:focus{outline:none;border-color:#964a20;box-shadow:0 0 0 3px rgba(150,74,32,0.12)}
+.flash-msg{animation:flashIn 0.35s ease-out}
+@keyframes flashIn{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body class="bg-background text-on-background min-h-screen" style="padding-bottom:120px;">
+
+<!-- Flash: fixed top center, auto-dismiss -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div id="flash-container" class="fixed top-3 left-1/2 -translate-x-1/2 z-[100] flex flex-col items-center gap-2 w-full max-w-sm px-3">
+{% for category, message in messages %}
+<div class="flash-msg px-4 py-2.5 rounded-xl shadow-lg text-xs font-medium flex items-center gap-2 w-full
+  {% if category == 'success' %}bg-emerald-600 text-white
+  {% elif category == 'error' %}bg-red-600 text-white
+  {% elif category == 'warning' %}bg-amber-500 text-white
+  {% else %}bg-white text-on-surface border border-outline-variant{% endif %}">
+  <span class="material-symbols-outlined text-base flex-shrink-0" style="font-variation-settings:'FILL' 1">{{ 'check_circle' if category == 'success' else 'error' if category == 'error' else 'warning' }}</span>
+  <span class="flex-grow leading-snug">{{ message }}</span>
+  <button type="button" onclick="this.closest('.flash-msg').remove()" class="ml-1 opacity-70 hover:opacity-100 transition-opacity flex-shrink-0">
+    <span class="material-symbols-outlined text-sm">close</span>
+  </button>
+</div>
+{% endfor %}
+</div>
+<script>
+(function(){
+  var msgs=document.querySelectorAll('.flash-msg');
+  msgs.forEach(function(el){
+    setTimeout(function(){
+      el.style.transition='opacity 0.5s, transform 0.5s';
+      el.style.opacity='0';
+      el.style.transform='translateY(-12px)';
+      setTimeout(function(){el.remove();},500);
+    },4500);
+  });
+})();
+</script>
+{% endif %}
+{% endwith %}
+
+<header class="sticky top-0 z-50 shadow-[0_2px_12px_rgba(46,50,48,0.05)] flex justify-between items-center w-full px-4 py-3" style="background-color:#faf6f0;">
+  <span class="text-xl font-serif text-emerald-900 font-semibold tracking-tight">{{ session['full_name'] }}</span>
+  <a href="/logout" class="p-2 hover:bg-stone-100 transition-colors active:scale-95 duration-150 rounded-full">
+    <span class="material-symbols-outlined text-emerald-800">logout</span>
+  </a>
+</header>
+
+<main class="px-4 pt-5 space-y-6 max-w-lg mx-auto">
+
+<!-- Loyalty Card -->
+<div class="{{ 'loyalty-oro' if loyalty_points >= 1000 else 'loyalty-plata' if loyalty_points >= 500 else 'loyalty-verde' }} rounded-xl p-5 text-white shadow-lg relative overflow-hidden">
+  <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+  <div class="relative z-10">
+    <div class="flex justify-between items-start mb-7">
+      <div>
+        <p class="font-label text-white/80 text-[10px] uppercase tracking-widest mb-0.5">Programa de Lealtad</p>
+        <h2 class="text-xl font-headline font-bold">{% if loyalty_points >= 1000 %}Grano Oro{% elif loyalty_points >= 500 %}Grano Plata{% else %}Grano Verde{% endif %}</h2>
+      </div>
+      <span class="material-symbols-outlined text-3xl">coffee</span>
+    </div>
+    <div class="mb-4">
+      <p class="text-xs opacity-90 mb-0.5">Puntos acumulados</p>
+      <div class="flex items-baseline gap-1.5">
+        <span class="text-4xl font-headline font-black">{{ "{:,}".format(loyalty_points) }}</span>
+        <span class="text-sm opacity-80 italic">pts</span>
+      </div>
+    </div>
+    <div class="space-y-1.5">
+      {% if loyalty_points < 500 %}
+      <div class="flex justify-between text-[10px] mb-0.5"><span>→ Plata (500 pts)</span><span>{{ (loyalty_points / 500 * 100)|int }}%</span></div>
+      <div class="h-1.5 w-full bg-white/20 rounded-full overflow-hidden"><div class="h-full bg-tertiary-container rounded-full" style="width:{{ (loyalty_points / 500 * 100)|int }}%"></div></div>
+      {% elif loyalty_points < 1000 %}
+      <div class="flex justify-between text-[10px] mb-0.5"><span>→ Oro (1000 pts)</span><span>{{ ((loyalty_points - 500) / 500 * 100)|int }}%</span></div>
+      <div class="h-1.5 w-full bg-white/20 rounded-full overflow-hidden"><div class="h-full bg-tertiary-container rounded-full" style="width:{{ ((loyalty_points - 500) / 500 * 100)|int }}%"></div></div>
+      {% else %}
+      <div class="flex justify-between text-[10px]"><span>Nivel máximo</span><span>100%</span></div>
+      <div class="h-1.5 w-full bg-white/20 rounded-full overflow-hidden"><div class="h-full bg-tertiary-container rounded-full" style="width:100%"></div></div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- Rewards -->
+<section class="space-y-3">
+  <h3 class="text-base font-headline font-bold px-1">Recompensas</h3>
+  <div class="grid grid-cols-2 gap-3">
+    {% if loyalty_points >= 500 %}
+    <form method="POST" action="/redeem-reward" class="bg-surface-container-high rounded-xl p-4 border border-primary/10 relative overflow-hidden">
+      <input type="hidden" name="reward_type" value="coffee"/>
+      <div class="bg-primary/10 text-primary px-2 py-0.5 rounded-full text-[9px] font-bold inline-block mb-2">RECANJEABLE</div>
+      <div class="flex items-center gap-1.5 mb-1">
+        <span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings:'FILL' 1">local_cafe</span>
+        <h4 class="text-sm font-headline font-semibold">Café Gratis</h4>
+      </div>
+      <div class="flex items-center gap-1 mb-3"><span class="material-symbols-outlined text-tertiary text-sm">stars</span><span class="text-tertiary font-bold text-xs">500 pts</span></div>
+      <button type="submit" class="w-full bg-primary text-white py-2 rounded-lg font-bold text-xs active:scale-95 transition-transform">Canjear</button>
+    </form>
+    {% else %}
+    <div class="bg-surface-container rounded-xl p-4 border border-outline-variant/30 opacity-60">
+      <div class="bg-outline-variant text-on-surface-variant px-2 py-0.5 rounded-full text-[9px] font-bold inline-block mb-2">FALTAN {{ 500 - loyalty_points }}</div>
+      <div class="flex items-center gap-1.5 mb-1">
+        <span class="material-symbols-outlined text-outline text-lg">local_cafe</span>
+        <h4 class="text-sm font-headline font-semibold">Café Gratis</h4>
+      </div>
+      <div class="flex items-center gap-1"><span class="material-symbols-outlined text-outline text-sm">stars</span><span class="text-outline font-bold text-xs">500 pts</span></div>
+    </div>
+    {% endif %}
+
+    {% if loyalty_points >= 800 %}
+    <form method="POST" action="/redeem-reward" class="bg-surface-container-high rounded-xl p-4 border border-primary/10 relative overflow-hidden">
+      <input type="hidden" name="reward_type" value="discount"/>
+      <div class="bg-primary/10 text-primary px-2 py-0.5 rounded-full text-[9px] font-bold inline-block mb-2">RECANJEABLE</div>
+      <div class="flex items-center gap-1.5 mb-1">
+        <span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings:'FILL' 1">sell</span>
+        <h4 class="text-sm font-headline font-semibold">20% Descuento</h4>
+      </div>
+      <div class="flex items-center gap-1 mb-3"><span class="material-symbols-outlined text-tertiary text-sm">stars</span><span class="text-tertiary font-bold text-xs">800 pts</span></div>
+      <button type="submit" class="w-full bg-primary text-white py-2 rounded-lg font-bold text-xs active:scale-95 transition-transform">Canjear</button>
+    </form>
+    {% else %}
+    <div class="bg-surface-container rounded-xl p-4 border border-outline-variant/30 opacity-60">
+      <div class="bg-outline-variant text-on-surface-variant px-2 py-0.5 rounded-full text-[9px] font-bold inline-block mb-2">FALTAN {{ 800 - loyalty_points }}</div>
+      <div class="flex items-center gap-1.5 mb-1">
+        <span class="material-symbols-outlined text-outline text-lg">sell</span>
+        <h4 class="text-sm font-headline font-semibold">20% Descuento</h4>
+      </div>
+      <div class="flex items-center gap-1"><span class="material-symbols-outlined text-outline text-sm">stars</span><span class="text-outline font-bold text-xs">800 pts</span></div>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- Orders -->
+<section class="space-y-3">
+  <h3 class="text-base font-headline font-bold px-1">Pedidos Recientes</h3>
+  {% if orders %}
+  <div class="space-y-3">
+    {% for order in orders %}
+    <div class="bg-surface-container-low border border-outline-variant/15 rounded-xl p-3.5 flex gap-3">
+      <div class="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-surface-container">
+        {% if order.first_image %}
+        <img alt="Pedido" class="w-full h-full object-cover" src="{{ order.first_image }}"/>
+        {% else %}
+        <div class="w-full h-full flex items-center justify-center"><span class="material-symbols-outlined text-xl text-outline-variant">local_cafe</span></div>
+        {% endif %}
+      </div>
+      <div class="flex-grow min-w-0">
+        <p class="text-[9px] font-bold text-primary uppercase tracking-tighter">{{ order.formatted_date }}</p>
+        <h4 class="text-sm font-headline font-bold truncate">
+          {% if order.first_item.get('product_name') %}{{ order.first_item['product_name'] }}{% else %}Pedido #{{ order.id }}{% endif %}
+          {% if order.item_count > 1 %} <span class="text-[10px] font-normal text-on-surface-variant">+{{ order.item_count - 1 }}</span>{% endif %}
+        </h4>
+        <p class="text-[10px] text-on-surface-variant">+{{ order.points_earned }} pts</p>
+      </div>
+      <div class="flex flex-col items-end gap-1.5 flex-shrink-0">
+        <span class="font-bold text-sm text-tertiary">${{ "{:,}".format(order.total) }}</span>
+        {% if order.can_reorder %}
+        <form method="POST" action="/reorder/{{ order.id }}">
+          <button type="submit" class="bg-primary/10 text-primary px-2.5 py-1 rounded-full text-[10px] font-bold flex items-center gap-1 active:scale-95 transition-transform">
+            <span class="material-symbols-outlined" style="font-size:12px">replay</span>Repetir
+          </button>
+        </form>
+        {% else %}
+        <div class="text-[10px] text-error font-medium px-2 py-1 rounded-lg bg-error-container/20 text-center">No disponible</div>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="bg-surface-container-low rounded-xl p-8 text-center border border-outline-variant/15">
+    <span class="material-symbols-outlined text-4xl text-outline-variant mb-2">receipt_long</span>
+    <h4 class="text-lg font-headline font-bold mb-1">Sin pedidos aún</h4>
+    <p class="text-xs text-on-surface-variant mb-3">Compra para ganar puntos.</p>
+    <a href="/dashboard" class="bg-primary text-white font-bold px-5 py-2 rounded-xl text-xs">Ver Menú</a>
+  </div>
+  {% endif %}
+</section>
+
+<!-- Support -->
+<section class="space-y-4">
+  <h3 class="text-base font-headline font-bold px-1">Soporte</h3>
+  <div class="space-y-2.5">
+    <div class="bg-surface-container-low rounded-xl p-3.5 flex items-center gap-3">
+      <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-primary text-lg">location_on</span>
+      </div>
+      <div>
+        <p class="text-xs font-bold text-on-surface">Calle 70 # 9-45, Chapinero Alto</p>
+        <p class="text-[10px] text-on-surface-variant">Bogotá, Colombia</p>
+      </div>
+    </div>
+    <div class="bg-surface-container-low rounded-xl p-3.5 flex items-center gap-3">
+      <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-primary text-lg">mail</span>
+      </div>
+      <div>
+        <p class="text-xs font-bold text-on-surface">soporte07@aromagrano.com</p>
+        <p class="text-[10px] text-on-surface-variant">Respuesta en menos de 24h</p>
+      </div>
+    </div>
+    <div class="bg-surface-container-low rounded-xl p-3.5 flex items-center gap-3">
+      <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-primary text-lg">call</span>
+      </div>
+      <div>
+        <p class="text-xs font-bold text-on-surface">+57 322 865 3310</p>
+        <p class="text-[10px] text-on-surface-variant">Lun-Sáb 7am - 8pm</p>
+      </div>
+    </div>
+  </div>
+  <form method="POST" action="/send-support" class="bg-surface-container-low rounded-xl p-4 border border-outline-variant/15 space-y-3">
+    <textarea name="message" rows="3" placeholder="¿En qué podemos ayudarte?" class="input-focus w-full bg-white/50 border border-outline-variant/30 rounded-xl px-4 py-3 text-sm resize-none"></textarea>
+    <button type="submit" class="w-full py-3.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md" style="background-color:#964a20;color:#fff;">
+      <span class="material-symbols-outlined text-lg" style="color:#fff;">send</span>
+      Enviar Mensaje
+    </button>
+  </form>
+</section>
+
+</main>
+
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pt-2 pb-5 bg-[#faf6f0]/95 backdrop-blur-md shadow-[0_-2px_12px_rgba(46,50,48,0.04)] rounded-t-[24px] border-t border-stone-200/50">
+  <a class="flex flex-col items-center justify-center text-stone-500 font-medium active:scale-90 duration-200 ease-out" href="/dashboard">
+    <span class="material-symbols-outlined text-[22px]">restaurant_menu</span>
+    <span class="font-['Nunito_Sans'] text-[10px]">Menú</span>
+  </a>
+  <div class="cart-badge" data-count="{{ cart_count }}">
+    <a class="flex flex-col items-center justify-center text-stone-500 active:scale-90 duration-200 ease-out" href="/orders">
+      <span class="material-symbols-outlined text-[22px]">receipt_long</span>
+      <span class="font-['Nunito_Sans'] text-[10px]">Pedidos</span>
+    </a>
+  </div>
+  <a class="flex flex-col items-center justify-center text-emerald-800 font-bold bg-emerald-50 rounded-xl px-4 py-1 active:scale-90 duration-200 ease-out" href="/profile">
+    <span class="material-symbols-outlined text-[22px]" style="font-variation-settings:'FILL' 1">person</span>
+    <span class="font-['Nunito_Sans'] text-[10px]">Perfil</span>
+  </a>
+</nav>
+</body>
+</html>

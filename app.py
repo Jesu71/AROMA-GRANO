@@ -3,7 +3,7 @@ from supabase import create_client, Client
 from user_agents import parse
 import os
 from functools import wraps
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -15,7 +15,24 @@ url: str = "https://lmvulmiiuoknceifvrcy.supabase.co"
 key: str = "sb_secret_-jqmUZ8z63E4ymW9UxHa3w_dkd0Xd9i"
 supabase: Client = create_client(url, key)
 
-# Decorador para verificar si el usuario es administrador
+MESSES_ES = {
+    1: 'Enero', 2: 'Febrero', 3: 'Marzo', 4: 'Abril',
+    5: 'Mayo', 6: 'Junio', 7: 'Julio', 8: 'Agosto',
+    9: 'Septiembre', 10: 'Octubre', 11: 'Noviembre', 12: 'Diciembre'
+}
+
+
+def format_order_date(date_str):
+    if not date_str:
+        return ''
+    try:
+        dt = datetime.fromisoformat(date_str.replace('Z', '+00:00'))
+        dt_co = dt - timedelta(hours=5)
+        return f"{dt_co.day} de {MESSES_ES[dt_co.month]}"
+    except:
+        return str(date_str)[:10]
+
+
 def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -25,20 +42,19 @@ def admin_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-# Helper para crear notificaciones en la base de datos
+
 def create_notification(notification_type, message, details=None):
     try:
-        notification_data = {
+        supabase.table("notifications").insert({
             "type": notification_type,
             "message": message,
             "details": details,
             "is_read": False
-        }
-        supabase.table("notifications").insert(notification_data).execute()
+        }).execute()
     except Exception as e:
         print(f"Error creating notification: {e}")
 
-# Helper para obtener el conteo del carrito
+
 def get_cart_count(user_id):
     try:
         cart_data = supabase.table("cart_items").select("id").eq("user_id", user_id).execute()
@@ -46,36 +62,28 @@ def get_cart_count(user_id):
     except:
         return 0
 
-# Helper para limpiar items huérfanos del carrito (productos que ya no existen)
+
 def clean_orphan_cart_items(user_id):
-    """Elimina del carrito los items cuyo product_id ya no existe en la tabla products"""
     try:
-        # Obtener todos los items del carrito del usuario
         cart_data = supabase.table("cart_items").select("product_id, id").eq("user_id", user_id).execute()
         if not cart_data.data:
             return []
-
-        # Obtener todos los IDs de productos existentes
         products_data = supabase.table("products").select("id").execute()
         existing_ids = set(p['id'] for p in products_data.data) if products_data.data else set()
-
-        # Identificar items huérfanos
         orphan_ids = []
         orphan_product_ids = []
         for item in cart_data.data:
             if item['product_id'] not in existing_ids:
                 orphan_ids.append(item['id'])
                 orphan_product_ids.append(item['product_id'])
-
-        # Eliminar items huérfanos
         if orphan_ids:
             for orphan_id in orphan_ids:
                 supabase.table("cart_items").delete().eq("id", orphan_id).execute()
-
         return orphan_product_ids
     except Exception as e:
         print(f"Error cleaning orphan cart items: {e}")
         return []
+
 
 def init_db():
     try:
@@ -90,6 +98,9 @@ def init_db():
         supabase.table("products").select("*").limit(1).execute()
     except Exception as e:
         print(f"Error en init_db: {e}")
+
+
+# ===================== AUTENTICACIÓN =====================
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
@@ -110,6 +121,7 @@ def login():
         else:
             flash('Correo o contraseña incorrectos', 'error')
     return render_template('login.html')
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -134,6 +146,37 @@ def register():
         flash('¡Registro exitoso! Ahora puedes iniciar sesión.', 'success')
         return redirect(url_for('login'))
     return render_template('register.html')
+
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('login'))
+
+
+@app.route('/forgot-password')
+def forgot_password():
+    if 'user_id' in session:
+        return redirect(url_for('dashboard'))
+    return render_template('forgot_password.html')
+
+
+@app.route('/send-recovery', methods=['POST'])
+def send_recovery():
+    email = request.form.get('email')
+    if not email:
+        flash('Por favor ingresa tu correo electrónico', 'error')
+        return redirect(url_for('forgot_password'))
+    user = supabase.table("users").select("*").eq("email", email).execute()
+    if not user.data:
+        flash('El correo electrónico no está registrado en nuestro sistema', 'error')
+        return redirect(url_for('forgot_password'))
+    user_name = user.data[0]['full_name'] if user.data else 'Usuario'
+    flash(f'¡Correo enviado con éxito, {user_name}! Hemos enviado un enlace de recuperación a {email}.', 'success')
+    return redirect(url_for('login'))
+
+
+# ===================== DASHBOARD =====================
 
 @app.route('/dashboard')
 def dashboard():
@@ -169,6 +212,7 @@ def dashboard():
     else:
         return render_template('dashboard_pc.html', products=products, category=category, origin=origin, cart_count=cart_count)
 
+
 @app.route('/customize/<int:product_id>')
 def customize(product_id):
     if 'user_id' not in session:
@@ -191,6 +235,7 @@ def customize(product_id):
     else:
         return render_template('customize_pc.html', product=product, cart_count=cart_count)
 
+
 @app.route('/add-to-cart', methods=['POST'])
 def add_to_cart():
     if 'user_id' not in session:
@@ -200,7 +245,6 @@ def add_to_cart():
         user_id = session['user_id']
         product_id = request.form.get('product_id')
 
-        # Verificar que el producto sigue existiendo antes de añadirlo
         product_check = supabase.table("products").select("id, name").eq("id", product_id).execute()
         if not product_check.data:
             flash('Este producto ya no está disponible', 'error')
@@ -217,7 +261,7 @@ def add_to_cart():
         milk_surcharge = int(request.form.get('milk_surcharge', 0))
         total_price = (unit_price + milk_surcharge) * quantity
 
-        cart_item = {
+        supabase.table("cart_items").insert({
             "user_id": user_id,
             "product_id": product_id,
             "product_name": product_name,
@@ -230,14 +274,15 @@ def add_to_cart():
             "unit_price": unit_price,
             "milk_surcharge": milk_surcharge,
             "total_price": total_price
-        }
-
-        supabase.table("cart_items").insert(cart_item).execute()
+        }).execute()
         flash('¡Producto añadido al carrito con éxito!', 'success')
         return redirect(url_for('orders'))
     except Exception as e:
         flash(f'Error al añadir al carrito: {str(e)}', 'error')
         return redirect(url_for('dashboard'))
+
+
+# ===================== CARRITO =====================
 
 @app.route('/orders')
 def orders():
@@ -246,7 +291,6 @@ def orders():
 
     user_id = session['user_id']
 
-    # Limpiar items huérfanos antes de mostrar el carrito
     removed = clean_orphan_cart_items(user_id)
     if removed:
         flash(f'Se eliminaron {len(removed)} producto(s) de tu carrito porque ya no están disponibles', 'warning')
@@ -264,6 +308,7 @@ def orders():
     else:
         return render_template('orders_pc.html', cart_items=cart_items, total=total, cart_count=cart_count)
 
+
 @app.route('/remove-from-cart/<int:item_id>', methods=['POST', 'GET'])
 def remove_from_cart(item_id):
     if 'user_id' not in session:
@@ -275,6 +320,24 @@ def remove_from_cart(item_id):
         flash('Error al eliminar el producto', 'error')
     return redirect(url_for('orders'))
 
+
+@app.route('/cart-count')
+def cart_count_api():
+    if 'user_id' not in session:
+        return jsonify({"count": 0})
+    count = get_cart_count(session['user_id'])
+    return jsonify({"count": count})
+
+
+@app.route('/cart')
+def cart():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    return redirect(url_for('orders'))
+
+
+# ===================== CHECKOUT Y PAGO =====================
+
 @app.route('/checkout')
 def checkout():
     if 'user_id' not in session:
@@ -282,7 +345,6 @@ def checkout():
 
     user_id = session['user_id']
 
-    # Limpiar items huérfanos antes de mostrar la pasarela
     removed = clean_orphan_cart_items(user_id)
     if removed:
         flash(f'Se eliminaron {len(removed)} producto(s) de tu carrito porque ya no están disponibles', 'warning')
@@ -300,6 +362,7 @@ def checkout():
     else:
         return render_template('checkout_pc.html', cart_items=cart_items, total=total, cart_count=cart_count)
 
+
 @app.route('/process-payment', methods=['POST'])
 def process_payment():
     if 'user_id' not in session:
@@ -307,38 +370,216 @@ def process_payment():
 
     user_id = session['user_id']
 
-    # Verificar que todos los productos siguen existiendo antes de confirmar
-    cart_data = supabase.table("cart_items").select("product_id").eq("user_id", user_id).execute()
-    if cart_data.data:
-        products_data = supabase.table("products").select("id").execute()
-        existing_ids = set(p['id'] for p in products_data.data) if products_data.data else set()
+    cart_data = supabase.table("cart_items").select("*").eq("user_id", user_id).execute()
+    cart_items = cart_data.data if cart_data.data else []
 
-        for item in cart_data.data:
-            if item['product_id'] not in existing_ids:
-                # Hay productos que ya no existen, limpiar y avisar
-                clean_orphan_cart_items(user_id)
-                flash('Tu pedido no pudo procesarse porque algunos productos ya no están disponibles. Se eliminaron de tu carrito.', 'error')
-                return redirect(url_for('orders'))
+    if not cart_items:
+        flash('Tu carrito está vacío.', 'error')
+        return redirect(url_for('orders'))
+
+    products_data = supabase.table("products").select("id").execute()
+    existing_ids = set(p['id'] for p in products_data.data) if products_data.data else set()
+
+    for item in cart_items:
+        if item['product_id'] not in existing_ids:
+            clean_orphan_cart_items(user_id)
+            flash('Algunos productos ya no están disponibles. Se eliminaron de tu carrito.', 'error')
+            return redirect(url_for('orders'))
 
     try:
+        items_json = []
+        for item in cart_items:
+            items_json.append({
+                "product_id": item.get("product_id"),
+                "product_name": item.get("product_name"),
+                "product_image_url": item.get("product_image_url", ""),
+                "origin": item.get("origin", "Etiopía"),
+                "milk_type": item.get("milk_type", "Entera"),
+                "temperature": item.get("temperature", "Caliente"),
+                "sweetness": item.get("sweetness", 50),
+                "quantity": item.get("quantity", 1),
+                "unit_price": item.get("unit_price", 0),
+                "milk_surcharge": item.get("milk_surcharge", 0),
+                "total_price": item.get("total_price", 0)
+            })
+
+        total = sum(item['total_price'] for item in cart_items)
+
+        supabase.table("orders_history").insert({
+            "user_id": user_id,
+            "items": items_json,
+            "total": total,
+            "points_earned": 7
+        }).execute()
+
+        current_user = supabase.table("users").select("loyalty_points").eq("id", user_id).single().execute()
+        current_points = current_user.data.get('loyalty_points', 0) if current_user.data else 0
+        supabase.table("users").update({"loyalty_points": current_points + 7}).eq("id", user_id).execute()
+
         supabase.table("cart_items").delete().eq("user_id", user_id).execute()
-        flash('¡Pedido realizado con éxito! Tu café está en preparación.', 'success')
+
+        flash('¡Pedido realizado con éxito! Ganaste 7 puntos de lealtad.', 'success')
     except Exception as e:
-        flash('Error al procesar el pedido', 'error')
+        print(f"Error en process_payment: {e}")
+        flash('Error al procesar el pedido.', 'error')
+
     return redirect(url_for('dashboard'))
 
-@app.route('/cart-count')
-def cart_count_api():
-    if 'user_id' not in session:
-        return jsonify({"count": 0})
-    count = get_cart_count(session['user_id'])
-    return jsonify({"count": count})
 
-@app.route('/cart')
-def cart():
+# ===================== PERFIL Y LEALTAD =====================
+
+@app.route('/profile')
+def profile():
     if 'user_id' not in session:
         return redirect(url_for('login'))
+
+    user_id = session['user_id']
+
+    user_data = supabase.table("users").select("*").eq("id", user_id).single().execute()
+    user = user_data.data if user_data.data else {}
+    loyalty_points = user.get('loyalty_points', 0)
+
+    try:
+        orders_data = supabase.table("orders_history").select("*").eq("user_id", user_id).order("created_at", desc=True).limit(10).execute()
+        raw_orders = orders_data.data if orders_data.data else []
+    except:
+        raw_orders = []
+
+    orders = []
+    for order in raw_orders:
+        order_items = order.get('items', [])
+        if isinstance(order_items, list):
+            first_item = order_items[0] if order_items else {}
+            first_image = first_item.get('product_image_url', '') if first_item else ''
+            item_count = len(order_items)
+            can_reorder = False
+            for it in order_items:
+                pid = it.get('product_id')
+                if pid:
+                    check = supabase.table("products").select("id").eq("id", pid).execute()
+                    if check.data:
+                        can_reorder = True
+                        break
+        else:
+            first_item = {}
+            first_image = ''
+            item_count = 0
+            can_reorder = False
+        orders.append({
+            'id': order.get('id'),
+            'formatted_date': format_order_date(order.get('created_at')),
+            'total': order.get('total', 0),
+            'points_earned': order.get('points_earned', 7),
+            'first_item': first_item,
+            'first_image': first_image,
+            'item_count': item_count,
+            'can_reorder': can_reorder
+        })
+
+    cart_count = get_cart_count(user_id)
+
+    user_agent = request.headers.get('User-Agent')
+    agent = parse(user_agent)
+
+    if agent.is_mobile:
+        return render_template('profile_mobile.html', user=user, loyalty_points=loyalty_points, orders=orders, cart_count=cart_count)
+    else:
+        return render_template('profile_pc.html', user=user, loyalty_points=loyalty_points, orders=orders, cart_count=cart_count)
+
+
+@app.route('/redeem-reward', methods=['POST'])
+def redeem_reward():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    reward_type = request.form.get('reward_type', 'coffee')
+    points_required = 500 if reward_type == 'coffee' else 800
+
+    user_data = supabase.table("users").select("loyalty_points").eq("id", session['user_id']).single().execute()
+    if not user_data.data:
+        flash('Error al obtener tu perfil.', 'error')
+        return redirect(url_for('profile'))
+
+    current_points = user_data.data.get('loyalty_points', 0)
+    if current_points < points_required:
+        flash(f'Necesitas {points_required} puntos. Tienes {current_points}.', 'error')
+        return redirect(url_for('profile'))
+
+    new_points = current_points - points_required
+    supabase.table("users").update({"loyalty_points": new_points}).eq("id", session['user_id']).execute()
+
+    reward_name = "Café de la Casa Gratis" if reward_type == 'coffee' else "20% en tu Próxima Compra"
+    flash(f'¡Canjeaste: {reward_name}! Se descontaron {points_required} puntos.', 'success')
+    return redirect(url_for('profile'))
+
+
+@app.route('/reorder/<int:order_id>', methods=['POST'])
+def reorder(order_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    order = supabase.table("orders_history").select("*").eq("id", order_id).eq("user_id", session['user_id']).single().execute()
+    if not order.data:
+        flash('Pedido no encontrado.', 'error')
+        return redirect(url_for('profile'))
+
+    items = order.data.get('items', [])
+    added = 0
+    skipped = False
+    for item in items:
+        product_id = item.get('product_id')
+        if not product_id:
+            skipped = True
+            continue
+        check = supabase.table("products").select("id").eq("id", product_id).execute()
+        if not check.data:
+            skipped = True
+            continue
+        try:
+            supabase.table("cart_items").insert({
+                "user_id": session['user_id'],
+                "product_id": product_id,
+                "product_name": item.get('product_name', ''),
+                "product_image_url": item.get('product_image_url', ''),
+                "origin": item.get('origin', 'Etiopía'),
+                "milk_type": item.get('milk_type', 'Entera'),
+                "temperature": item.get('temperature', 'Caliente'),
+                "sweetness": item.get('sweetness', 50),
+                "quantity": item.get('quantity', 1),
+                "unit_price": item.get('unit_price', 0),
+                "milk_surcharge": item.get('milk_surcharge', 0),
+                "total_price": item.get('total_price', 0)
+            }).execute()
+            added += 1
+        except:
+            pass
+
+    if skipped:
+        flash('Algunos productos de ese pedido ya no están disponibles y se omitieron.', 'warning')
+
+    if added > 0:
+        flash(f'¡Se añadieron {added} producto(s) a tu carrito!', 'success')
+    elif skipped and added == 0:
+        flash('Los productos de ese pedido ya no están disponibles.', 'error')
+    else:
+        flash('No se pudo repetir el pedido.', 'error')
     return redirect(url_for('orders'))
+
+
+@app.route('/send-support', methods=['POST'])
+def send_support():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    message = request.form.get('message', '').strip()
+    if message:
+        user_name = session.get('full_name', 'Usuario')
+        user_email = session.get('email', '')
+        create_notification('support_message', f'Soporte de {user_name} ({user_email}): {message}')
+        flash('¡Mensaje enviado! Te responderemos pronto.', 'success')
+    else:
+        flash('Escribe tu mensaje.', 'error')
+    return redirect(url_for('profile'))
+
 
 @app.route('/subscription')
 def subscription():
@@ -346,13 +587,31 @@ def subscription():
         return redirect(url_for('login'))
     return redirect(url_for('profile'))
 
-@app.route('/profile')
-def profile():
+
+# ===================== FOOTER =====================
+
+@app.route('/sustainability')
+def sustainability():
     if 'user_id' not in session:
         return redirect(url_for('login'))
-    return "Sección de Perfil - Aquí verás tu historial de pedidos y suscripciones"
+    return render_template('sustainability.html')
 
-# ===================== RUTAS DE ADMINISTRACIÓN =====================
+
+@app.route('/contact')
+def contact():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    return render_template('contact.html')
+
+
+@app.route('/terms')
+def terms():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    return render_template('terminos.html')
+
+
+# ===================== ADMIN =====================
 
 @app.route('/admin')
 @admin_required
@@ -369,6 +628,7 @@ def admin_dashboard():
     availability = round((active_count / len(products)) * 100) if products else 0
     return render_template('admin/dashboard.html', products=products, categories=categories, availability=availability)
 
+
 @app.route('/admin/users')
 @admin_required
 def admin_users():
@@ -380,6 +640,7 @@ def admin_users():
                 user['is_admin'] = False
             users.append(user)
     return render_template('admin/users.html', users=users)
+
 
 @app.route('/admin/products', methods=['GET', 'POST'])
 @admin_required
@@ -408,24 +669,20 @@ def admin_products():
         return redirect(url_for('admin_dashboard'))
     return redirect(url_for('admin_dashboard'))
 
+
 @app.route('/admin/products/<int:product_id>', methods=['DELETE'])
 @admin_required
 def delete_product(product_id):
     try:
         product = supabase.table("products").select("name").eq("id", product_id).single().execute()
         product_name = product.data['name'] if product.data else 'Producto desconocido'
-
-        # Eliminar el producto
         supabase.table("products").delete().eq("id", product_id).execute()
-
-        # Eliminar TODOS los items de carrito que referencian este producto
-        orphan_cleanup = supabase.table("cart_items").delete().eq("product_id", product_id).execute()
-
+        supabase.table("cart_items").delete().eq("product_id", product_id).execute()
         create_notification('product_deleted', f'Producto eliminado: {product_name}')
-
         return jsonify({"success": True, "message": "Producto eliminado"})
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
+
 
 @app.route('/admin/products/<int:product_id>')
 @admin_required
@@ -437,6 +694,7 @@ def get_product(product_id):
         return jsonify(product.data)
     except Exception as e:
         return jsonify({"error": str(e)}), 404
+
 
 @app.route('/admin/users/<int:user_id>/toggle-role', methods=['POST'])
 @admin_required
@@ -455,6 +713,7 @@ def toggle_user_role(user_id):
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
 
+
 @app.route('/admin/users/<int:user_id>', methods=['DELETE'])
 @admin_required
 def delete_user(user_id):
@@ -463,17 +722,13 @@ def delete_user(user_id):
             return jsonify({"success": False, "message": "No puedes eliminar tu propia cuenta"}), 400
         user = supabase.table("users").select("full_name").eq("id", user_id).single().execute()
         user_name = user.data['full_name'] if user.data else 'Usuario desconocido'
-
-        # Eliminar carrito del usuario antes de eliminarlo
         supabase.table("cart_items").delete().eq("user_id", user_id).execute()
-
-        # Eliminar usuario
         supabase.table("users").delete().eq("id", user_id).execute()
-
         create_notification('user_deleted', f'Usuario eliminado: {user_name}')
         return jsonify({"success": True, "message": "Usuario eliminado"})
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
+
 
 @app.route('/admin/users/<int:user_id>')
 @admin_required
@@ -485,6 +740,7 @@ def get_user(user_id):
         return jsonify(user.data)
     except Exception as e:
         return jsonify({"error": str(e)}), 404
+
 
 @app.route('/admin/notifications')
 @admin_required
@@ -499,6 +755,7 @@ def admin_notifications():
         print(f"Error fetching notifications: {e}")
         return jsonify({"notifications": [], "unread_count": 0})
 
+
 @app.route('/admin/notifications/mark-read', methods=['POST'])
 @admin_required
 def mark_notifications_read():
@@ -508,51 +765,8 @@ def mark_notifications_read():
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
 
-# ===================== RUTAS DEL FOOTER =====================
-
-@app.route('/sustainability')
-def sustainability():
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
-    return render_template('sustainability.html')
-
-@app.route('/contact')
-def contact():
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
-    return render_template('contact.html')
-
-@app.route('/terms')
-def terms():
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
-    return render_template('terminos.html')
-
-@app.route('/logout')
-def logout():
-    session.clear()
-    return redirect(url_for('login'))
-
-@app.route('/forgot-password')
-def forgot_password():
-    if 'user_id' in session:
-        return redirect(url_for('dashboard'))
-    return render_template('forgot_password.html')
-
-@app.route('/send-recovery', methods=['POST'])
-def send_recovery():
-    email = request.form.get('email')
-    if not email:
-        flash('Por favor ingresa tu correo electrónico', 'error')
-        return redirect(url_for('forgot_password'))
-    user = supabase.table("users").select("*").eq("email", email).execute()
-    if not user.data:
-        flash('El correo electrónico no está registrado en nuestro sistema', 'error')
-        return redirect(url_for('forgot_password'))
-    user_name = user.data[0]['full_name'] if user.data else 'Usuario'
-    flash(f'¡Correo enviado con éxito, {user_name}! Hemos enviado un enlace de recuperación a {email}.', 'success')
-    return redirect(url_for('login'))
 
 if __name__ == '__main__':
     init_db()
     app.run(debug=True)
+    
