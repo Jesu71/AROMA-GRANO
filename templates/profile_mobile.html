@@ -27,7 +27,7 @@ h1,h2,h3,.headline{font-family:'Literata',serif}
 </head>
 <body class="bg-background text-on-background min-h-screen" style="padding-bottom:120px;">
 
-<!-- Flash: fixed top center, auto-dismiss -->
+<!-- Flash -->
 {% with messages = get_flashed_messages(with_categories=true) %}
 {% if messages %}
 <div id="flash-container" class="fixed top-3 left-1/2 -translate-x-1/2 z-[100] flex flex-col items-center gap-2 w-full max-w-sm px-3">
@@ -54,7 +54,7 @@ h1,h2,h3,.headline{font-family:'Literata',serif}
       el.style.opacity='0';
       el.style.transform='translateY(-12px)';
       setTimeout(function(){el.remove();},500);
-    },4500);
+    },6000);
   });
 })();
 </script>
@@ -108,46 +108,64 @@ h1,h2,h3,.headline{font-family:'Literata',serif}
   <h3 class="text-base font-headline font-bold px-1">Recompensas</h3>
   <div class="grid grid-cols-2 gap-3">
     {% if loyalty_points >= 500 %}
-    <form method="POST" action="/redeem-reward" class="bg-surface-container-high rounded-xl p-4 border border-primary/10 relative overflow-hidden">
+    <form method="POST" action="/redeem-reward" class="rounded-xl p-4 border relative overflow-hidden" style="background-color:#e1ebdf;border-color:rgba(150,74,32,0.15);">
       <input type="hidden" name="reward_type" value="coffee"/>
-      <div class="bg-primary/10 text-primary px-2 py-0.5 rounded-full text-[9px] font-bold inline-block mb-2">RECANJEABLE</div>
+      <div class="px-2 py-0.5 rounded-full text-[9px] font-bold inline-block mb-2" style="background-color:rgba(150,74,32,0.1);color:#964a20;">RECANJEABLE</div>
       <div class="flex items-center gap-1.5 mb-1">
-        <span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings:'FILL' 1">local_cafe</span>
+        <span class="material-symbols-outlined text-lg" style="color:#964a20;font-variation-settings:'FILL' 1">local_cafe</span>
         <h4 class="text-sm font-headline font-semibold">Café Gratis</h4>
       </div>
-      <div class="flex items-center gap-1 mb-3"><span class="material-symbols-outlined text-tertiary text-sm">stars</span><span class="text-tertiary font-bold text-xs">500 pts</span></div>
-      <button type="submit" class="w-full bg-primary text-white py-2 rounded-lg font-bold text-xs active:scale-95 transition-transform">Canjear</button>
+      <p class="text-[10px] text-on-surface-variant mb-1">De cortesía de la casa</p>
+      <p class="text-[9px] text-on-surface-variant mb-2">(Café ya seleccionado)</p>
+      <div class="flex items-center gap-1 mb-3">
+        <span class="material-symbols-outlined text-sm" style="color:#7c5900">stars</span>
+        <span class="font-bold text-xs" style="color:#7c5900">500 pts</span>
+      </div>
+      <button type="submit" class="w-full py-2 rounded-lg font-bold text-xs active:scale-95 transition-transform" style="background-color:#964a20;color:#fff;">Canjear</button>
     </form>
     {% else %}
     <div class="bg-surface-container rounded-xl p-4 border border-outline-variant/30 opacity-60">
       <div class="bg-outline-variant text-on-surface-variant px-2 py-0.5 rounded-full text-[9px] font-bold inline-block mb-2">FALTAN {{ 500 - loyalty_points }}</div>
       <div class="flex items-center gap-1.5 mb-1">
-        <span class="material-symbols-outlined text-outline text-lg">local_cafe</span>
+        <span class="material-symbols-outlined text-lg" style="color:#737e72">local_cafe</span>
         <h4 class="text-sm font-headline font-semibold">Café Gratis</h4>
       </div>
-      <div class="flex items-center gap-1"><span class="material-symbols-outlined text-outline text-sm">stars</span><span class="text-outline font-bold text-xs">500 pts</span></div>
+      <p class="text-[10px] text-on-surface-variant mb-1">De cortesía de la casa</p>
+      <p class="text-[9px] text-on-surface-variant mb-2">(Café ya seleccionado)</p>
+      <div class="flex items-center gap-1">
+        <span class="material-symbols-outlined text-sm" style="color:#737e72">stars</span>
+        <span class="font-bold text-xs" style="color:#737e72">500 pts</span>
+      </div>
     </div>
     {% endif %}
 
     {% if loyalty_points >= 800 %}
-    <form method="POST" action="/redeem-reward" class="bg-surface-container-high rounded-xl p-4 border border-primary/10 relative overflow-hidden">
+    <form method="POST" action="/redeem-reward" class="rounded-xl p-4 border relative overflow-hidden" style="background-color:#e1ebdf;border-color:rgba(150,74,32,0.15);">
       <input type="hidden" name="reward_type" value="discount"/>
-      <div class="bg-primary/10 text-primary px-2 py-0.5 rounded-full text-[9px] font-bold inline-block mb-2">RECANJEABLE</div>
+      <div class="px-2 py-0.5 rounded-full text-[9px] font-bold inline-block mb-2" style="background-color:rgba(150,74,32,0.1);color:#964a20;">RECANJEABLE</div>
       <div class="flex items-center gap-1.5 mb-1">
-        <span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings:'FILL' 1">sell</span>
-        <h4 class="text-sm font-headline font-semibold">20% Descuento</h4>
+        <span class="material-symbols-outlined text-lg" style="color:#964a20;font-variation-settings:'FILL' 1">sell</span>
+        <h4 class="text-sm font-headline font-semibold">20% de Descuento</h4>
       </div>
-      <div class="flex items-center gap-1 mb-3"><span class="material-symbols-outlined text-tertiary text-sm">stars</span><span class="text-tertiary font-bold text-xs">800 pts</span></div>
-      <button type="submit" class="w-full bg-primary text-white py-2 rounded-lg font-bold text-xs active:scale-95 transition-transform">Canjear</button>
+      <p class="text-[10px] text-on-surface-variant mb-2">En cualquier café al azar del menú</p>
+      <div class="flex items-center gap-1 mb-3">
+        <span class="material-symbols-outlined text-sm" style="color:#7c5900">stars</span>
+        <span class="font-bold text-xs" style="color:#7c5900">800 pts</span>
+      </div>
+      <button type="submit" class="w-full py-2 rounded-lg font-bold text-xs active:scale-95 transition-transform" style="background-color:#964a20;color:#fff;">Canjear</button>
     </form>
     {% else %}
     <div class="bg-surface-container rounded-xl p-4 border border-outline-variant/30 opacity-60">
       <div class="bg-outline-variant text-on-surface-variant px-2 py-0.5 rounded-full text-[9px] font-bold inline-block mb-2">FALTAN {{ 800 - loyalty_points }}</div>
       <div class="flex items-center gap-1.5 mb-1">
-        <span class="material-symbols-outlined text-outline text-lg">sell</span>
-        <h4 class="text-sm font-headline font-semibold">20% Descuento</h4>
+        <span class="material-symbols-outlined text-lg" style="color:#737e72">sell</span>
+        <h4 class="text-sm font-headline font-semibold">20% de Descuento</h4>
       </div>
-      <div class="flex items-center gap-1"><span class="material-symbols-outlined text-outline text-sm">stars</span><span class="text-outline font-bold text-xs">800 pts</span></div>
+      <p class="text-[10px] text-on-surface-variant mb-2">En cualquier café al azar del menú</p>
+      <div class="flex items-center gap-1">
+        <span class="material-symbols-outlined text-sm" style="color:#737e72">stars</span>
+        <span class="font-bold text-xs" style="color:#737e72">800 pts</span>
+      </div>
     </div>
     {% endif %}
   </div>
@@ -168,23 +186,35 @@ h1,h2,h3,.headline{font-family:'Literata',serif}
         {% endif %}
       </div>
       <div class="flex-grow min-w-0">
-        <p class="text-[9px] font-bold text-primary uppercase tracking-tighter">{{ order.formatted_date }}</p>
+        <p class="text-[9px] font-bold uppercase tracking-tighter" style="color:#964a20">{{ order.formatted_date }}</p>
         <h4 class="text-sm font-headline font-bold truncate">
           {% if order.first_item.get('product_name') %}{{ order.first_item['product_name'] }}{% else %}Pedido #{{ order.id }}{% endif %}
           {% if order.item_count > 1 %} <span class="text-[10px] font-normal text-on-surface-variant">+{{ order.item_count - 1 }}</span>{% endif %}
         </h4>
+        {% if order.is_free %}
+        <p class="text-[10px] font-semibold" style="color:#006f11">☕ Cortesía — Recoger en tienda</p>
+        {% elif order.is_reward %}
+        <p class="text-[10px] font-semibold" style="color:#7c5900">🏷️ Descuento lealtad</p>
+        {% else %}
         <p class="text-[10px] text-on-surface-variant">+{{ order.points_earned }} pts</p>
+        {% endif %}
       </div>
       <div class="flex flex-col items-end gap-1.5 flex-shrink-0">
-        <span class="font-bold text-sm text-tertiary">${{ "{:,}".format(order.total) }}</span>
-        {% if order.can_reorder %}
+        {% if order.is_free %}
+        <span class="font-bold text-sm" style="color:#006f11">GRATIS</span>
+        {% else %}
+        <span class="font-bold text-sm" style="color:#7c5900">${{ "{:,}".format(order.total) }}</span>
+        {% endif %}
+        {% if order.is_reward or order.is_free %}
+        <div class="text-[9px] font-medium px-2 py-1 rounded-lg text-center" style="background-color:rgba(150,74,32,0.08);color:#964a20;">Recompensa</div>
+        {% elif order.can_reorder %}
         <form method="POST" action="/reorder/{{ order.id }}">
-          <button type="submit" class="bg-primary/10 text-primary px-2.5 py-1 rounded-full text-[10px] font-bold flex items-center gap-1 active:scale-95 transition-transform">
+          <button type="submit" class="px-2.5 py-1 rounded-full text-[10px] font-bold flex items-center gap-1 active:scale-95 transition-transform" style="background-color:rgba(150,74,32,0.1);color:#964a20;">
             <span class="material-symbols-outlined" style="font-size:12px">replay</span>Repetir
           </button>
         </form>
         {% else %}
-        <div class="text-[10px] text-error font-medium px-2 py-1 rounded-lg bg-error-container/20 text-center">No disponible</div>
+        <div class="text-[10px] font-medium px-2 py-1 rounded-lg text-center" style="color:#a73b21;background-color:rgba(253,121,90,0.15);">No disponible</div>
         {% endif %}
       </div>
     </div>
@@ -195,7 +225,7 @@ h1,h2,h3,.headline{font-family:'Literata',serif}
     <span class="material-symbols-outlined text-4xl text-outline-variant mb-2">receipt_long</span>
     <h4 class="text-lg font-headline font-bold mb-1">Sin pedidos aún</h4>
     <p class="text-xs text-on-surface-variant mb-3">Compra para ganar puntos.</p>
-    <a href="/dashboard" class="bg-primary text-white font-bold px-5 py-2 rounded-xl text-xs">Ver Menú</a>
+    <a href="/dashboard" class="font-bold px-5 py-2 rounded-xl text-xs" style="background-color:#964a20;color:#fff;">Ver Menú</a>
   </div>
   {% endif %}
 </section>
@@ -205,8 +235,8 @@ h1,h2,h3,.headline{font-family:'Literata',serif}
   <h3 class="text-base font-headline font-bold px-1">Soporte</h3>
   <div class="space-y-2.5">
     <div class="bg-surface-container-low rounded-xl p-3.5 flex items-center gap-3">
-      <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-        <span class="material-symbols-outlined text-primary text-lg">location_on</span>
+      <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background-color:rgba(150,74,32,0.1);">
+        <span class="material-symbols-outlined text-lg" style="color:#964a20">location_on</span>
       </div>
       <div>
         <p class="text-xs font-bold text-on-surface">Calle 70 # 9-45, Chapinero Alto</p>
@@ -214,8 +244,8 @@ h1,h2,h3,.headline{font-family:'Literata',serif}
       </div>
     </div>
     <div class="bg-surface-container-low rounded-xl p-3.5 flex items-center gap-3">
-      <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-        <span class="material-symbols-outlined text-primary text-lg">mail</span>
+      <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background-color:rgba(150,74,32,0.1);">
+        <span class="material-symbols-outlined text-lg" style="color:#964a20">mail</span>
       </div>
       <div>
         <p class="text-xs font-bold text-on-surface">soporte07@aromagrano.com</p>
@@ -223,8 +253,8 @@ h1,h2,h3,.headline{font-family:'Literata',serif}
       </div>
     </div>
     <div class="bg-surface-container-low rounded-xl p-3.5 flex items-center gap-3">
-      <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-        <span class="material-symbols-outlined text-primary text-lg">call</span>
+      <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background-color:rgba(150,74,32,0.1);">
+        <span class="material-symbols-outlined text-lg" style="color:#964a20">call</span>
       </div>
       <div>
         <p class="text-xs font-bold text-on-surface">+57 322 865 3310</p>

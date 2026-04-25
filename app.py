@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from supabase import create_client, Client
 from user_agents import parse
 import os
+import random
 from functools import wraps
 from datetime import datetime, timedelta
 from flask_cors import CORS
@@ -83,6 +84,35 @@ def clean_orphan_cart_items(user_id):
     except Exception as e:
         print(f"Error cleaning orphan cart items: {e}")
         return []
+
+
+def get_active_products():
+    """Obtiene todos los productos activos del menú actual."""
+    try:
+        products_data = supabase.table("products").select("*").execute()
+        if not products_data.data:
+            return []
+        active = [p for p in products_data.data if p.get('status', 'active') == 'active']
+        return active if active else products_data.data
+    except Exception as e:
+        print(f"Error getting active products: {e}")
+        return []
+
+
+def get_cheapest_product():
+    """Obtiene el producto más barato activo de la base de datos."""
+    active = get_active_products()
+    if not active:
+        return None
+    return min(active, key=lambda p: p.get('price', 999999))
+
+
+def get_random_product():
+    """Obtiene un producto aleatorio activo del menú. Siempre dinámico según el menú actual."""
+    active = get_active_products()
+    if not active:
+        return None
+    return random.choice(active)
 
 
 def init_db():
@@ -387,8 +417,11 @@ def process_payment():
             return redirect(url_for('orders'))
 
     try:
+        has_reward_item = any(item.get('origin') == 'Con descuento lealtad' for item in cart_items)
+
         items_json = []
         for item in cart_items:
+            is_reward = item.get('origin') == 'Con descuento lealtad'
             items_json.append({
                 "product_id": item.get("product_id"),
                 "product_name": item.get("product_name"),
@@ -400,25 +433,31 @@ def process_payment():
                 "quantity": item.get("quantity", 1),
                 "unit_price": item.get("unit_price", 0),
                 "milk_surcharge": item.get("milk_surcharge", 0),
-                "total_price": item.get("total_price", 0)
+                "total_price": item.get("total_price", 0),
+                "is_reward": is_reward
             })
 
         total = sum(item['total_price'] for item in cart_items)
+        points_earned = 0 if has_reward_item else 7
 
         supabase.table("orders_history").insert({
             "user_id": user_id,
             "items": items_json,
             "total": total,
-            "points_earned": 7
+            "points_earned": points_earned
         }).execute()
 
-        current_user = supabase.table("users").select("loyalty_points").eq("id", user_id).single().execute()
-        current_points = current_user.data.get('loyalty_points', 0) if current_user.data else 0
-        supabase.table("users").update({"loyalty_points": current_points + 7}).eq("id", user_id).execute()
+        if points_earned > 0:
+            current_user = supabase.table("users").select("loyalty_points").eq("id", user_id).single().execute()
+            current_points = current_user.data.get('loyalty_points', 0) if current_user.data else 0
+            supabase.table("users").update({"loyalty_points": current_points + points_earned}).eq("id", user_id).execute()
 
         supabase.table("cart_items").delete().eq("user_id", user_id).execute()
 
-        flash('¡Pedido realizado con éxito! Ganaste 7 puntos de lealtad.', 'success')
+        if has_reward_item:
+            flash('¡Pedido realizado con éxito! Descuento de lealtad aplicado.', 'success')
+        else:
+            flash(f'¡Pedido realizado con éxito! Ganaste {points_earned} puntos de lealtad.', 'success')
     except Exception as e:
         print(f"Error en process_payment: {e}")
         flash('Error al procesar el pedido.', 'error')
@@ -452,28 +491,40 @@ def profile():
             first_item = order_items[0] if order_items else {}
             first_image = first_item.get('product_image_url', '') if first_item else ''
             item_count = len(order_items)
-            can_reorder = False
-            for it in order_items:
-                pid = it.get('product_id')
-                if pid:
-                    check = supabase.table("products").select("id").eq("id", pid).execute()
-                    if check.data:
-                        can_reorder = True
-                        break
+
+            is_reward = any(it.get('is_reward', False) for it in order_items)
+            is_free = order.get('total', 0) == 0
+
+            if is_reward or is_free:
+                can_reorder = False
+            else:
+                can_reorder = False
+                for it in order_items:
+                    pid = it.get('product_id')
+                    if pid and not it.get('is_reward', False):
+                        check = supabase.table("products").select("id").eq("id", pid).execute()
+                        if check.data:
+                            can_reorder = True
+                            break
         else:
             first_item = {}
             first_image = ''
             item_count = 0
+            is_reward = False
+            is_free = False
             can_reorder = False
+
         orders.append({
             'id': order.get('id'),
             'formatted_date': format_order_date(order.get('created_at')),
             'total': order.get('total', 0),
-            'points_earned': order.get('points_earned', 7),
+            'points_earned': order.get('points_earned', 0),
             'first_item': first_item,
             'first_image': first_image,
             'item_count': item_count,
-            'can_reorder': can_reorder
+            'can_reorder': can_reorder,
+            'is_reward': is_reward,
+            'is_free': is_free
         })
 
     cart_count = get_cart_count(user_id)
@@ -505,11 +556,75 @@ def redeem_reward():
         flash(f'Necesitas {points_required} puntos. Tienes {current_points}.', 'error')
         return redirect(url_for('profile'))
 
+    # Descontar puntos
     new_points = current_points - points_required
     supabase.table("users").update({"loyalty_points": new_points}).eq("id", session['user_id']).execute()
 
-    reward_name = "Café de la Casa Gratis" if reward_type == 'coffee' else "20% en tu Próxima Compra"
-    flash(f'¡Canjeaste: {reward_name}! Se descontaron {points_required} puntos.', 'success')
+    if reward_type == 'coffee':
+        # Café gratis: el más barato, crear pedido en historial con total $0
+        cheapest = get_cheapest_product()
+        if not cheapest:
+            supabase.table("users").update({"loyalty_points": current_points}).eq("id", session['user_id']).execute()
+            flash('No hay productos disponibles para canjear en este momento.', 'error')
+            return redirect(url_for('profile'))
+
+        items_json = [{
+            "product_id": cheapest.get('id'),
+            "product_name": cheapest.get('name', 'Café de la Casa'),
+            "product_image_url": cheapest.get('image_url', ''),
+            "origin": "Cortesía de la casa",
+            "milk_type": "Entera",
+            "temperature": "Caliente",
+            "sweetness": 50,
+            "quantity": 1,
+            "unit_price": 0,
+            "milk_surcharge": 0,
+            "total_price": 0,
+            "is_reward": True
+        }]
+        try:
+            supabase.table("orders_history").insert({
+                "user_id": session['user_id'],
+                "items": items_json,
+                "total": 0,
+                "points_earned": 0
+            }).execute()
+        except Exception as e:
+            print(f"Error creating free coffee order: {e}")
+
+        flash(f'☕ ¡Canjeaste un Café Gratis ({cheapest.get("name", "Café")})! Puedes pasar a recogerlo a nuestra tienda en Chapinero Alto. Se descontaron {points_required} puntos.', 'success')
+
+    else:
+        # 20% descuento: café ALEATORIO del menú actual
+        random_product = get_random_product()
+        if not random_product:
+            supabase.table("users").update({"loyalty_points": current_points}).eq("id", session['user_id']).execute()
+            flash('No hay productos disponibles para canjear en este momento.', 'error')
+            return redirect(url_for('profile'))
+
+        original_price = random_product.get('price', 0)
+        discounted_price = int(original_price * 0.8)
+
+        try:
+            supabase.table("cart_items").insert({
+                "user_id": session['user_id'],
+                "product_id": random_product.get('id'),
+                "product_name": random_product.get('name', 'Café') + ' (20% desc.)',
+                "product_image_url": random_product.get('image_url', ''),
+                "origin": "Con descuento lealtad",
+                "milk_type": "Entera",
+                "temperature": "Caliente",
+                "sweetness": 50,
+                "quantity": 1,
+                "unit_price": discounted_price,
+                "milk_surcharge": 0,
+                "total_price": discounted_price
+            }).execute()
+        except Exception as e:
+            print(f"Error adding discounted item to cart: {e}")
+
+        flash(f'🏷️ ¡Canjeaste 20% de descuento en {random_product.get("name", "Café")}! Original: ${original_price:,} → Con descuento: ${discounted_price:,} COP. Revisa tu carrito para confirmar. Se descontaron {points_required} puntos.', 'success')
+
     return redirect(url_for('profile'))
 
 
@@ -524,11 +639,21 @@ def reorder(order_id):
         return redirect(url_for('profile'))
 
     items = order.data.get('items', [])
+
+    is_reward_order = any(it.get('is_reward', False) for it in items)
+    is_free_order = order.data.get('total', 0) == 0
+    if is_reward_order or is_free_order:
+        flash('Los pedidos de recompensa no se pueden repetir. Si deseas otro, canjea más puntos.', 'error')
+        return redirect(url_for('profile'))
+
     added = 0
     skipped = False
     for item in items:
         product_id = item.get('product_id')
         if not product_id:
+            skipped = True
+            continue
+        if item.get('is_reward', False):
             skipped = True
             continue
         check = supabase.table("products").select("id").eq("id", product_id).execute()
@@ -765,8 +890,6 @@ def mark_notifications_read():
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
 
-
 if __name__ == '__main__':
     init_db()
     app.run(debug=True)
-    
