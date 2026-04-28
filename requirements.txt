@@ -1,6 +1,7 @@
 Flask
-supabase
+supabase==2.10.0
 user-agents
 flask-socketio
 python-dotenv
 flask_cors
+gunicorn
