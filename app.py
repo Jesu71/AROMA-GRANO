@@ -13,8 +13,8 @@ app.secret_key = os.urandom(24)
 CORS(app)
 
 # Configuración de Supabase
-url: str = "https://lmvulmiiuoknceifvrcy.supabase.co"
-key: str = "sb_secret_-jqmUZ8z63E4ymW9UxHa3w_dkd0Xd9i"
+url: str = os.environ.get("SUPABASE_URL")
+key: str = os.environ.get("SUPABASE_KEY")
 supabase: Client = create_client(url, key)
 
 MESSES_ES = {
