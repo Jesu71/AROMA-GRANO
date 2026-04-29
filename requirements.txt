@@ -1,5 +1,5 @@
 Flask
-supabase==2.10.0
+supabase==2.15.0
 user-agents
 flask-socketio
 python-dotenv
