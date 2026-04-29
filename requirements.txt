@@ -1,5 +1,5 @@
 Flask
-supabase==2.15.0
+supabase
 user-agents
 python-dotenv
 flask_cors
