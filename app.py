@@ -7,10 +7,14 @@ import random
 from functools import wraps
 from datetime import datetime, timedelta
 from flask_cors import CORS
+from dotenv import load_dotenv
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 CORS(app)
+
+#Para probar en local inyectando las variables de entorno de supabase
+load_dotenv()
 
 # Configuración de Supabase
 url: str = os.environ.get("SUPABASE_URL")
@@ -897,6 +901,10 @@ def admin_notifications():
     except Exception as e:
         print(f"Error fetching notifications: {e}")
         return jsonify({"notifications": [], "unread_count": 0})
+    
+@app.route('/analiticas.html')
+def analiticas():
+    return render_template('admin/analiticas.html')
 
 
 @app.route('/admin/notifications/mark-read', methods=['POST'])
@@ -910,4 +918,5 @@ def mark_notifications_read():
 
 if __name__ == '__main__':
     init_db()
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    app.run(host='0.0.0.0', port=5000, debug=True)
+

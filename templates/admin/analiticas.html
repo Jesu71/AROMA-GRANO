@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Aroma &amp; Grano Admin - Inteligencia de Negocio</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;900&amp;family=Public+Sans:wght@400;500;600;700&amp;family=EB+Garamond:ital,wght@0,400..800;1,400..800&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-surface": "#2b352c",
+                    "primary": "#b56236",
+                    "on-secondary-fixed-variant": "#006b10",
+                    "primary-fixed": "#f99868",
+                    "primary-dim": "#873e15",
+                    "surface-variant": "#dae6d8",
+                    "surface-bright": "#f6fbf3",
+                    "on-tertiary-container": "#5e4200",
+                    "inverse-surface": "#0b0f0b",
+                    "surface-container-low": "#eff6ec",
+                    "primary-container": "#f99868",
+                    "surface-container-highest": "#dae6d8",
+                    "secondary-fixed": "#97f98a",
+                    "surface-container": "#e8f0e5",
+                    "on-error": "#fff7f6",
+                    "background": "#f6fbf3",
+                    "tertiary-fixed-dim": "#efbc57",
+                    "tertiary-dim": "#6d4d00",
+                    "tertiary-container": "#ffc963",
+                    "on-tertiary": "#fff8f1",
+                    "on-secondary-fixed": "#004b08",
+                    "on-primary-container": "#562000",
+                    "surface": "#f6fbf3",
+                    "error": "#a73b21",
+                    "outline-variant": "#aab5a9",
+                    "inverse-primary": "#f99868",
+                    "on-tertiary-fixed": "#463000",
+                    "primary-fixed-dim": "#e98b5c",
+                    "on-primary": "#fff7f5",
+                    "secondary-container": "#97f98a",
+                    "on-tertiary-fixed-variant": "#6a4b00",
+                    "surface-dim": "#d2ddd0",
+                    "on-surface-variant": "#576257",
+                    "outline": "#737e72",
+                    "error-dim": "#791903",
+                    "surface-tint": "#b56236",
+                    "secondary-fixed-dim": "#8aeb7e",
+                    "surface-container-high": "#e1ebdf",
+                    "on-background": "#2b352c",
+                    "on-primary-fixed": "#2f0e00",
+                    "on-secondary-container": "#00600d",
+                    "tertiary": "#7c5900",
+                    "secondary-dim": "#00610e",
+                    "inverse-on-surface": "#999e97",
+                    "on-secondary": "#ebffe1",
+                    "error-container": "#fd795a",
+                    "on-primary-fixed-variant": "#642600",
+                    "tertiary-fixed": "#ffc963",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary": "#006f11",
+                    "on-error-container": "#6e1400"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["EB Garamond", "serif"],
+                    "display": ["Be Vietnam Pro", "sans-serif"],
+                    "body": ["Public Sans", "sans-serif"],
+                    "label": ["Public Sans", "sans-serif"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .eb-headline { font-family: 'EB Garamond', serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body min-h-screen">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 bottom-0 w-64 z-50 flex flex-col p-4 bg-stone-50 dark:bg-stone-950 border-r border-stone-200 dark:border-stone-800">
+<div class="flex items-center gap-3 mb-8 px-2">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined">coffee</span>
+</div>
+<div>
+<h1 class="font-['Be_Vietnam_Pro'] text-xl font-bold text-orange-800">Bean &amp; Brew</h1>
+<p class="text-[10px] uppercase tracking-widest text-stone-500 font-bold">Panel de Control</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-stone-600 dark:text-stone-400 hover:text-orange-700 dark:hover:text-orange-400 hover:bg-orange-50 dark:hover:bg-stone-900 rounded-full transition-all hover:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-['Public_Sans'] text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-stone-600 dark:text-stone-400 hover:text-orange-700 dark:hover:text-orange-400 hover:bg-orange-50 dark:hover:bg-stone-900 rounded-full transition-all hover:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined">restaurant_menu</span>
+<span class="font-['Public_Sans'] text-sm">Gestión del Menú</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-stone-600 dark:text-stone-400 hover:text-orange-700 dark:hover:text-orange-400 hover:bg-orange-50 dark:hover:bg-stone-900 rounded-full transition-all hover:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined">database</span>
+<span class="font-['Public_Sans'] text-sm">Base de Datos</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-stone-600 dark:text-stone-400 hover:text-orange-700 dark:hover:text-orange-400 hover:bg-orange-50 dark:hover:bg-stone-900 rounded-full transition-all hover:translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="font-['Public_Sans'] text-sm">Pedidos</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 rounded-full font-bold" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-['Public_Sans'] text-sm">Analíticas</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-stone-200">
+<div class="flex items-center gap-3 px-4">
+<img alt="Manager Avatar" class="w-10 h-10 rounded-full border-2 border-primary-fixed" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJznwgM7kv5n5IzOYweaAWwmtrRNulWlF6-XozFdFXFq1G9WQrOkUfulGaqCh0Awbdsc2lsf0itcccmSUHuTK7dVvgxMTiKjG053eV6Dj_68jD67hMblbQCZhsOonZIjEWbKohJY9krHrJ5_LKmX3T-729UON6F1HoGFzyyuhM4BM4UtDBlVMnmTwQxLzJ58GJL6T3DTPhK3m9bC8YmLpreoxUMADbvwQETnobE6LCyGRqWCnyBtlONG0pfTOs85fkufwu9B2isbs"/>
+<div class="overflow-hidden">
+<p class="text-xs font-bold truncate">Marcus Vane</p>
+<p class="text-[10px] text-stone-500">Gerente General</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 min-h-screen p-8 bg-surface">
+<header class="fixed top-0 right-0 left-0 z-40 flex items-center justify-between px-8 py-4 ml-64 bg-white/90 backdrop-blur-md border-b border-stone-200 shadow-sm">
+<div class="flex items-center gap-8">
+<h2 class="eb-headline text-3xl font-bold text-orange-800">Inteligencia de Negocio</h2>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-stone-400">search</span>
+<input class="pl-10 pr-4 py-2 bg-stone-100 border-none rounded-full text-sm w-64 focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Buscar analíticas..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-stone-500 hover:bg-stone-100 rounded-full transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-stone-500 hover:bg-stone-100 rounded-full transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="h-8 w-[1px] bg-stone-200 mx-2"></div>
+<div class="flex items-center gap-2 px-3 py-1 bg-primary/10 rounded-full">
+<span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+<span class="text-[10px] font-bold text-primary uppercase tracking-tight">Sistema en Vivo</span>
+</div>
+</div>
+</header>
+<div class="mt-20">
+<!-- Header Section -->
+<div class="flex justify-between items-end mb-10">
+<div>
+<h3 class="eb-headline text-5xl font-normal text-on-surface">Resumen de Insights</h3>
+<p class="text-on-surface-variant mt-2 max-w-lg font-medium">Seguimiento de tendencias históricas de rendimiento y métricas de compromiso del cliente en todas las ubicaciones de Aroma &amp; Grano.</p>
+</div>
+<div class="flex gap-2">
+<button class="px-6 py-3 bg-surface-container-high text-on-surface font-semibold rounded-full flex items-center gap-2 hover:bg-primary-container/20 transition-colors">
+<span class="material-symbols-outlined text-xl">calendar_today</span>
+                        Últimos 30 Días
+                    </button>
+<button class="px-6 py-3 bg-primary text-white font-semibold rounded-full flex items-center gap-2 shadow-lg shadow-primary/20 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-xl">download</span>
+                        Exportar Reporte
+                    </button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Ventas en el Tiempo -->
+<div class="col-span-12 lg:col-span-8 bg-surface-container-lowest p-8 rounded-xl shadow-sm border border-stone-100">
+<div class="flex justify-between items-start mb-8">
+<div>
+<h4 class="eb-headline text-2xl text-on-surface">Ventas en el Tiempo</h4>
+<p class="text-sm text-stone-500">Crecimiento de ingresos en el trimestre actual</p>
+</div>
+<div class="flex items-center gap-4 text-xs font-bold">
+<div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-primary"></span> Ingresos</div>
+<div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-tertiary"></span> Volumen</div>
+</div>
+</div>
+<!-- Visual Chart Representation (Empty State) -->
+<div class="h-64 flex items-end justify-between gap-4 px-2">
+<div class="flex-1 bg-stone-100 rounded-t-lg relative group transition-all" style="height: 4px;"></div>
+<div class="flex-1 bg-stone-100 rounded-t-lg relative group transition-all" style="height: 4px;"></div>
+<div class="flex-1 bg-stone-100 rounded-t-lg relative group transition-all" style="height: 4px;"></div>
+<div class="flex-1 bg-stone-100 rounded-t-lg relative group transition-all" style="height: 4px;">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] py-1 px-2 rounded">$0</div>
+</div>
+<div class="flex-1 bg-stone-100 rounded-t-lg relative group transition-all" style="height: 4px;"></div>
+<div class="flex-1 bg-stone-100 rounded-t-lg relative group transition-all" style="height: 4px;"></div>
+<div class="flex-1 bg-stone-100 rounded-t-lg relative group transition-all" style="height: 4px;"></div>
+</div>
+<div class="flex justify-between mt-4 text-[10px] font-bold text-stone-400 uppercase tracking-widest px-2">
+<span>Ene</span><span>Feb</span><span>Mar</span><span>Abr</span><span>May</span><span>Jun</span><span>Jul</span>
+</div>
+</div>
+<!-- Análisis de Horas Pico -->
+<div class="col-span-12 lg:col-span-4 bg-primary text-white p-8 rounded-xl shadow-xl relative overflow-hidden">
+<div class="relative z-10">
+<h4 class="eb-headline text-2xl mb-1">Análisis de Horas Pico</h4>
+<p class="text-white/70 text-sm mb-8 font-medium">Eficiencia operativa durante alta demanda</p>
+<div class="space-y-6">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-white">schedule</span>
+</div>
+<div>
+<p class="text-xs font-bold text-white/60 uppercase tracking-tighter">Ventana de Actividad</p>
+<p class="text-xl font-bold">Sin datos</p>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-bold">
+<span>Utilización de Personal</span>
+<span>0%</span>
+</div>
+<div class="w-full h-1.5 bg-white/20 rounded-full overflow-hidden">
+<div class="h-full bg-white rounded-full" style="width: 0%;"></div>
+</div>
+</div>
+<div class="pt-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-white/50">trending_flat</span>
+<p class="text-sm font-medium">Sin cambios vs semana anterior</p>
+</div>
+</div>
+</div>
+<div class="absolute -right-10 -bottom-10 opacity-10">
+<span class="material-symbols-outlined" style="font-size: 200px;">coffee_maker</span>
+</div>
+</div>
+<!-- Impacto de Lealtad -->
+<div class="col-span-12 lg:col-span-4 bg-surface-container-high p-8 rounded-xl border border-stone-200">
+<h4 class="eb-headline text-2xl text-on-surface mb-2">Impacto de Lealtad</h4>
+<p class="text-sm text-stone-600 mb-8 font-medium">Retención de clientes y economía de puntos</p>
+<div class="grid grid-cols-2 gap-4 mb-8">
+<div class="bg-surface-container-lowest p-4 rounded-xl">
+<p class="text-[10px] font-bold text-stone-500 uppercase">Ganados</p>
+<p class="text-2xl font-black text-secondary">0</p>
+<p class="text-[10px] text-stone-400 font-bold">0%</p>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-xl">
+<p class="text-[10px] font-bold text-stone-500 uppercase">Redimidos</p>
+<p class="text-2xl font-black text-primary">0</p>
+<p class="text-[10px] text-stone-400 font-bold">0%</p>
+</div>
+</div>
+<div class="relative h-4 w-full bg-stone-200 rounded-full overflow-hidden flex">
+<div class="h-full bg-stone-300" style="width: 0%;"></div>
+</div>
+<div class="mt-4 flex justify-between items-center text-xs font-bold">
+<span class="text-stone-500">Esperando datos</span>
+<span class="text-stone-500">Ratio 0:0</span>
+</div>
+</div>
+<!-- Productos Más Populares -->
+<div class="col-span-12 lg:col-span-8 bg-surface-container-lowest p-8 rounded-xl shadow-sm border border-stone-100 flex flex-col md:flex-row gap-8">
+<div class="flex-1">
+<h4 class="eb-headline text-2xl text-on-surface mb-1">Productos Más Populares</h4>
+<p class="text-sm text-stone-500 mb-6">Artículos con mejor rendimiento por volumen</p>
+<div class="space-y-4">
+<div class="flex items-center gap-4 group">
+<div class="w-12 h-12 rounded-lg bg-stone-100 shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-stone-300">image</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-end mb-1">
+<span class="text-sm font-bold text-stone-400">Sin datos</span>
+<span class="text-xs text-stone-400">0 vendidos</span>
+</div>
+<div class="w-full h-1 bg-stone-100 rounded-full overflow-hidden">
+<div class="h-full bg-stone-200" style="width: 0%;"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4 group">
+<div class="w-12 h-12 rounded-lg bg-stone-100 shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-stone-300">image</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-end mb-1">
+<span class="text-sm font-bold text-stone-400">Sin datos</span>
+<span class="text-xs text-stone-400">0 vendidos</span>
+</div>
+<div class="w-full h-1 bg-stone-100 rounded-full overflow-hidden">
+<div class="h-full bg-stone-200" style="width: 0%;"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="w-full md:w-1/3 flex flex-col justify-center items-center border-l border-stone-100 pl-8">
+<div class="relative w-32 h-32 rounded-full border-[12px] border-stone-100 flex items-center justify-center">
+<div class="text-center">
+<p class="text-2xl font-black text-stone-300">0%</p>
+<p class="text-[8px] font-bold text-stone-400 uppercase">Categorías</p>
+</div>
+</div>
+<div class="mt-6 space-y-2 w-full">
+<div class="flex justify-between text-[10px] font-bold"><span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-stone-200"></span> Café</span> <span>0%</span></div>
+<div class="flex justify-between text-[10px] font-bold"><span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-stone-200"></span> Repostería</span> <span>0%</span></div>
+</div>
+</div>
+</div>
+<!-- Ventas Geográficas -->
+<div class="col-span-12 bg-white rounded-xl overflow-hidden shadow-sm border border-stone-100 flex h-80">
+<div class="w-1/3 p-8 border-r border-stone-100 flex flex-col justify-between">
+<div>
+<h4 class="eb-headline text-2xl text-on-surface mb-1">Ventas Geográficas</h4>
+<p class="text-sm text-stone-500 font-medium">Análisis de rendimiento regional</p>
+</div>
+<div class="space-y-4">
+<div class="p-3 bg-stone-50 rounded-lg border-l-4 border-stone-200">
+<p class="text-[10px] font-bold text-stone-400 uppercase">Tienda Principal</p>
+<p class="font-bold text-stone-300">Sin datos</p>
+<p class="text-xs text-stone-400 font-bold">$0 Mensuales</p>
+</div>
+</div>
+</div>
+<div class="w-2/3 bg-stone-100 relative group overflow-hidden flex items-center justify-center">
+<div class="text-center">
+<span class="material-symbols-outlined text-stone-300 text-6xl">map</span>
+<p class="text-stone-400 font-bold text-sm">Mapa no disponible</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<footer class="mt-12 py-8 border-t border-stone-200 flex justify-between items-center text-stone-400 text-xs font-bold tracking-widest uppercase">
+<div>© 2024 Suite Administrativa Aroma &amp; Grano</div>
+<div class="flex gap-6">
+<a class="hover:text-primary transition-colors" href="#">Política de Privacidad</a>
+<a class="hover:text-primary transition-colors" href="#">Logs de Auditoría</a>
+<a class="hover:text-primary transition-colors" href="#">Centro de Ayuda</a>
+</div>
+</footer>
+</main>
+</body></html>
