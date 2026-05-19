@@ -1,4 +1,4 @@
-
+from collections import Counter
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from supabase import create_client, Client
 from user_agents import parse
@@ -8,6 +8,7 @@ from functools import wraps
 from datetime import datetime, timedelta
 from flask_cors import CORS
 from dotenv import load_dotenv
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
@@ -27,6 +28,23 @@ MESSES_ES = {
     9: 'Septiembre', 10: 'Octubre', 11: 'Noviembre', 12: 'Diciembre'
 }
 
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        # Si no está logueado o su rol no es 'admin', va para el login (raíz)
+        if 'user_id' not in session or session.get('rol') != 'admin':
+            return redirect('/')
+        return f(*args, **kwargs)
+    return decorated_function
+
+def cajero_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        # Si no está logueado o su rol no es 'cajero', va para el login (raíz)
+        if 'user_id' not in session or session.get('rol') != 'cajero':
+            return redirect('/')
+        return f(*args, **kwargs)
+    return decorated_function
 
 def format_order_date(date_str):
     if not date_str:
@@ -134,65 +152,36 @@ def init_db():
 
 # ===================== AUTENTICACIÓN =====================
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'], endpoint='login')
 def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
+        
         user = supabase.table("users").select("*").eq("email", email).eq("password", password).execute()
+        
         if user.data:
             user_data = user.data[0]
             session['user_id'] = user_data['id']
             session['email'] = user_data['email']
             session['full_name'] = user_data['full_name']
-            session['is_admin'] = user_data.get('is_admin', False)
-            if session['is_admin']:
+            
+            # Guardamos el rol que viene de tu nueva columna en Supabase
+            session['rol'] = user_data.get('rol', 'cliente')
+            
+            # Redirección automática según el rol
+            if session['rol'] == 'admin':
                 return redirect(url_for('admin_dashboard'))
+                
+            elif session['rol'] == 'cajero':
+                return redirect(url_for('cajero_pedidos'))
+                
             else:
                 return redirect(url_for('dashboard'))
         else:
             flash('Correo o contraseña incorrectos', 'error')
+            
     return render_template('login.html')
-
-
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    if request.method == 'POST':
-        full_name = request.form['full_name']
-        email = request.form['email']
-        password = request.form['password']
-        confirm_password = request.form['confirm_password']
-        if password != confirm_password:
-            flash('Las contraseñas no coinciden', 'error')
-            return redirect(url_for('register'))
-        existing_user = supabase.table("users").select("*").eq("email", email).execute()
-        if existing_user.data:
-            flash('El correo ya está registrado', 'error')
-            return redirect(url_for('register'))
-        supabase.table("users").insert({
-            "full_name": full_name,
-            "email": email,
-            "password": password
-        }).execute()
-        create_notification('user_registered', f'Nuevo usuario registrado: {full_name}', email)
-        flash('¡Registro exitoso! Ahora puedes iniciar sesión.', 'success')
-        return redirect(url_for('login'))
-    return render_template('register.html')
-
-
-@app.route('/logout')
-def logout():
-    session.clear()
-    return redirect(url_for('login'))
-
-
-@app.route('/forgot-password')
-def forgot_password():
-    if 'user_id' in session:
-        return redirect(url_for('dashboard'))
-    return render_template('forgot_password.html')
-
-
 @app.route('/send-recovery', methods=['POST'])
 def send_recovery():
     email = request.form.get('email')
@@ -210,40 +199,49 @@ def send_recovery():
 
 # ===================== DASHBOARD =====================
 
-@app.route('/dashboard')
+@app.route('/admin')
 def dashboard():
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
+    # 1. Traer todos los productos
+    prod_resp = supabase.table("products").select("*").execute()
+    productos = prod_resp.data if prod_resp.data else []
 
-    user_agent = request.headers.get('User-Agent')
-    agent = parse(user_agent)
+    # 2. Traer todos los pagos para las métricas
+    pagos_resp = supabase.table("pagos").select("*").execute()
+    pagos = pagos_resp.data if pagos_resp.data else []
 
-    category = request.args.get('category', 'all')
-    origin = request.args.get('origin', 'all')
+    # --- CALCULAR ESTADÍSTICAS EN EL BACKEND ---
+    total_items = len(productos)
+    
+    # Categorías únicas con validación por si 'category' viene vacío
+    categorias_unicas = len(set(p['category'] for p in productos if p.get('category'))) if productos else 0
+    
+    # Disponibilidad (Protegido contra valores None / Null en la base de datos)
+    productos_disponibles = 0
+    for p in productos:
+        stock_val = p.get('stock')
+        # Si stock es None o vacío, asumimos que es 0. De lo contrario, usamos su valor numérico.
+        stock_actual = 0 if stock_val is None else int(stock_val)
+        if stock_actual > 0:
+            productos_disponibles += 1
+            
+    disponibilidad = int((productos_disponibles / total_items) * 100) if total_items > 0 else 0
 
-    query = supabase.table("products").select("*")
-    if category != 'all':
-        query = query.eq("category", category)
-    products = query.execute().data
+    # Más vendido
+    conteo_ventas = Counter()
+    for pago in pagos:
+        # Asegurar que producto_id no sea nulo
+        if pago.get('producto_id'):
+            conteo_ventas[pago['producto_id']] += pago.get('cantidad', 1)
+    
+    mas_vendido = conteo_ventas.most_common(1)[0][0] if conteo_ventas else "N/A"
 
-    if origin != 'all':
-        filtered_products = []
-        for product in products:
-            if origin == 'Etiopía - Sidamo' and ('Espresso' in product['name'] or 'Sidamo' in product['name']):
-                filtered_products.append(product)
-            elif origin == 'Colombia - Huila' and ('Colombia' in product['name'] or 'Huila' in product['name']):
-                filtered_products.append(product)
-            elif origin == 'Costa Rica - Tarrazú' and ('Costa Rica' in product['name'] or 'Tarrazú' in product['name']):
-                filtered_products.append(product)
-        products = filtered_products
-
-    cart_count = get_cart_count(session['user_id'])
-
-    if agent.is_mobile:
-        return render_template('dashboard_mobile.html', products=products, category=category, origin=origin, cart_count=cart_count)
-    else:
-        return render_template('dashboard_pc.html', products=products, category=category, origin=origin, cart_count=cart_count)
-
+    # Enviar todo al HTML
+    return render_template('admin/dashboard.html',
+                            productos=productos, 
+                            total_items=total_items, 
+                            mas_vendido=mas_vendido, 
+                            categorias=categorias_unicas, 
+                            disponibilidad=disponibilidad)
 
 @app.route('/customize/<int:product_id>')
 def customize(product_id):
@@ -776,18 +774,6 @@ def admin_dashboard():
     return render_template('admin/dashboard.html', products=products, categories=categories, availability=availability)
 
 
-@app.route('/admin/users')
-@admin_required
-def admin_users():
-    users_data = supabase.table("users").select("*").execute()
-    users = []
-    if users_data.data:
-        for user in users_data.data:
-            if 'is_admin' not in user:
-                user['is_admin'] = False
-            users.append(user)
-    return render_template('admin/users.html', users=users)
-
 
 @app.route('/admin/products', methods=['GET', 'POST'])
 @admin_required
@@ -902,10 +888,73 @@ def admin_notifications():
         print(f"Error fetching notifications: {e}")
         return jsonify({"notifications": [], "unread_count": 0})
     
-@app.route('/analiticas.html')
-def analiticas():
-    return render_template('admin/analiticas.html')
+@app.route('/admin/analiticas')
+@admin_required
+def admin_analiticas():
+    try:
+        # 1. CONSULTA REAL A LA TABLA DE PAGOS
+        pagos_resp = supabase.table("pagos").select("created_at, total_pago, categoria").execute()
+        lista_pagos = pagos_resp.data if pagos_resp.data else []
+        
+        # Inicializamos los 7 meses de la gráfica en 0: [ENE, FEB, MAR, ABR, MAY, JUN, JUL]
+        ventas_por_mes = [0, 0, 0, 0, 0, 0, 0]
+        
+        # Variables para contar categorías vendidas en el gráfico de dona
+        total_items_vendidos = len(lista_pagos)
+        ventas_cafe = 0
+        ventas_reposteria = 0
+        
+        for pago in lista_pagos:
+            fecha_str = pago.get('created_at') # Formato: "2026-04-15T18:30:00+00:00"
+            monto = pago.get('total_pago', 0)
+            cat_pago = pago.get('categoria', '').lower()
+            
+            # --- Procesar Fecha para el Gráfico de Líneas ---
+            if fecha_str:
+                # Quitamos la zona horaria si viene con '+' para evitar errores en fromisoformat
+                fecha_limpia = fecha_str.split('+')[0]
+                fecha_dt = datetime.fromisoformat(fecha_limpia)
+                mes = fecha_dt.month  # Devuelve un entero del 1 al 12
+                
+                # Clasificamos de Enero (1) a Julio (7) en sus respectivas posiciones (0 a 6)
+                if 1 <= mes <= 7:
+                    ventas_por_mes[mes - 1] += float(monto)
+            
+            # --- Procesar Categoría para el Gráfico de Dona ---
+            if 'café' in cat_pago or 'cafe' in cat_pago:
+                ventas_cafe += 1
+            elif 'repostería' in cat_pago or 'reposteria' in cat_pago:
+                ventas_reposteria += 1
 
+        # Calcular los porcentajes reales de venta
+        porcentaje_cafe = round((ventas_cafe / total_items_vendidos) * 100) if total_items_vendidos > 0 else 0
+        porcentaje_reposteria = round((ventas_reposteria / total_items_vendidos) * 100) if total_items_vendidos > 0 else 0
+
+        # 2. SEGUIMIENTO DE LEALTAD (De la tabla de usuarios como ya funcionaba)
+        users_resp = supabase.table("users").select("loyalty_points").execute()
+        usuarios = users_resp.data if users_resp.data else []
+        puntos_ganados = sum(u.get('loyalty_points', 0) for u in usuarios if u.get('loyalty_points', 0) > 0)
+        
+        # 3. EXTRAER TOTAL DE CATEGORÍAS DISPONIBLES (De la tabla de productos)
+        prod_resp = supabase.table("products").select("category").execute()
+        productos = prod_resp.data if prod_resp.data else []
+        categorias_unicas = list(set(p.get('category') for p in productos if p.get('category')))
+
+        # ESTRUCTURA DE MÉTRICAS PARA JINJA2
+        metrics = {
+            'puntos_ganados': puntos_ganados,
+            'puntos_redimidos': 0, # Lo dejamos estático o según tu lógica de negocio
+            'total_categorias': len(categorias_unicas),
+            'porcentaje_cafe': porcentaje_cafe,
+            'porcentaje_reposteria': porcentaje_reposteria,
+            'ventas_meses': ventas_por_mes  # <-- Lista con los totales reales de ENE a JUL
+        }
+
+        return render_template('admin/analiticas.html', metrics=metrics)
+        
+    except Exception as e:
+        print("Error crítico en analiticas:", str(e))
+        return f"Error al procesar los datos de pagos: {str(e)}", 500
 
 @app.route('/admin/notifications/mark-read', methods=['POST'])
 @admin_required
@@ -915,6 +964,199 @@ def mark_notifications_read():
         return jsonify({"success": True})
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
+
+
+@app.route('/admin/actualizar-stock', methods=['POST'])
+def actualizar_stock():
+    try:
+        data = request.get_json()
+        producto_id = data.get('id')
+        nuevo_stock = data.get('stock')
+
+        # Conexión directa para actualizar la columna stock en Supabase
+        supabase.table("products").update({"stock": nuevo_stock}).eq("id", producto_id).execute()
+
+        return jsonify({"status": "success", "message": "Stock modificado"}), 200
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+    
+from flask import redirect, url_for, request
+
+@app.route('/admin/nuevo-producto', methods=['POST'])
+def nuevo_producto():
+    try:
+        # Obtener los datos enviados desde el Modal
+        name = request.form.get('name')
+        price = float(request.form.get('price', 0))
+        category = request.form.get('category')
+        stock = int(request.form.get('stock', 0))
+        image_url = request.form.get('image_url')
+        description = request.form.get('description', '')
+
+        # Preparar el objeto para Supabase
+        nuevo_item = {
+            "name": name,
+            "price": price,
+            "category": category,
+            "stock": stock,
+            "image_url": image_url,
+            "description": description
+        }
+
+        # Insertar fila directamente en la tabla 'products' de Supabase
+        supabase.table("products").insert(nuevo_item).execute()
+
+        # Recargar la vista del dashboard para ver el nuevo producto listado al instante
+        return redirect(url_for('dashboard'))
+        
+    except Exception as e:
+        return f"<h3>Error al insertar producto en Supabase:</h3><pre>{str(e)}</pre>", 500
+    
+@app.route('/admin/eliminar-producto/<producto_id>', methods=['POST'])
+def eliminar_producto(producto_id):
+    try:
+        supabase.table("products").delete().eq("id", producto_id).execute()
+        return jsonify({"status": "success", "message": "Producto eliminado"}), 200
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route('/admin/actualizar-producto', methods=['POST'])
+def actualizar_producto():
+    try:
+        producto_id = request.form.get('id')
+        
+        datos_actualizados = {
+            "name": request.form.get('name'),
+            "price": float(request.form.get('price', 0)),
+            "category": request.form.get('category'),
+            "stock": int(request.form.get('stock', 0)),
+            "image_url": request.form.get('image_url'),
+            "description": request.form.get('description', '')
+        }
+
+        # Actualizar en Supabase buscando por su ID
+        supabase.table("products").update(datos_actualizados).eq("id", producto_id).execute()
+        
+        return redirect(url_for('dashboard'))
+    except Exception as e:
+        return f"<h3>Error al actualizar en Supabase:</h3><pre>{str(e)}</pre>", 500
+    
+@app.route('/admin/users')
+@admin_required
+def admin_users():
+    try:
+        # 1. Traemos los datos limpios de Supabase
+        response = supabase.table("users").select("*").execute()
+        lista_usuarios = response.data if response.data else []
+        
+        # 2. Imprimimos en la consola para tu control
+        print("--- CONTROL DE USUARIOS EN CONSOLA ---")
+        print(lista_usuarios)
+        print("---------------------------------------")
+        
+        # 3. Enviamos la variable estricta 'users' al HTML
+        return render_template('admin/users.html', users=lista_usuarios)
+    except Exception as e:
+        print("Error en ruta admin_users:", str(e))
+        return f"Error al cargar usuarios: {str(e)}", 500
+def cajero_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        # Verificamos si hay un usuario logueado y si su rol es 'cajero'
+        if 'usuario' not in session or session.get('rol') != 'cajero':
+            print("Acceso denegado: No es cajero o no ha iniciado sesión.")
+            return redirect(url_for('login_cajero'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+# --- RUTA DE INICIO DE SESIÓN ---
+@app.route('/cajero/login', methods=['GET', 'POST'])
+def login_cajero():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        
+        try:
+            # 1. Buscamos el usuario en tu tabla 'users' de Supabase
+            auth_resp = supabase.table("users").select("*").eq("email", email).execute()
+            usuarios = auth_resp.data
+            
+            if usuarios:
+                usuario_actual = usuarios[0]
+                # NOTA: Aquí puedes validar con tu sistema de contraseñas (ej: bcrypt o texto plano temporal)
+                # Para este ejemplo asumimos que el rol guardado en tu base de datos es 'cajero'
+                if usuario_actual.get('role') == 'cajero' or usuario_actual.get('rol') == 'cajero':
+                    session['usuario'] = usuario_actual.get('email')
+                    session['rol'] = 'cajero'
+                    return redirect(url_for('cajero_pedidos'))
+                else:
+                    return render_template('cajero/login.html', error="Tu usuario no tiene rol de Cajero.")
+            else:
+                return render_template('cajero/login.html', error="Credenciales incorrectas o usuario inexistente.")
+                
+        except Exception as e:
+            return render_template('cajero/login.html', error=f"Error de conexión: {str(e)}")
+            
+    return render_template('cajero/login.html', error=None)
+
+def cajero_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        # Si no hay un id de usuario en sesión o el rol no es 'cajero', lo mandamos al login ('/')
+        if 'user_id' not in session or session.get('rol') != 'cajero':
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
+# --- VISTA DE PEDIDOS PROTEGIDA ---
+@app.route('/cajero/pedidos')
+@cajero_required  # <-- Protege la vista usando la sesión del login
+def cajero_pedidos():
+    try:
+        resp = supabase.table("pagos").select("*").order("created_at", desc=True).execute()
+        pedidos = resp.data if resp.data else []
+        
+        ingresos_hoy = sum(float(p.get('total_pago', 0)) for p in pedidos if p.get('estado') != 'Cancelado')
+        ordenes_activas = sum(1 for p in pedidos if p.get('estado') in ['Confirmada', 'En Preparación'])
+        
+        metrics = {
+            'ingresos_hoy': ingresos_hoy,
+            'ordenes_activas': ordenes_activas,
+            'pico_demanda': '10:30 AM'
+        }
+        return render_template('cajero/pedidos.html', pedidos=pedidos, metrics=metrics)
+    except Exception as e:
+        return f"Error al cargar pedidos: {str(e)}", 500
+    
+@app.route('/logout')
+def logout():
+    session.clear() # Borra de forma segura todos los datos de la sesión actual
+    flash('Has cerrado sesión correctamente.', 'success')
+    return redirect('/') # Te manda directo a la pantalla de login
+# --- API EN LIVE: CAMBIAR ESTADO EN LA BASE DE DATOS ---
+@app.route('/api/pedidos/update_status', methods=['POST'])
+def update_pedido_status():
+    try:
+        data = request.get_json()
+        pedido_id = data.get('id')
+        nuevo_estado = data.get('estado')
+        
+        if not pedido_id or not nuevo_estado:
+            return jsonify({'success': False, 'error': 'Datos faltantes'}), 400
+            
+        # Actualizamos de forma real y persistente la columna 'estado' en Supabase
+        supabase.table("pagos").update({'estado': nuevo_estado}).eq('id', pedido_id).execute()
+        
+        return jsonify({'success': True, 'nuevo_estado': nuevo_estado})
+    except Exception as e:
+        print("Error al guardar estado:", str(e))
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+# Ruta rápida para cerrar sesión
+@app.route('/cajero/logout')
+def logout_cajero():
+    session.clear()
+    return redirect(url_for('login_cajero'))
+
 
 if __name__ == '__main__':
     init_db()

@@ -160,51 +160,54 @@
     <!-- Sidebar Overlay (móvil) -->
     <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-40 hidden transition-opacity duration-300 opacity-0" onclick="toggleSidebar()"></div>
 
-    <!-- Sidebar -->
-    <aside id="sidebar" class="fixed left-0 top-0 bottom-0 w-[280px] z-50 flex flex-col p-4 bg-[#ffffff] border-r border-[#c2c9bd]/30 shadow-xl -translate-x-full md:translate-x-0 md:shadow-none transition-transform duration-300 ease-in-out">
-        <div class="flex items-center justify-between mb-8 px-2">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary flex-shrink-0">
-                    <span class="material-symbols-outlined">local_cafe</span>
-                </div>
-                <div class="min-w-0">
-                    <h1 class="font-display text-xl font-bold text-primary leading-tight">Aroma & Grano</h1>
-                    <p class="text-[10px] text-on-surface-variant font-medium uppercase tracking-wider">Panel de Admin</p>
-                </div>
-            </div>
-            <button class="md:hidden p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors flex-shrink-0" onclick="toggleSidebar()">
-                <span class="material-symbols-outlined">close</span>
-            </button>
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-stone-50 border-r border-stone-200/80 flex flex-col transition-transform duration-300 md:translate-x-0 -translate-x-full">
+    
+    <div class="p-6 flex items-center gap-3 border-b border-stone-200/50">
+        <div class="w-10 h-10 bg-amber-800 rounded-xl flex items-center justify-center shadow-md shadow-amber-900/10">
+            <span class="material-symbols-outlined text-white text-xl">coffee_maker</span>
         </div>
-
-        <nav class="flex-1 space-y-1.5">
-            <a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-primary hover:bg-surface-container-high rounded-lg transition-all hover:translate-x-1 duration-200" href="{{ url_for('admin_dashboard') }}">
-                <span class="material-symbols-outlined">restaurant_menu</span>
-                <span class="text-sm">Gestión del Menú</span>
-            </a>
-            <a class="flex items-center gap-3 px-4 py-3 sidebar-active rounded-lg font-medium transition-all hover:translate-x-1 duration-200" href="{{ url_for('admin_users') }}">
-                <span class="material-symbols-outlined">group</span>
-                <span class="text-sm">Usuarios</span>
-            </a>
-        </nav>
-
-        <div class="mt-auto p-4 rounded-xl bg-[#eef3eb]">
-            <div class="flex items-center gap-3 mb-3">
-                <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary flex-shrink-0">
-                    <span class="material-symbols-outlined">account_circle</span>
-                </div>
-                <div class="min-w-0">
-                    <p class="text-sm font-bold truncate">{{ session['full_name'] }}</p>
-                    <p class="text-xs text-on-surface-variant">Administrador</p>
-                </div>
-            </div>
-            <a href="{{ url_for('logout') }}" class="w-full py-2 text-xs font-bold text-error bg-error/10 rounded-lg hover:bg-error/20 transition-colors flex items-center justify-center gap-2">
-                <span class="material-symbols-outlined text-sm">logout</span>
-                <span>Cerrar Sesión</span>
-            </a>
+        <div>
+            <h1 class="font-serif font-bold text-lg text-stone-900 leading-none">Café & Grano</h1>
+            <p class="text-[10px] font-sans tracking-wider text-stone-500 uppercase font-semibold mt-0.5">Coffee Shop Admin</p>
         </div>
-    </aside>
+    </div>
 
+    <nav class="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
+        <a href="{{ url_for('admin_products') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-stone-600 hover:bg-orange-50/50 hover:text-amber-900 transition-all group">
+            <span class="material-symbols-outlined text-stone-400 group-hover:text-amber-700 transition-colors">restaurant_menu</span>
+            <span class="font-medium text-sm">Gestión de Menú</span>
+        </a>
+
+        <a href="{{ url_for('admin_users') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-orange-50 text-amber-900 font-semibold shadow-sm shadow-orange-100/50 transition-all">
+            <span class="material-symbols-outlined text-amber-700">group</span>
+            <span class="text-sm">Usuarios</span>
+        </a>
+<a href="{{ url_for('admin_analiticas') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-stone-600 hover:bg-orange-50/50 hover:text-amber-900 transition-all group">
+    <span class="material-symbols-outlined text-stone-400 group-hover:text-amber-700 transition-colors">insert_chart</span>
+    <span class="font-medium text-sm">Analíticas</span>
+</a>
+    </nav>
+
+    <div class="p-4 border-t border-stone-200/60 bg-stone-100/50">
+        <div class="flex items-center gap-3 p-2 bg-white rounded-xl shadow-sm border border-stone-200/40">
+            <div class="w-9 h-9 bg-amber-100 rounded-lg flex items-center justify-center text-amber-800">
+                <span class="material-symbols-outlined text-lg">account_circle</span>
+            </div>
+            <div class="flex-1 min-w-0">
+                <p class="text-xs font-bold text-stone-800 truncate">Admin Portal</p>
+                <p class="text-[10px] text-emerald-600 font-medium flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>
+                    Session active
+                </p>
+            </div>
+        </div>
+        <a href="#" class="mt-2 flex items-center justify-center gap-2 w-full px-4 py-2 bg-stone-200/60 hover:bg-red-50 hover:text-red-700 text-stone-700 text-xs font-semibold rounded-xl transition-all">
+            <span class="material-symbols-outlined text-sm">logout</span>
+            <span>Logout</span>
+        </a>
+    </div>
+</aside>
+<main class="flex-1 md:pl-64 p-8 ..."></main>
     <!-- TopNavBar -->
     <header class="fixed top-0 right-0 left-0 z-30 flex items-center justify-between px-4 md:px-6 py-3 ml-0 md:ml-[280px] bg-[#ffffff]/95 backdrop-blur-md border-b border-[#c2c9bd]/30 shadow-sm">
         <div class="flex items-center gap-3 flex-1 md:w-1/3">
@@ -411,382 +414,387 @@
             </div>
         </div>
     </div>
+<script>
+    let currentRoleId = null;
+    let currentRoleIsAdmin = false;
+    let currentDeleteUserId = null;
+    let notificationPollInterval = null;
+    let previousUnreadCount = 0;
 
-    <script>
-        let currentRoleId = null;
-        let currentRoleIsAdmin = false;
-        let currentDeleteUserId = null;
-        let notificationPollInterval = null;
-        let previousUnreadCount = 0;
+    // =====================
+    // SIDEBAR MÓVIL
+    // =====================
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        const isOpen = !sidebar.classList.contains('-translate-x-full');
 
-        // =====================
-        // SIDEBAR MÓVIL
-        // =====================
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            const isOpen = !sidebar.classList.contains('-translate-x-full');
-
-            if (isOpen) {
-                sidebar.classList.add('-translate-x-full');
-                overlay.classList.add('opacity-0');
-                setTimeout(() => overlay.classList.add('hidden'), 300);
-            } else {
-                overlay.classList.remove('hidden');
-                requestAnimationFrame(() => {
-                    overlay.classList.remove('opacity-0');
-                    sidebar.classList.remove('-translate-x-full');
-                });
-            }
+        if (isOpen) {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('opacity-0');
+            setTimeout(() => overlay.classList.add('hidden'), 300);
+        } else {
+            overlay.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                overlay.classList.remove('opacity-0');
+                sidebar.classList.remove('-translate-x-full');
+            });
         }
+    }
 
-        window.addEventListener('resize', function() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            if (window.innerWidth >= 768) {
+    window.addEventListener('resize', function() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        if (window.innerWidth >= 768) {
+            overlay.classList.add('hidden');
+            overlay.classList.add('opacity-0');
+        } else {
+            if (sidebar.classList.contains('-translate-x-full')) {
                 overlay.classList.add('hidden');
                 overlay.classList.add('opacity-0');
-            } else {
-                if (sidebar.classList.contains('-translate-x-full')) {
-                    overlay.classList.add('hidden');
-                    overlay.classList.add('opacity-0');
-                }
-            }
-        });
-
-        // =====================
-        // SISTEMA DE NOTIFICACIONES EN TIEMPO REAL
-        // =====================
-        document.addEventListener('DOMContentLoaded', function() {
-            fetchNotifications();
-            notificationPollInterval = setInterval(fetchNotifications, 5000);
-        });
-
-        async function fetchNotifications() {
-            try {
-                const response = await fetch('/admin/notifications');
-                if (!response.ok) return;
-
-                const data = await response.json();
-
-                const clearedAt = localStorage.getItem('notificationsClearedAt');
-                let filteredNotifications = data.notifications;
-                if (clearedAt) {
-                    filteredNotifications = data.notifications.filter(n => {
-                        return new Date(n.created_at) > new Date(clearedAt);
-                    });
-                }
-
-                const visibleUnreadCount = filteredNotifications.filter(n => !n.is_read).length;
-
-                const badge = document.getElementById('notificationBadge');
-                if (badge) {
-                    if (visibleUnreadCount > previousUnreadCount && previousUnreadCount >= 0) {
-                        badge.classList.add('new-notification');
-                        setTimeout(() => badge.classList.remove('new-notification'), 600);
-                    }
-                    badge.setAttribute('data-count', visibleUnreadCount);
-                    previousUnreadCount = visibleUnreadCount;
-                }
-
-                renderNotifications(filteredNotifications);
-            } catch (error) {
-                console.error('Error fetching notifications:', error);
             }
         }
+    });
 
-        function renderNotifications(notifications) {
-            const container = document.getElementById('notificationsContent');
-            if (!container) return;
+    // =====================
+    // SISTEMA DE NOTIFICACIONES EN TIEMPO REAL
+    // =====================
+    document.addEventListener('DOMContentLoaded', function() {
+        fetchNotifications();
+        notificationPollInterval = setInterval(fetchNotifications, 5000);
+    });
 
-            if (!notifications || notifications.length === 0) {
-                container.innerHTML = `
-                    <div class="p-6 text-center text-on-surface-variant text-sm">
-                        <span class="material-symbols-outlined text-3xl mb-2 block opacity-30">notifications_off</span>
-                        No hay notificaciones recientes
-                    </div>
-                `;
-                return;
+    async function fetchNotifications() {
+        try {
+            const response = await fetch('/admin/notifications');
+            if (!response.ok) return;
+
+            const data = await response.json();
+
+            const clearedAt = localStorage.getItem('notificationsClearedAt');
+            let filteredNotifications = data.notifications;
+            if (clearedAt) {
+                filteredNotifications = data.notifications.filter(n => {
+                    return new Date(n.created_at) > new Date(clearedAt);
+                });
             }
 
-            let html = '';
-            notifications.forEach(notification => {
-                let icon, color, title;
-
-                switch (notification.type) {
-                    case 'product_created':
-                        icon = 'add_circle';
-                        color = 'text-secondary';
-                        title = 'Nuevo producto creado';
-                        break;
-                    case 'product_updated':
-                        icon = 'edit';
-                        color = 'text-tertiary';
-                        title = 'Producto actualizado';
-                        break;
-                    case 'product_deleted':
-                        icon = 'delete';
-                        color = 'text-error';
-                        title = 'Producto eliminado';
-                        break;
-                    case 'user_registered':
-                        icon = 'person_add';
-                        color = 'text-primary';
-                        title = 'Nuevo usuario registrado';
-                        break;
-                    case 'user_role_changed':
-                        icon = 'admin_panel_settings';
-                        color = 'text-tertiary';
-                        title = 'Rol de usuario cambiado';
-                        break;
-                    case 'user_deleted':
-                        icon = 'person_remove';
-                        color = 'text-error';
-                        title = 'Usuario eliminado';
-                        break;
-                    default:
-                        icon = 'info';
-                        color = 'text-on-surface-variant';
-                        title = 'Notificación';
-                }
-
-                const timeText = notification.created_at ? timeAgo(notification.created_at) : '';
-                const unreadClass = notification.is_read ? '' : 'unread';
-
-                html += `
-                    <div class="notification-item ${unreadClass}">
-                        <div class="flex items-start gap-3">
-                            <span class="material-symbols-outlined ${color} text-lg mt-0.5">${icon}</span>
-                            <div class="flex-1 min-w-0">
-                                <p class="font-medium text-sm text-on-surface">${title}</p>
-                                <p class="text-xs text-on-surface-variant truncate">${notification.message}</p>
-                                <p class="text-xs text-on-surface-variant/60 mt-0.5">${timeText}</p>
-                            </div>
-                            ${!notification.is_read ? '<span class="w-2 h-2 rounded-full bg-primary flex-shrink-0 mt-2"></span>' : ''}
-                        </div>
-                    </div>
-                `;
-            });
-
-            container.innerHTML = html;
-        }
-
-        function clearNotifications() {
-            localStorage.setItem('notificationsClearedAt', new Date().toISOString());
-
-            fetch('/admin/notifications/mark-read', { method: 'POST' }).catch(err => {
-                console.error('Error marking notifications as read:', err);
-            });
-
-            const container = document.getElementById('notificationsContent');
-            if (container) {
-                container.innerHTML = `
-                    <div class="p-6 text-center text-on-surface-variant text-sm">
-                        <span class="material-symbols-outlined text-3xl mb-2 block opacity-30">notifications_off</span>
-                        No hay notificaciones recientes
-                    </div>
-                `;
-            }
+            const visibleUnreadCount = filteredNotifications.filter(n => !n.is_read).length;
 
             const badge = document.getElementById('notificationBadge');
             if (badge) {
-                badge.setAttribute('data-count', '0');
-            }
-            previousUnreadCount = 0;
-        }
-
-        async function markAllAsRead() {
-            try {
-                await fetch('/admin/notifications/mark-read', { method: 'POST' });
-                fetchNotifications();
-            } catch (error) {
-                console.error('Error marking notifications as read:', error);
-            }
-        }
-
-        function toggleNotifications() {
-            const dropdown = document.getElementById('notificationDropdown');
-            const isOpening = !dropdown.classList.contains('show');
-            dropdown.classList.toggle('show');
-
-            if (isOpening) {
-                markAllAsRead();
-            }
-        }
-
-        function timeAgo(dateString) {
-            const now = new Date();
-            const date = new Date(dateString);
-            const diffMs = now - date;
-            const diffSeconds = Math.floor(diffMs / 1000);
-            const diffMinutes = Math.floor(diffSeconds / 60);
-            const diffHours = Math.floor(diffMinutes / 60);
-            const diffDays = Math.floor(diffHours / 24);
-
-            if (diffSeconds < 60) return 'Hace unos segundos';
-            if (diffMinutes < 60) return `Hace ${diffMinutes} minuto${diffMinutes > 1 ? 's' : ''}`;
-            if (diffHours < 24) return `Hace ${diffHours} hora${diffHours > 1 ? 's' : ''}`;
-            return `Hace ${diffDays} día${diffDays > 1 ? 's' : ''}`;
-        }
-
-        // =====================
-        // CAMBIAR ROL DE USUARIO
-        // =====================
-        function confirmRoleChange(userId, userName, isAdmin) {
-            currentRoleId = userId;
-            currentRoleIsAdmin = isAdmin;
-
-            const newRole = isAdmin ? 'Cliente' : 'Administrador';
-            document.getElementById('roleModalUser').textContent = userName;
-            document.getElementById('roleModalMessage').textContent = `¿Deseas cambiar el rol de este usuario a ${newRole}? ${!isAdmin ? 'Este usuario tendrá acceso completo al panel de administración.' : 'Este usuario perderá el acceso al panel de administración.'}`;
-            document.getElementById('confirmRoleText').textContent = `Hacer ${newRole}`;
-
-            document.getElementById('roleModal').classList.remove('hidden');
-        }
-
-        function closeRoleModal() {
-            document.getElementById('roleModal').classList.add('hidden');
-            currentRoleId = null;
-        }
-
-        async function toggleUserRole() {
-            if (!currentRoleId) return;
-
-            try {
-                const response = await fetch(`/admin/users/${currentRoleId}/toggle-role`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    const row = document.querySelector(`tr[data-id="${currentRoleId}"]`);
-                    if (row) {
-                        const badgeEl = row.querySelector(`[class*="role-badge-"]`);
-                        if (badgeEl) {
-                            if (data.is_admin) {
-                                badgeEl.className = 'role-badge-' + currentRoleId + ' admin-badge';
-                                badgeEl.textContent = 'Admin';
-                            } else {
-                                badgeEl.className = 'role-badge-' + currentRoleId + ' user-badge';
-                                badgeEl.textContent = 'Cliente';
-                            }
-                        }
-
-                        const roleBtn = row.querySelector('button[onclick*="confirmRoleChange"]');
-                        if (roleBtn) {
-                            const newIsAdmin = data.is_admin;
-                            const userName = row.querySelector('.font-bold').textContent;
-                            roleBtn.setAttribute('onclick', `confirmRoleChange(${currentRoleId}, '${userName}', ${newIsAdmin})`);
-                        }
-                    }
-
-                    closeRoleModal();
-                } else {
-                    alert(data.message || 'Error al cambiar el rol');
-                    closeRoleModal();
+                if (visibleUnreadCount > previousUnreadCount && previousUnreadCount >= 0) {
+                    badge.classList.add('new-notification');
+                    setTimeout(() => badge.classList.remove('new-notification'), 600);
                 }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Error al cambiar el rol del usuario');
+                badge.setAttribute('data-count', visibleUnreadCount);
+                previousUnreadCount = visibleUnreadCount;
+            }
+
+            renderNotifications(filteredNotifications);
+        } catch (error) {
+            console.error('Error fetching notifications:', error);
+        }
+    }
+
+    function renderNotifications(notifications) {
+        const container = document.getElementById('notificationsContent');
+        if (!container) return;
+
+        if (!notifications || notifications.length === 0) {
+            container.innerHTML = `
+                <div class="p-6 text-center text-on-surface-variant text-sm">
+                    <span class="material-symbols-outlined text-3xl mb-2 block opacity-30">notifications_off</span>
+                    No hay notificaciones recientes
+                </div>
+            `;
+            return;
+        }
+
+        let html = '';
+        notifications.forEach(notification => {
+            let icon, color, title;
+
+            switch (notification.type) {
+                case 'product_created':
+                    icon = 'add_circle';
+                    color = 'text-secondary';
+                    title = 'Nuevo producto creado';
+                    break;
+                case 'product_updated':
+                    icon = 'edit';
+                    color = 'text-tertiary';
+                    title = 'Producto actualizado';
+                    break;
+                case 'product_deleted':
+                    icon = 'delete';
+                    color = 'text-error';
+                    title = 'Producto eliminado';
+                    break;
+                case 'user_registered':
+                    icon = 'person_add';
+                    color = 'text-primary';
+                    title = 'Nuevo usuario registrado';
+                    break;
+                case 'user_role_changed':
+                    icon = 'admin_panel_settings';
+                    color = 'text-tertiary';
+                    title = 'Rol de usuario cambiado';
+                    break;
+                case 'user_deleted':
+                    icon = 'person_remove';
+                    color = 'text-error';
+                    title = 'Usuario eliminado';
+                    break;
+                default:
+                    icon = 'info';
+                    color = 'text-on-surface-variant';
+                    title = 'Notificación';
+            }
+
+            const timeText = notification.created_at ? timeAgo(notification.created_at) : '';
+            const unreadClass = notification.is_read ? '' : 'unread';
+
+            html += `
+                <div class="notification-item ${unreadClass}">
+                    <div class="flex items-start gap-3">
+                        <span class="material-symbols-outlined ${color} text-lg mt-0.5">${icon}</span>
+                        <div class="flex-1 min-w-0">
+                            <p class="font-medium text-sm text-on-surface">${title}</p>
+                            <p class="text-xs text-on-surface-variant truncate">${notification.message}</p>
+                            <p class="text-xs text-on-surface-variant/60 mt-0.5">${timeText}</p>
+                        </div>
+                        ${!notification.is_read ? '<span class="w-2 h-2 rounded-full bg-primary flex-shrink-0 mt-2"></span>' : ''}
+                    </div>
+                </div>
+            `;
+        });
+
+        container.innerHTML = html;
+    }
+
+    function clearNotifications() {
+        localStorage.setItem('notificationsClearedAt', new Date().toISOString());
+
+        fetch('/admin/notifications/mark-read', { method: 'POST' }).catch(err => {
+            console.error('Error marking notifications as read:', err);
+        });
+
+        const container = document.getElementById('notificationsContent');
+        if (container) {
+            container.innerHTML = `
+                <div class="p-6 text-center text-on-surface-variant text-sm">
+                    <span class="material-symbols-outlined text-3xl mb-2 block opacity-30">notifications_off</span>
+                    No hay notificaciones recientes
+                </div>
+            `;
+        }
+
+        const badge = document.getElementById('notificationBadge');
+        if (badge) {
+            badge.setAttribute('data-count', '0');
+        }
+        previousUnreadCount = 0;
+    }
+
+    async function markAllAsRead() {
+        try {
+            await fetch('/admin/notifications/mark-read', { method: 'POST' });
+            fetchNotifications();
+        } catch (error) {
+            console.error('Error marking notifications as read:', error);
+        }
+    }
+
+    function toggleNotifications() {
+        const dropdown = document.getElementById('notificationDropdown');
+        const isOpening = !dropdown.classList.contains('show');
+        dropdown.classList.toggle('show');
+
+        if (isOpening) {
+            markAllAsRead();
+        }
+    }
+
+    // =====================
+    // CAMBIAR ROL DE USUARIO (Sincronizado con tu backend real)
+    // =====================
+    function confirmRoleChange(userId, userName, isAdmin) {
+        currentRoleId = userId;
+        currentRoleIsAdmin = isAdmin;
+
+        const newRole = isAdmin ? 'Cliente' : 'Administrador';
+        document.getElementById('roleModalUser').textContent = userName;
+        document.getElementById('roleModalMessage').textContent = `¿Deseas cambiar el rol de este usuario a ${newRole}? ${!isAdmin ? 'Este usuario tendrá acceso completo al panel de administración.' : 'Este usuario perderá el acceso al panel de administración.'}`;
+        document.getElementById('confirmRoleText').textContent = `Hacer ${newRole}`;
+
+        document.getElementById('roleModal').classList.remove('hidden');
+    }
+
+    function closeRoleModal() {
+        document.getElementById('roleModal').classList.add('hidden');
+        currentRoleId = null;
+    }
+
+    async function toggleUserRole() {
+        if (!currentRoleId) return;
+
+        try {
+            // Apunta exactamente a tu endpoint: /admin/users/<user_id>/toggle-role
+            const response = await fetch(`/admin/users/${currentRoleId}/toggle-role`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            const data = await response.json();
+
+            // Tu backend responde con data.success (true/false)
+            if (data.success) {
+                const row = document.querySelector(`tr[data-id="${currentRoleId}"]`);
+                if (row) {
+                    const badgeEl = row.querySelector(`[class*="role-badge-"]`);
+                    // Usamos la propiedad exacta 'is_admin' devuelta por tu backend
+                    const nuevoEstadoAdmin = data.is_admin;
+                    
+                    if (badgeEl) {
+                        if (nuevoEstadoAdmin) {
+                            badgeEl.className = 'role-badge-' + currentRoleId + ' admin-badge';
+                            badgeEl.textContent = 'Admin';
+                        } else {
+                            badgeEl.className = 'role-badge-' + currentRoleId + ' user-badge';
+                            badgeEl.textContent = 'Cliente';
+                        }
+                    }
+
+                    const roleBtn = row.querySelector('button[onclick*="confirmRoleChange"]');
+                    if (roleBtn) {
+                        const userName = row.querySelector('.font-bold').textContent;
+                        roleBtn.setAttribute('onclick', `confirmRoleChange(${currentRoleId}, '${userName}', ${nuevoEstadoAdmin})`);
+                    }
+                }
+
+                closeRoleModal();
+            } else {
+                alert(data.message || 'Error al cambiar el rol');
                 closeRoleModal();
             }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error al cambiar el rol del usuario');
+            closeRoleModal();
         }
+    }
 
-        // =====================
-        // ELIMINAR USUARIO
-        // =====================
-        function confirmDeleteUser(userId, userName) {
-            currentDeleteUserId = userId;
-            document.getElementById('deleteUserModalName').textContent = userName;
-            document.getElementById('deleteUserModal').classList.remove('hidden');
-        }
+    // =====================
+    // ELIMINAR USUARIO (Sincronizado con tu backend real)
+    // =====================
+    function confirmDeleteUser(userId, userName) {
+        currentDeleteUserId = userId;
+        document.getElementById('deleteUserModalName').textContent = userName;
+        document.getElementById('deleteUserModal').classList.remove('hidden');
+    }
 
-        function closeDeleteUserModal() {
-            document.getElementById('deleteUserModal').classList.add('hidden');
-            currentDeleteUserId = null;
-        }
+    function closeDeleteUserModal() {
+        document.getElementById('deleteUserModal').classList.add('hidden');
+        currentDeleteUserId = null;
+    }
 
-        async function deleteUser() {
-            if (!currentDeleteUserId) return;
+    async function deleteUser() {
+        if (!currentDeleteUserId) return;
 
-            try {
-                const response = await fetch(`/admin/users/${currentDeleteUserId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    const row = document.querySelector(`tr[data-id="${currentDeleteUserId}"]`);
-                    if (row) {
-                        row.style.transition = 'opacity 0.3s, transform 0.3s';
-                        row.style.opacity = '0';
-                        row.style.transform = 'translateX(20px)';
-                        setTimeout(() => row.remove(), 300);
-                    }
-
-                    const counter = document.querySelector('.text-xs.font-bold.text-primary');
-                    if (counter) {
-                        const currentCount = parseInt(counter.textContent);
-                        counter.textContent = `${currentCount - 1}`;
-                    }
-
-                    closeDeleteUserModal();
-                } else {
-                    alert(data.message || 'Error al eliminar el usuario');
-                    closeDeleteUserModal();
+        try {
+            // Apunta exactamente a tu endpoint con método DELETE: /admin/users/<user_id>
+            const response = await fetch(`/admin/users/${currentDeleteUserId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
                 }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Error al eliminar el usuario');
+            });
+
+            const data = await response.json();
+
+            // Tu backend responde con data.success
+            if (data.success) {
+                const row = document.querySelector(`tr[data-id="${currentDeleteUserId}"]`);
+                if (row) {
+                    row.style.transition = 'opacity 0.3s, transform 0.3s';
+                    row.style.opacity = '0';
+                    row.style.transform = 'translateX(20px)';
+                    setTimeout(() => row.remove(), 300);
+                }
+
+                const counter = document.querySelector('.text-xs.font-bold.text-primary');
+                if (counter) {
+                    const currentCount = parseInt(counter.textContent);
+                    counter.textContent = `${currentCount - 1}`;
+                }
+
+                closeDeleteUserModal();
+            } else {
+                alert(data.message || 'Error al eliminar el usuario');
                 closeDeleteUserModal();
             }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error al eliminar el usuario');
+            closeDeleteUserModal();
         }
+    }
 
-        // =====================
-        // BÚSQUEDA DE USUARIOS
-        // =====================
-        function searchUsers() {
-            const searchTerm = document.getElementById('userSearchInput').value.toLowerCase();
-            const rows = document.querySelectorAll('.user-row');
+    // =====================
+    // BÚSQUEDA DE USUARIOS
+    // =====================
+    function searchUsers() {
+        const searchTerm = document.getElementById('userSearchInput').value.toLowerCase().trim();
+        const rows = document.querySelectorAll('.user-row');
 
-            rows.forEach(row => {
-                const name = row.getAttribute('data-name');
-                const email = row.getAttribute('data-email');
-                const shouldShow = name.includes(searchTerm) || email.includes(searchTerm);
-                row.style.display = shouldShow ? '' : 'none';
-            });
+        rows.forEach(row => {
+            const name = row.getAttribute('data-name') || '';
+            const email = row.getAttribute('data-email') || '';
+            const shouldShow = name.includes(searchTerm) || email.includes(searchTerm);
+            row.style.display = shouldShow ? '' : 'none';
+        });
+    }
+
+    function timeAgo(dateString) {
+        const now = new Date();
+        const date = new Date(dateString);
+        const diffMs = now - date;
+        const diffSeconds = Math.floor(diffMs / 1000);
+        const diffMinutes = Math.floor(diffSeconds / 60);
+        const diffHours = Math.floor(diffMinutes / 60);
+        const diffDays = Math.floor(diffHours / 24);
+
+        if (diffSeconds < 60) return 'Hace unos segundos';
+        if (diffMinutes < 60) return `Hace ${diffMinutes} minuto${diffMinutes > 1 ? 's' : ''}`;
+        if (diffHours < 24) return `Hace ${diffHours} hora${diffHours > 1 ? 's' : ''}`;
+        return `Hace ${diffDays} día${diffDays > 1 ? 's' : ''}`;
+    }
+
+    // =====================
+    // EVENT LISTENERS
+    // =====================
+    document.getElementById('confirmRoleBtn').addEventListener('click', toggleUserRole);
+    document.getElementById('confirmDeleteUserBtn').addEventListener('click', deleteUser);
+
+    document.getElementById('roleModal').addEventListener('click', function(e) {
+        if (e.target === this) closeRoleModal();
+    });
+
+    document.getElementById('deleteUserModal').addEventListener('click', function(e) {
+        if (e.target === this) closeDeleteUserModal();
+    });
+
+    document.addEventListener('click', function(e) {
+        const dropdown = document.getElementById('notificationDropdown');
+        const badge = document.getElementById('notificationBadge');
+
+        if (dropdown && badge && !dropdown.contains(e.target) && !badge.contains(e.target)) {
+            dropdown.classList.remove('show');
         }
-
-        // =====================
-        // EVENT LISTENERS
-        // =====================
-        document.getElementById('confirmRoleBtn').addEventListener('click', toggleUserRole);
-        document.getElementById('confirmDeleteUserBtn').addEventListener('click', deleteUser);
-
-        document.getElementById('roleModal').addEventListener('click', function(e) {
-            if (e.target === this) closeRoleModal();
-        });
-
-        document.getElementById('deleteUserModal').addEventListener('click', function(e) {
-            if (e.target === this) closeDeleteUserModal();
-        });
-
-        document.addEventListener('click', function(e) {
-            const dropdown = document.getElementById('notificationDropdown');
-            const badge = document.getElementById('notificationBadge');
-
-            if (dropdown && badge && !dropdown.contains(e.target) && !badge.contains(e.target)) {
-                dropdown.classList.remove('show');
-            }
-        });
-    </script>
+    });
+</script>
 </body>
 </html>

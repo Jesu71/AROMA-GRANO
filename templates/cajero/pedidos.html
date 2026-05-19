@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Bean & Brew - Cajero</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body class="bg-stone-50 text-stone-900 font-['Public_Sans'] min-h-screen">
+
+    <aside class="fixed left-0 top-0 bottom-0 w-64 z-50 flex flex-col p-4 bg-white border-r border-stone-200">
+        <div class="flex items-center gap-3 mb-8 px-2">
+            <div class="w-10 h-10 rounded-full bg-orange-800 flex items-center justify-center text-white">
+                <span class="material-symbols-outlined">coffee</span>
+            </div>
+            <div>
+                <h1 class="font-['Be_Vietnam_Pro'] text-xl font-bold text-orange-800">Bean & Brew</h1>
+                <p class="text-[10px] uppercase tracking-widest text-stone-500 font-bold">Terminal Cajero</p>
+            </div>
+        </div>
+        <nav class="flex-1 space-y-1">
+            <a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-orange-50 text-amber-900 font-semibold shadow-sm transition-all" href="{{ url_for('cajero_pedidos') }}">
+                <span class="material-symbols-outlined text-amber-700">shopping_cart</span>
+                <span class="text-sm">Gestión de Pedidos</span>
+            </a>
+        </nav>
+        <div class="mt-auto pt-6 border-t border-stone-200">
+            <div class="flex items-center gap-3 px-4">
+                <div class="w-10 h-10 rounded-full bg-stone-200 flex items-center justify-center font-bold text-stone-700">CJ</div>
+                <div>
+                    <p class="text-xs font-bold truncate">{{ session.get('full_name', 'Cajero') }}</p>
+                    <p class="text-[10px] text-stone-500">Operador Principal</p>
+                </div>
+            </div>
+            <a href="/logout" class="flex items-center gap-3 px-4 py-2.5 text-red-600 hover:bg-red-50 rounded-full transition-all text-sm font-semibold mx-2">
+            <span class="material-symbols-outlined text-red-500">logout</span>
+            Cerrar Sesión
+        </a>
+        </div>
+    </aside>
+
+    <main class="ml-64 min-h-screen p-8 bg-stone-50/50">
+        <header class="fixed top-0 right-0 left-0 z-40 flex items-center justify-between px-8 py-4 ml-64 bg-white/90 backdrop-blur-md border-b border-stone-200 shadow-sm">
+            <div class="flex items-center gap-8">
+                <h2 class="font-['Be_Vietnam_Pro'] text-3xl font-bold text-orange-800">Gestión de Pedidos</h2>
+                <div class="relative group">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-stone-400">search</span>
+                    <input class="pl-10 pr-4 py-2 bg-stone-100 border-none rounded-full text-sm w-64 focus:ring-2 focus:ring-orange-800/20 outline-none transition-all" placeholder="Buscar pedidos..." type="text"/>
+                </div>
+            </div>
+        </header>
+
+        <div class="mt-20">
+            <div class="flex gap-2 mb-6">
+                <button class="px-4 py-2 bg-orange-800 text-white text-xs font-bold rounded-full">Todo</button>
+                <button class="px-4 py-2 bg-stone-200/60 text-stone-700 text-xs font-bold rounded-full hover:bg-stone-200">Preparando</button>
+                <button class="px-4 py-2 bg-stone-200/60 text-stone-700 text-xs font-bold rounded-full hover:bg-stone-200">Completado</button>
+                <button class="px-4 py-2 bg-stone-200/60 text-stone-700 text-xs font-bold rounded-full hover:bg-stone-200">Cancelado</button>
+            </div>
+
+            <div class="space-y-4 mb-10">
+                {% for pedido in pedidos %}
+                <div class="bg-white p-6 rounded-2xl border border-stone-100 shadow-sm flex items-center justify-between transition-all hover:shadow-md" id="row-{{ pedido.id }}">
+                    <div class="flex items-center gap-6">
+                        <div class="text-center shrink-0">
+                            <span class="text-[10px] font-bold text-stone-400 block uppercase">ORDER</span>
+                            <span class="text-lg font-bold text-orange-800">#{{ pedido.id }}</span>
+                        </div>
+                        <div>
+                            <h5 class="font-bold text-stone-800 text-sm">Ítem ID: {{ pedido.producto_id }}</h5>
+                            <p class="text-xs text-stone-500 mt-1">Cantidad: {{ pedido.cantidad }} u. • Categoría: {{ pedido.categoria }}</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-8">
+                        <div class="text-right">
+                            <span class="text-[10px] font-bold text-stone-400 block uppercase">Monto Total</span>
+                            <span class="font-bold text-stone-800">$ {{ "{:,.0f}".format(pedido.total_pago) }} COP</span>
+                        </div>
+
+                        <div>
+                            {% if pedido.estado == 'Confirmada' %}
+                                <span class="px-3 py-1 bg-blue-50 text-blue-700 text-[10px] font-bold uppercase tracking-wider rounded-full border border-blue-200" id="badge-{{ pedido.id }}">Confirmada</span>
+                            {% elif pedido.estado == 'En Preparación' %}
+                                <span class="px-3 py-1 bg-amber-50 text-amber-700 text-[10px] font-bold uppercase tracking-wider rounded-full border border-amber-200" id="badge-{{ pedido.id }}">En Preparación</span>
+                            {% elif pedido.estado == 'Listo para Recoger' %}
+                                <span class="px-3 py-1 bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase tracking-wider rounded-full border border-emerald-200" id="badge-{{ pedido.id }}">Listo para Recoger</span>
+                            {% elif pedido.estado == 'Entregada' %}
+                                <span class="px-3 py-1 bg-purple-50 text-purple-700 text-[10px] font-bold uppercase tracking-wider rounded-full border border-purple-200" id="badge-{{ pedido.id }}">Entregada</span>
+                            {% else %}
+                                <span class="px-3 py-1 bg-stone-100 text-stone-600 text-[10px] font-bold uppercase tracking-wider rounded-full border border-stone-200" id="badge-{{ pedido.id }}">{{ pedido.estado }}</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="relative">
+                            <select onchange="cambiarEstado('{{ pedido.id }}', this.value)" class="text-xs bg-stone-50 border border-stone-200 rounded-lg p-2 text-stone-700 font-medium outline-none focus:ring-2 focus:ring-orange-800/20 cursor-pointer">
+                                <option value="Confirmada" {% if pedido.estado == 'Confirmada' %}selected{% endif %}>Confirmada</option>
+                                <option value="En Preparación" {% if pedido.estado == 'En Preparación' %}selected{% endif %}>En Preparación</option>
+                                <option value="Listo para Recoger" {% if pedido.estado == 'Listo para Recoger' %}selected{% endif %}>Listo para Recoger</option>
+                                <option value="Entregada" {% if pedido.estado == 'Entregada' %}selected{% endif %}>Entregada</option>
+                                <option value="Cancelado" {% if pedido.estado == 'Cancelado' %}selected{% endif %}>Cancelado</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="grid grid-cols-3 gap-6">
+                <div class="bg-orange-950 text-white p-6 rounded-2xl shadow-md">
+                    <p class="text-[10px] uppercase font-bold text-white/60 tracking-wider">Ingresos Hoy</p>
+                    <p class="text-3xl font-bold mt-1">$ {{ "{:,.0f}".format(metrics.ingresos_hoy) }} COP</p>
+                </div>
+                <div class="bg-emerald-600 text-white p-6 rounded-2xl shadow-md">
+                    <p class="text-[10px] uppercase font-bold text-white/60 tracking-wider">Órdenes Activas</p>
+                    <p class="text-3xl font-bold mt-1">{{ metrics.ordenes_activas }}</p>
+                </div>
+                <div class="bg-amber-500 text-white p-6 rounded-2xl shadow-md">
+                    <p class="text-[10px] uppercase font-bold text-white/60 tracking-wider">Pico de Demanda</p>
+                    <p class="text-3xl font-bold mt-1">{{ metrics.pico_demanda }}</p>
+                </div>
+            </div>

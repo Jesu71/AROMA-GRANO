@@ -99,7 +99,7 @@
 <span class="material-symbols-outlined">coffee</span>
 </div>
 <div>
-<h1 class="font-display text-2xl font-bold text-orange-800">Bean &amp; Brew</h1>
+<h1 class="font-display text-2xl font-bold text-orange-800">Café &amp; Grano</h1>
 <p class="text-xs text-stone-500 font-medium uppercase tracking-wider">Coffee Shop Admin</p>
 </div>
 </div>
@@ -107,19 +107,14 @@
 <!-- Active: Menu Management -->
 <a class="flex items-center gap-3 px-4 py-3 bg-orange-100 text-orange-800 rounded-full font-bold transition-all hover:translate-x-1 duration-200" href="#">
 <span class="material-symbols-outlined" data-icon="restaurant_menu">restaurant_menu</span>
-<span class="text-sm">Menu Management</span>
+<span class="text-sm">Gestión de Menú</span>
+<a href="{{ url_for('admin_users') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-stone-600 hover:bg-orange-50/50 hover:text-amber-900 transition-all">
+    <span class="material-symbols-outlined">group</span>
+    <span>Usuarios</span>
 </a>
-<a class="flex items-center gap-3 px-4 py-3 text-stone-600 hover:text-orange-700 hover:bg-orange-50 rounded-full transition-all hover:translate-x-1 duration-200" href="#">
-<span class="material-symbols-outlined" data-icon="database">database</span>
-<span class="text-sm">Database</span>
-</a>
-<a class="flex items-center gap-3 px-4 py-3 text-stone-600 hover:text-orange-700 hover:bg-orange-50 rounded-full transition-all hover:translate-x-1 duration-200" href="#">
-<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
-<span class="text-sm">Orders</span>
-</a>
-<a class="flex items-center gap-3 px-4 py-3 text-stone-600 hover:text-orange-700 hover:bg-orange-50 rounded-full transition-all hover:translate-x-1 duration-200" href="/analiticas.html">
-<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
-<span class="text-sm">Analiticas</span>
+<a href="{{ url_for('admin_analiticas') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-stone-600 hover:bg-orange-50/50 hover:text-amber-900 transition-all group">
+    <span class="material-symbols-outlined text-stone-400 group-hover:text-amber-700 transition-colors">insert_chart</span>
+    <span class="font-medium text-sm">Analíticas</span>
 </a>
 </nav>
 <div class="mt-auto p-4 rounded-xl bg-surface-container-low">
@@ -130,7 +125,10 @@
 <p class="text-xs text-on-surface-variant">Session active</p>
 </div>
 </div>
-<button class="w-full py-2 text-xs font-bold text-error bg-error/10 rounded-full hover:bg-error hover:text-white transition-colors">Logout</button>
+<a href="/logout" class="flex items-center gap-3 px-4 py-2.5 text-red-600 hover:bg-red-50 rounded-full transition-all text-sm font-semibold mx-2">
+            <span class="material-symbols-outlined text-red-500">logout</span>
+            Cerrar Sesión
+        </a>
 </div>
 </aside>
 <!-- TopNavBar (Authority: JSON) -->
@@ -159,28 +157,28 @@
 <h2 class="font-headline text-5xl text-primary mb-2">Gestión del Menú</h2>
 <p class="text-on-surface-variant max-w-md">Administra el inventario de bebidas, ajusta precios en tiempo real y actualiza las categorías de Aroma &amp; Grano.</p>
 </div>
-<button class="flex items-center gap-2 px-6 py-3 bg-primary text-on-primary rounded-full font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
-<span class="material-symbols-outlined">add</span>
+<button onclick="abrirModal()" class="bg-[#783e1e] hover:bg-[#613218] text-white font-bold text-xs uppercase tracking-wider px-6 py-3 rounded-full flex items-center gap-2 shadow-sm border border-[#613218]/10 transition-all active:scale-95 duration-200">
+<span class="material-symbols-outlined text-sm">add_circle</span>
 <span>Nuevo Producto</span>
 </button>
 </div>
 <!-- Dashboard Stats Grid -->
 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
 <div class="bg-surface-container-low p-6 rounded-lg border border-surface-variant flex flex-col gap-1">
-<span class="text-xs font-bold uppercase tracking-widest text-primary-dim">Total Items</span>
-<span class="text-3xl font-display font-black">42</span>
+    <span class="text-xs font-bold uppercase tracking-widest text-primary-dim">Total Items</span>
+    <span class="text-3xl font-display font-black">{{ total_items }}</span>
 </div>
 <div class="bg-surface-container-low p-6 rounded-lg border border-surface-variant flex flex-col gap-1">
-<span class="text-xs font-bold uppercase tracking-widest text-secondary-dim">Más Vendido</span>
-<span class="text-3xl font-display font-black">Latte</span>
+    <span class="text-xs font-bold uppercase tracking-widest text-secondary-dim">Más Vendido</span>
+    <span class="text-3xl font-display font-black">{{ mas_vendido }}</span>
 </div>
 <div class="bg-surface-container-low p-6 rounded-lg border border-surface-variant flex flex-col gap-1">
-<span class="text-xs font-bold uppercase tracking-widest text-tertiary-dim">Categorías</span>
-<span class="text-3xl font-display font-black">6</span>
+    <span class="text-xs font-bold uppercase tracking-widest text-tertiary-dim">Categorías</span>
+    <span class="text-3xl font-display font-black">{{ categorias }}</span>
 </div>
 <div class="bg-surface-container-low p-6 rounded-lg border border-surface-variant flex flex-col gap-1">
-<span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Disponibilidad</span>
-<span class="text-3xl font-display font-black">94%</span>
+    <span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Disponibilidad</span>
+    <span class="text-3xl font-display font-black">{{ disponibilidad }}%</span>
 </div>
 </div>
 <!-- Bento Menu Management Layout -->
@@ -199,154 +197,217 @@
 </div>
 </div>
 <div class="overflow-x-auto">
-<table class="w-full text-left">
-<thead>
-<tr class="text-xs font-bold uppercase tracking-wider text-on-surface-variant bg-stone-50">
-<th class="px-6 py-4">Producto</th>
-<th class="px-6 py-4 text-right">Precio ($ COP)</th>
-<th class="px-6 py-4">Categoría</th>
-<th class="px-6 py-4">Estado</th>
-<th class="px-6 py-4 text-center">Acciones</th>
-</tr>
+<table class="min-w-full divide-y divide-stone-200">
+<thead class="bg-stone-50">
+    <tr>
+    <th scope="col" class="px-6 py-3 text-left text-xs font-bold uppercase tracking-widest text-stone-500">Producto</th>
+    <th scope="col" class="px-6 py-3 text-right text-xs font-bold uppercase tracking-widest text-stone-500">Precio</th>
+    <th scope="col" class="px-6 py-3 text-left text-xs font-bold uppercase tracking-widest text-stone-500">Categoría</th>
+    <th scope="col" class="px-6 py-3 text-left text-xs font-bold uppercase tracking-widest text-stone-500">Stock</th>
+    <th scope="col" class="px-6 py-3 text-center text-xs font-bold uppercase tracking-widest text-stone-500">Acciones</th>
+    </tr>
 </thead>
-<tbody class="divide-y divide-stone-100">
-<!-- Row 1 -->
-<tr class="hover:bg-orange-50/30 transition-colors group">
-<td class="px-6 py-4">
-<div class="flex items-center gap-3">
-<img class="w-12 h-12 rounded-full object-cover" data-alt="close-up of a perfectly crafted caffe latte with heart-shaped foam art in a ceramic white cup" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmIgkSdUy23S3v4uiPiX-ZivoUZUXTCrqcJk9Gwp1g63KWMr819TlFC5O8buahmZn1GR9I-oFBsVc94m8a1MrPH9pfdSxX5R97za74ApKSYqe0GHJWigpk9Qkk3HculatlqMgY7hTuM_H6irtnPzCUvwyRUxvA3NKT-WvYhRrjpvFRjVuLZIqH8xFDawkZkg37DQ0KbIIf9_DWMhEqjagHa7qaXbMuYHb2wwDCndLWRI2i4GvxM_rVHRJI9kW0pD3ZeGdbhoYHoXw"/>
-<div>
-<p class="font-bold text-on-surface">Latte</p>
-<p class="text-xs text-on-surface-variant">Smooth &amp; Creamy</p>
-</div>
-</div>
-</td>
-<td class="px-6 py-4 text-right font-display font-bold text-primary">
-                                        $ 8.500
-                                    </td>
-<td class="px-6 py-4">
-<span class="px-3 py-1 bg-surface-container rounded-full text-xs font-medium">Caliente</span>
-</td>
-<td class="px-6 py-4">
-<div class="flex items-center gap-1.5 text-secondary font-bold text-xs">
-<span class="w-2 h-2 rounded-full bg-secondary"></span>
-                                            Activo
-                                        </div>
-</td>
-<td class="px-6 py-4">
+
+<tbody class="divide-y divide-stone-100 bg-white">
+    {% for prod in productos %}
+    <tr class="hover:bg-orange-50/30 transition-colors group">
+    <td class="px-6 py-4 whitespace-nowrap">
+        <div class="flex items-center gap-3">
+        <img class="w-12 h-12 rounded-full object-cover border border-stone-200 shadow-sm" src="{{ prod.image_url }}" alt="{{ prod.name }}"/>
+        <p class="font-bold text-stone-800">{{ prod.name }}</p>
+        </div>
+    </td>
+
+    <td class="px-6 py-4 whitespace-nowrap text-right font-display font-bold text-amber-700">
+        $ {{ "{:,.0f}".format(prod.price).replace(",", ".") }}
+    </td>
+
+    <td class="px-6 py-4 whitespace-nowrap">
+        {% if prod.category and prod.category.lower() in ['frío', 'cold brew', 'iced'] %}
+        <span class="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">{{ prod.category }}</span>
+        {% else %}
+        <span class="px-3 py-1 bg-stone-100 text-stone-700 rounded-full text-xs font-medium">{{ prod.category }}</span>
+        {% endif %}
+    </td>
+
+    <td class="px-6 py-4 whitespace-nowrap">
+        <input 
+        type="number" 
+        value="{{ prod.stock if prod.stock is not none else 0 }}" 
+        min="0"
+        class="w-20 px-2 py-1 text-center font-semibold bg-stone-50 border border-stone-200 rounded focus:bg-white focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
+        onchange="actualizarStock('{{ prod.id }}', this.value)"
+        />
+    </td>
+    <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
 <div class="flex items-center justify-center gap-2">
-<button class="p-2 text-primary hover:bg-primary/10 rounded-full transition-colors" title="Editar">
-<span class="material-symbols-outlined text-sm">edit</span>
+<button type="button" 
+        class="p-2 text-amber-600 hover:bg-amber-50 rounded-full transition-colors btn-editar" 
+        data-id="{{ prod.id }}"
+        data-name="{{ prod.name }}"
+        data-price="{{ prod.price }}"
+        data-category="{{ prod.category }}"
+        data-stock="{{ prod.stock if prod.stock is not none else 0 }}"
+        data-image="{{ prod.image_url }}"
+        data-description="{{ prod.description if prod.description else '' }}"
+        title="Editar">
+  <span class="material-symbols-outlined text-sm">edit</span>
 </button>
-<button class="p-2 text-error hover:bg-error/10 rounded-full transition-colors" title="Eliminar">
-<span class="material-symbols-outlined text-sm">delete</span>
-</button>
+    
+    <button type="button" 
+            onclick="eliminarProducto('{{ prod.id }}', this)" 
+            class="p-2 text-red-600 hover:bg-red-50 rounded-full transition-colors" 
+            title="Eliminar">
+    <span class="material-symbols-outlined text-sm">delete</span>
+    </button>
 </div>
 </td>
-</tr>
-<!-- Row 2 -->
-<tr class="hover:bg-orange-50/30 transition-colors group">
-<td class="px-6 py-4">
-<div class="flex items-center gap-3">
-<img class="w-12 h-12 rounded-full object-cover" data-alt="a rich dark espresso shot with golden crema in a small glass cup on a wooden table" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhkWNzSQ8j6RLyHb32NDeqCxvYUzb5nPdlXOXDHePiqsjId_3GG556yEYI9FUImrQd18nfHsZnCecOnB_5FBWtfudh5R54Zu8XBpnKvIHtuXs_pcOm1PRvyIe_Xl7zN0kuiGXzlrsikQhijyXnS65_aZMcNaqEC-2f-EsLG_n_0yxm_C4bC_q1JIh_LEJFMwYaJJSwIBfhEn8Jp8QMGtgzcwARHj9gXXMd497lsmXmCx0hsdQuCobrXfzwnzNUl014QRM7G5K-j2I"/>
-<div>
-<p class="font-bold text-on-surface">Espresso</p>
-<p class="text-xs text-on-surface-variant">Rich &amp; Intense</p>
-</div>
-</div>
-</td>
-<td class="px-6 py-4 text-right font-display font-bold text-primary">
-                                        $ 4.800
-                                    </td>
-<td class="px-6 py-4">
-<span class="px-3 py-1 bg-surface-container rounded-full text-xs font-medium">Caliente</span>
-</td>
-<td class="px-6 py-4">
-<div class="flex items-center gap-1.5 text-secondary font-bold text-xs">
-<span class="w-2 h-2 rounded-full bg-secondary"></span>
-                                            Activo
-                                        </div>
-</td>
-<td class="px-6 py-4">
-<div class="flex items-center justify-center gap-2">
-<button class="p-2 text-primary hover:bg-primary/10 rounded-full transition-colors">
-<span class="material-symbols-outlined text-sm">edit</span>
-</button>
-<button class="p-2 text-error hover:bg-error/10 rounded-full transition-colors">
-<span class="material-symbols-outlined text-sm">delete</span>
-</button>
-</div>
-</td>
-</tr>
-<!-- Row 3 -->
-<tr class="hover:bg-orange-50/30 transition-colors group">
-<td class="px-6 py-4">
-<div class="flex items-center gap-3">
-<img class="w-12 h-12 rounded-full object-cover" data-alt="foamy cappuccino in a brown ceramic mug with chocolate sprinkles on top sitting on a rustic saucer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYS4p7Qg8PgLtLDt8BtMifXM__yuwCF7tfLFo04eId5-r5a7Iz-69iD8eCgr8GFfURWbjj3Id0Q-jmBnGyPkJUColidyZre2O8uYVCoR13puEG58fVmo49U4z58OihLAi3hizFqeHpyZCNwEqFEtMqPFhhy8q2QYSoLMKYY_45qR2oG0M1LNgeC0kEllF35B1qWSklYgnsdegYpCYYGPnpTkXFGU1wuvuypiBVjWm0ic7ju0DXxniY25OE-xLYuXKho9e2zGYcDKw"/>
-<div>
-<p class="font-bold text-on-surface">Cappuccino</p>
-<p class="text-xs text-on-surface-variant">Classic Italian</p>
-</div>
-</div>
-</td>
-<td class="px-6 py-4 text-right font-display font-bold text-primary">
-                                        $ 7.900
-                                    </td>
-<td class="px-6 py-4">
-<span class="px-3 py-1 bg-surface-container rounded-full text-xs font-medium">Caliente</span>
-</td>
-<td class="px-6 py-4">
-<div class="flex items-center gap-1.5 text-secondary font-bold text-xs">
-<span class="w-2 h-2 rounded-full bg-secondary"></span>
-                                            Activo
-                                        </div>
-</td>
-<td class="px-6 py-4">
-<div class="flex items-center justify-center gap-2">
-<button class="p-2 text-primary hover:bg-primary/10 rounded-full transition-colors">
-<span class="material-symbols-outlined text-sm">edit</span>
-</button>
-<button class="p-2 text-error hover:bg-error/10 rounded-full transition-colors">
-<span class="material-symbols-outlined text-sm">delete</span>
-</button>
-</div>
-</td>
-</tr>
-<!-- Row 4 -->
-<tr class="hover:bg-orange-50/30 transition-colors group">
-<td class="px-6 py-4">
-<div class="flex items-center gap-3">
-<img class="w-12 h-12 rounded-full object-cover" data-alt="iced americano with melting ice cubes and dark espresso swirls in a tall clear glass on a sunlit table" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6VRb713G5NVjxg391IQ7htuRuH9B1iqPOc-diPn69_3oaSypgjD_JBXJpAnu30zvM6Mi1YadsxLu4Ecfie1babYvhBYw5FNKc82kVWDbB6f6HjQKEieTdN2qgvSGQJETAvXjxJQKa0csR3JYyejmJE1V9w_Lpa1L8_WZAQylF60cE4yfsv4N4XN8wY59JMyoJOGqKQyvj2o7Xgm29k4iQpMHdTq5-goa2HzwZIr1ekYFJfqh43yjmdCHO9Vn9SEtTLLTAWt95XZg"/>
-<div>
-<p class="font-bold text-on-surface">Americano Frío</p>
-<p class="text-xs text-on-surface-variant">Refreshing</p>
-</div>
-</div>
-</td>
-<td class="px-6 py-4 text-right font-display font-bold text-primary">
-                                        $ 6.500
-                                    </td>
-<td class="px-6 py-4">
-<span class="px-3 py-1 bg-secondary-container rounded-full text-xs font-medium text-on-secondary-container">Frío</span>
-</td>
-<td class="px-6 py-4">
-<div class="flex items-center gap-1.5 text-tertiary font-bold text-xs">
-<span class="w-2 h-2 rounded-full bg-tertiary"></span>
-                                            Bajo Stock
-                                        </div>
-</td>
-<td class="px-6 py-4">
-<div class="flex items-center justify-center gap-2">
-<button class="p-2 text-primary hover:bg-primary/10 rounded-full transition-colors">
-<span class="material-symbols-outlined text-sm">edit</span>
-</button>
-<button class="p-2 text-error hover:bg-error/10 rounded-full transition-colors">
-<span class="material-symbols-outlined text-sm">delete</span>
-</button>
-</div>
-</td>
-</tr>
+    </tr>
+    {% else %}
+    <tr>
+    <td colspan="5" class="px-6 py-10 text-center text-sm text-stone-400">
+        No se encontraron productos registrados en la base de datos.
+    </td>
+    </tr>
+    {% endfor %}
 </tbody>
+</table>
+
+<script>
+function actualizarStock(productoId, nuevoStock) {
+    fetch('/admin/actualizar-stock', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            id: productoId,
+            stock: parseInt(nuevoStock)
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status !== 'success') {
+            alert('Error al actualizar el stock en la base de datos.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Ocurrió un error en la conexión.');
+    });
+}
+function abrirModal() {
+    document.getElementById('modalNuevoProducto').classList.remove('hidden');
+}
+
+function cerrarModal() {
+    document.getElementById('modalNuevoProducto').classList.add('hidden');
+}
+// Función para ELIMINAR mediante AJAX
+function eliminarProducto(productoId, botonElemento) {
+    if (confirm('¿Estás seguro de que deseas eliminar este producto de la base de datos?')) {
+        fetch(`/admin/eliminar-producto/${productoId}`, {
+            method: 'POST'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                // Borra la fila de la tabla inmediatamente sin recargar la página
+                const fila = botonElemento.closest('tr');
+                fila.remove();
+            } else {
+                alert('Error al eliminar el producto de Supabase.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error de conexión al intentar eliminar.');
+        });
+    }
+}
+document.addEventListener('click', function(event) {
+    const boton = event.target.closest('.btn-editar');
+    if (!boton) return; // Si no hicieron clic en el lápiz, no hace nada
+
+    // 1. Extraer los datos guardados en el botón sin problemas de comillas
+    const id = boton.getAttribute('data-id');
+    const name = boton.getAttribute('data-name');
+    const price = boton.getAttribute('data-price');
+    const category = boton.getAttribute('data-category');
+    const stock = boton.getAttribute('data-stock');
+    const imageUrl = boton.getAttribute('data-image');
+    const description = boton.getAttribute('data-description');
+
+    // 2. Ajustar los textos del modal para que entre en modo "Editar"
+    document.querySelector('#modalNuevoProducto h2').innerText = 'Editar Producto';
+    document.getElementById('formProducto').action = '/admin/actualizar-producto';
+    
+    // 3. Rellenar los inputs del formulario usando el atributo 'name' que ya tienen
+    document.getElementById('producto_id').value = id;
+    document.getElementsByName('name')[0].value = name;
+    document.getElementsByName('price')[0].value = price;
+    document.getElementsByName('category')[0].value = category;
+    document.getElementsByName('stock')[0].value = stock;
+    document.getElementsByName('image_url')[0].value = imageUrl;
+    document.getElementsByName('description')[0].value = description;
+    
+    // 4. Mostrar el modal en la pantalla
+    document.getElementById('modalNuevoProducto').classList.remove('hidden');
+});
+
+// Función para abrir el modal en modo EDICIÓN y cargar los datos
+function abrirModalEditar(id, name, price, category, stock, imageUrl, description) {
+    // 1. Cambiar los textos del modal para que digan "Editar"
+    document.querySelector('#modalNuevoProducto h2').innerText = 'Editar Producto';
+    document.querySelector('#modalNuevoProducto span.text-amber-800').innerText = 'Editar';
+    
+    // 2. Cambiar la acción del formulario hacia la ruta de actualizar
+    document.getElementById('formProducto').action = '/admin/actualizar-producto';
+    
+    // 3. Rellenar los campos con los valores reales del café seleccionado
+    document.getElementById('producto_id').value = id;
+    document.getElementsByName('name')[0].value = name;
+    document.getElementsByName('price')[0].value = price;
+    document.getElementsByName('category')[0].value = category;
+    document.getElementsByName('stock')[0].value = stock;
+    document.getElementsByName('image_url')[0].value = imageUrl;
+    document.getElementsByName('description')[0].value = description === 'None' ? '' : description;
+    
+    // 4. Mostrar el modal
+    document.getElementById('modalNuevoProducto').classList.remove('hidden');
+}
+
+// Modificamos tu función vieja de cerrar para que limpie el formulario por si vuelven a pulsar "+ Nuevo"
+function cerrarModal() {
+    document.getElementById('modalNuevoProducto').classList.add('hidden');
+    // Restablecer el formulario a su estado original de "Nuevo"
+    document.getElementById('formProducto').reset();
+    document.getElementById('producto_id').value = '';
+    document.getElementById('formProducto').action = '/admin/nuevo-producto';
+    document.querySelector('#modalNuevoProducto h2').innerText = 'Añadir Nuevo Producto';
+    document.querySelector('#modalNuevoProducto span.text-amber-800').innerText = 'Nuevo';
+}
+function filtrarPorCategoriaRapida(categoriaSeleccionada) {
+    // Busca todas las filas de productos en la tabla
+    const filas = document.querySelectorAll('.divide-y tr.hover\\:bg-orange-50\\/30');
+
+    filas.forEach(fila => {
+        // Obtenemos el botón de editar interno para leer el atributo 'data-category' de forma segura
+        const botonEditar = fila.querySelector('.btn-editar');
+        if (!botonEditar) return;
+
+        const catProducto = botonEditar.getAttribute('data-category').toLowerCase().trim();
+        const seleccion = categoriaSeleccionada.toLowerCase().trim();
+
+        if (seleccion === 'todos' || catProducto === seleccion) {
+            fila.style.display = ''; // Muestra la fila
+        } else {
+            fila.style.display = 'none'; // Oculta la fila
+        }
+    });
+}
+</script>
+
 </table>
 </div>
 </div>
@@ -393,16 +454,20 @@
                         </button>
 </div>
 <!-- Category Quick Edit -->
-<div class="bg-surface-container-high p-6 rounded-lg border border-surface-variant">
-<h4 class="font-bold mb-4">Categorías Rápidas</h4>
+<div class="mb-6">
+<div class="flex items-center justify-between mb-4">
+    <h3 class="font-bold text-base text-stone-700">Categorías</h3>
+</div>
+
 <div class="flex flex-wrap gap-2">
-<button class="px-4 py-2 bg-white rounded-full text-xs font-bold border border-stone-200 hover:border-primary hover:text-primary transition-colors">Café</button>
-<button class="px-4 py-2 bg-white rounded-full text-xs font-bold border border-stone-200 hover:border-primary hover:text-primary transition-colors">Té</button>
-<button class="px-4 py-2 bg-white rounded-full text-xs font-bold border border-stone-200 hover:border-primary hover:text-primary transition-colors">Pastelería</button>
-<button class="px-4 py-2 bg-white rounded-full text-xs font-bold border border-stone-200 hover:border-primary hover:text-primary transition-colors">Smoothies</button>
-<button class="px-4 py-2 bg-primary/10 text-primary rounded-full text-xs font-bold border border-primary/20">
-<span class="material-symbols-outlined text-xs align-middle mr-1">add</span>Nueva
-                            </button>
+    <button onclick="filtrarPorCategoriaRapida('todos')" class="px-4 py-2 bg-amber-800 text-white rounded-full text-xs font-bold shadow-sm hover:bg-amber-900 transition-all">Todos</button>
+    <button onclick="filtrarPorCategoriaRapida('latte')" class="px-4 py-2 bg-stone-100 hover:bg-orange-50 text-stone-700 hover:text-amber-900 rounded-full text-xs font-bold transition-all">Latte</button>
+    <button onclick="filtrarPorCategoriaRapida('expresso')" class="px-4 py-2 bg-stone-100 hover:bg-orange-50 text-stone-700 hover:text-amber-900 rounded-full text-xs font-bold transition-all">Expresso</button>
+    <button onclick="filtrarPorCategoriaRapida('coldbrew')" class="px-4 py-2 bg-stone-100 hover:bg-orange-50 text-stone-700 hover:text-amber-900 rounded-full text-xs font-bold transition-all">ColdBrew</button>
+    <button onclick="filtrarPorCategoriaRapida('capuchino')" class="px-4 py-2 bg-stone-100 hover:bg-orange-50 text-stone-700 hover:text-amber-900 rounded-full text-xs font-bold transition-all">Capuchino</button>
+    <button onclick="filtrarPorCategoriaRapida('especialidad')" class="px-4 py-2 bg-stone-100 hover:bg-orange-50 text-stone-700 hover:text-amber-900 rounded-full text-xs font-bold transition-all">Especialidad</button>
+    <button onclick="filtrarPorCategoriaRapida('repostería')" class="px-4 py-2 bg-stone-100 hover:bg-orange-50 text-stone-700 hover:text-amber-900 rounded-full text-xs font-bold transition-all">Repostería</button>
+</div>
 </div>
 </div>
 </div>
@@ -414,4 +479,104 @@
 <button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-on-primary rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50">
 <span class="material-symbols-outlined text-2xl">chat_bubble</span>
 </button>
+<div id="modalNuevoProducto" class="fixed inset-0 bg-stone-900/50 backdrop-blur-sm flex items-center justify-center z-50 hidden animate-fade-in">
+
+<div class="bg-white rounded-3xl p-8 max-w-3xl w-full mx-4 shadow-xl border border-stone-100 max-h-[90vh] overflow-y-auto">
+    
+    <div class="flex items-center justify-between mb-6 border-b border-stone-100 pb-4">
+    <div>
+        <span class="text-xs font-bold uppercase tracking-widest text-stone-400">Gestión / Inventario / Nuevo</span>
+        <h2 class="text-2xl font-black text-amber-900 font-display mt-1">Añadir Nuevo Producto</h2>
+    </div>
+    <button onclick="cerrarModal()" class="text-stone-400 hover:text-stone-600 p-2 rounded-full hover:bg-stone-50 transition-colors">
+        <span class="material-symbols-outlined">close</span>
+    </button>
+    </div>
+
+    <form id="formProducto" action="/admin/nuevo-producto" method="POST" class="grid grid-cols-12 gap-6">
+    <input type="hidden" id="producto_id" name="id" value="">
+
+    <div class="col-span-12 md:col-span-5 flex flex-col gap-4">
+        <span class="text-xs font-black uppercase tracking-wider text-stone-500">Imagen del Producto</span>
+        
+        <div class="border-2 border-dashed border-stone-200 bg-stone-50/50 rounded-2xl p-6 flex flex-col items-center justify-center text-center gap-2 aspect-square relative group hover:bg-stone-50 transition-colors">
+        <span class="material-symbols-outlined text-stone-400 text-3xl group-hover:scale-110 transition-transform">add_a_photo</span>
+        <p class="text-xs font-bold text-stone-600">URL de la Imagen</p>
+        <input 
+            type="url" 
+            name="image_url" 
+            placeholder="https://ejemplo.com/cafe.jpg" 
+            class="w-full mt-1 px-3 py-1.5 text-xs bg-white border border-stone-200 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none text-center"
+            required
+        />
+        <p class="text-[10px] text-stone-400 mt-2">Pega el link de Unsplash o Supabase Storage</p>
+        </div>
+
+        <div class="bg-emerald-50/60 border border-emerald-100 p-3 rounded-xl flex gap-3 text-stone-600 text-xs leading-relaxed">
+        <span class="material-symbols-outlined text-emerald-600 text-sm flex-shrink-0 mt-0.5">info</span>
+        <p>Asegúrate de que la imagen sea nítida y muestre el producto de forma apetecible para tus clientes.</p>
+        </div>
+    </div>
+
+    <div class="col-span-12 md:col-span-7 flex flex-col gap-4">
+        
+        <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-black uppercase tracking-wider text-stone-500">Nombre del Producto</label>
+        <input type="text" name="name" placeholder="Ej: Cappuccino de la Casa" class="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-amber-500 outline-none transition-all" required/>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+        <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-black uppercase tracking-wider text-stone-500">Precio</label>
+            <div class="relative flex items-center">
+            <span class="absolute left-4 text-xs font-bold text-stone-400">$ COP</span>
+            <input type="number" name="price" placeholder="0" class="w-full pl-16 pr-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-amber-500 outline-none transition-all" required/>
+            </div>
+        </div>
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-bold uppercase tracking-widest text-stone-500">Categoría</label>
+<div class="relative flex items-center">
+    <select id="select_category" name="category" class="w-full px-4 py-3 bg-stone-100/40 border border-stone-200 rounded-full text-sm focus:bg-white focus:ring-2 focus:ring-amber-700 outline-none transition-all appearance-none cursor-pointer" required>
+    <option value="" disabled selected>Seleccionar categoría</option>
+    <option value="Latte">Latte</option>
+    <option value="Expresso">Expresso</option>
+    <option value="ColdBrew">ColdBrew</option>
+    <option value="Capuchino">Capuchino</option>
+    <option value="Especialidad">Especialidad</option>
+    <option value="Repostería">Repostería</option>
+    </select>
+    <span class="material-symbols-outlined absolute right-4 text-stone-400 pointer-events-none text-sm">keyboard_arrow_down</span>
+</div>
+</div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+        <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-black uppercase tracking-wider text-stone-500">Stock Inicial</label>
+            <input type="number" name="stock" value="0" min="0" class="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-amber-500 outline-none transition-all" required/>
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-black uppercase tracking-wider text-stone-500">Descripción (Opcional)</label>
+            <input type="text" name="description" placeholder="Breve nota sobre preparación..." class="w-full px-4 py-2.5 bg-stone-50/50 border border-stone-200 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-amber-500 outline-none transition-all"/>
+        </div>
+        </div>
+
+        <div class="border-t border-stone-100 my-2"></div>
+
+        <div class="flex items-center justify-end gap-3 mt-2">
+        <button type="button" onclick="cerrarModal()" class="px-6 py-2.5 border border-stone-200 rounded-full text-sm font-bold text-stone-600 hover:bg-stone-50 transition-colors">
+            Cancelar
+        </button>
+        <button type="submit" class="px-6 py-2.5 bg-amber-800 text-white rounded-full text-sm font-bold shadow-md hover:bg-amber-900 transition-colors flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm">save</span>
+            Guardar Producto
+        </button>
+        </div>
+
+    </div>
+    </form>
+
+</div>
+</div>
 </body></html>
